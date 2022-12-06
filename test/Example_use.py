@@ -3,7 +3,7 @@ This script shows an example of data parsing using Parser_tools.py
 """
 
 import os
-import Parser_tools as pt
+from src.parsertools import Parser_tools as pt
 
 # location to store data
 data_folder = os.path.join(os.getcwd(), "..", "data")

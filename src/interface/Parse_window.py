@@ -18,11 +18,11 @@ import copy
 import os
 import sys
 import Parser_tools as pt
-from Ana_window import AnaFrame
+from src.interface.Ana_window import AnaFrame
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 import tkinter as tk
-from tkinter import N, S, W, E, DISABLED, EXTENDED, TOP, RIGHT, LEFT, X, Y, BOTH, END, ANCHOR
+from tkinter import N, S, W, E, DISABLED, EXTENDED, TOP, RIGHT, LEFT, X, BOTH, END, ANCHOR
 
 
 class Std_redirector(object):
