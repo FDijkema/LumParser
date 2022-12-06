@@ -18,7 +18,7 @@ import copy
 import os
 import sys
 import Parser_tools as pt
-from src.interface.Ana_window import AnaFrame
+from src.interface.anawindow import AnaFrame
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 import tkinter as tk

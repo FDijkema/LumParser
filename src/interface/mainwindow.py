@@ -16,8 +16,8 @@ App - the application that is created.
 import sys
 import os
 import Parser_tools as pt
-from src.interface.Ana_window import AnaFrame
-from Parse_window import ParseFrame
+from src.interface.anawindow import AnaFrame
+from parsewindow import ParseFrame
 import matplotlib.pyplot as plt
 import tkinter as tk
 from tkinter import N, S, W, E, TOP, BOTH, END

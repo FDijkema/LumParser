@@ -1,9 +1,9 @@
 """
-This script shows an example of data parsing using Parser_tools.py
+This script shows an example of data parsing using parsertools.py
 """
 
 import os
-from src.parsertools import Parser_tools as pt
+from src.parsertools import parsertools as pt
 
 # location to store data
 data_folder = os.path.join(os.getcwd(), "..", "data")

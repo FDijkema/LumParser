@@ -10,7 +10,7 @@ There are three option to analyse your luminescence data: use the user interface
 Use the user interface that is based of this script:
     This script comes with a user interface that makes the data analysis more
     intuitive. The signal analysis can be followed visually. To use this, execute
-    "Main_window.py"
+    "mainwindow.py"
     The user interface is the easiest way to use the script, but also the least
     flexible.
 
