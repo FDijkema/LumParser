@@ -1,5 +1,5 @@
 """
-This script shows an example of data parsing using parsertools.py
+This script shows an example of data parsing using tools.py
 """
 
 import os
@@ -26,7 +26,7 @@ dataset01 = pt.Dataset(name01, directory01)
 # get all signals from the dataset
 allsignals01 = dataset01.analyse(starting_point=0, threshold=0.3, bg_bounds="start_short")
 for s01 in allsignals01:
-    print(s01.get_info())
+    print(s01.get_info_string())
 # save all the found signals to a csv file
 pt.signals_to_csv(allsignals01, "Example01.csv", csv_folder)
 
