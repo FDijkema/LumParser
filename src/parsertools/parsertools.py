@@ -71,9 +71,8 @@ import os
 import copy
 import itertools
 import numpy as np
-from scipy.optimize import curve_fit, minimize, least_squares
+from scipy.optimize import curve_fit
 from scipy.stats import chisquare
-from math import *
 
 class Dataset:
     """

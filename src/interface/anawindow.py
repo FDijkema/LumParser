@@ -15,7 +15,7 @@ methods upon user interaction.
 
 import sys
 import os
-import Parser_tools as pt
+import src.parsertools as pt
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 import tkinter as tk

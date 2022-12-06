@@ -17,7 +17,7 @@ methods upon user interaction.
 import copy
 import os
 import sys
-import Parser_tools as pt
+import src.parsertools as pt
 from src.interface.anawindow import AnaFrame
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk

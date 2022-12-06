@@ -15,7 +15,7 @@ App - the application that is created.
 
 import sys
 import os
-import Parser_tools as pt
+import src.parsertools as pt
 from src.interface.anawindow import AnaFrame
 from parsewindow import ParseFrame
 import matplotlib.pyplot as plt
