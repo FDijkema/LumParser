@@ -15,7 +15,7 @@ class Signalgroup:
     of signals from different datasets. Signals can be accessed by name or
     index, renamed, added, moved in the sequence or removed.
     The entire signalgroup can be saved to work on later or the signals, fits
-    and fit parameters of all signals can be created and exported to csv at once.
+    and makefit parameters of all signals can be created and exported to csv at once.
 
     Two ways to create signalgroup:
     __init__(signals, filename, notes="") - initiate signalgroup form a list of
@@ -211,7 +211,7 @@ class Signalgroup:
 
     def fit_signal(self, signal_name, fct="Exponential", init_str='', func_str='', param_str=''):
         """
-        Take the signal of given name and fit to function, return fit information
+        Take the signal of given name and makefit to function, return makefit information
 
         Two modes of use possible:
         1) put in a preset function name for fct:
@@ -222,13 +222,13 @@ class Signalgroup:
             In this case func_str and param_str must further describe the function
             func_str should be a string stating the  mathematical expression
                 for the function
-            param_str should give the parameters to optimise in the fit in this
+            param_str should give the parameters to optimise in the makefit in this
                 format: 'param1, param2, param3'. X should not be included.
             The function can only contain mathematical expression and parameters
                 that are described in the parameter string.
 
         Advantage of using this function over Signal.fit_to method directly is
-        that the parameters and fit get stored in the signalgroup and can be
+        that the parameters and makefit get stored in the signalgroup and can be
         exported to csv.
 
         :param signal_name: string, name of the signal that should be fitted
@@ -238,7 +238,7 @@ class Signalgroup:
         :param func_str: for fct='Other', function formula should be put in here
         :param param_str: for fct='Other', function parameters should be put in here
         :return: func, popt, perr, p
-            # func is function object used to fit
+            # func is function object used to makefit
                 # includes func.name (str), func.formula (str) and func.params (list of str)
             # popt is array of parameters
             # pcov is covariance of those parameters, variance on diagonal
@@ -247,9 +247,9 @@ class Signalgroup:
         print("Fitting: {}".format(signal_name))
         s = self.get(signal_name)
         s = s.integrate()
-        funct, popt, perr, p = s.fit_to(fct, init_str=init_str, func_str=func_str,
-                                        param_str=param_str)  # calculating the fit
-        #  add the fit to the list
+        funct, popt, perr, p = s.fit_data(fct, init_str=init_str, func_str=func_str,
+                                          param_str=param_str)  # calculating the makefit
+        #  add the makefit to the list
         x, y = s.get_xy()
         x = np.array(x)
         self.fits[signal_name] = (list(x), list(funct(x, *popt)))
@@ -318,8 +318,8 @@ class Signalgroup:
         """
         Export all the latest fits that were made of the signals in the group
 
-        Note: when fits are created, only the latest fit for each signal is saved.
-        So when saving, make sure that all fit types are the same. Otherwise,
+        Note: when fits are created, only the latest makefit for each signal is saved.
+        So when saving, make sure that all makefit types are the same. Otherwise,
         correct by hand.
 
         :param exportname: string of desired file name to save to
@@ -345,7 +345,7 @@ class Signalgroup:
 
     def export_parameters(self, exportname, data_folder):
         """
-        Export all the latest fit parameters that were saves for the signals in the group
+        Export all the latest makefit parameters that were saves for the signals in the group
 
         Note: only the parameters that are saved for the first signal in the sequence
         are saved. The values of all signals are saved, but if not the same

@@ -68,11 +68,8 @@ signals_to_csv(signals, file_name, data_folder) - Save all signals in the list
 """
 
 import os
-import copy
 import itertools
-import numpy as np
-from scipy.optimize import curve_fit
-from scipy.stats import chisquare
+from src.parsertools import get_xy
 
 
 def list_files(data_folder):
@@ -86,13 +83,39 @@ def list_files(data_folder):
     return files
 
 
-def signals_to_csv(signals, file_name, data_folder):
+def make_header(signal, datatype="normal"):
+    """
+    Return list of header columns
+
+    Headers give information about signal and function as titles for columns of
+    data in a csv file
+    """
+    nameheader = [signal.name, ""]
+    startheaders = ["Start at [s]:", "%.6g" % signal.start]
+    infoheaders = {
+        "normal": ["Peak height [RLU]:", "%.6g" % signal.peak_height],
+        "integrated": ["Total integral [RLU*s]:", "%.6g" % signal.total_int]
+    }
+    typeheaders = {
+        "normal": ["Time[s]", "Light signal[RLU]"],
+        "integrated": ["Time[s]", "Integrated light signal[RLU]"]
+    }
+    header = [list(h) for h in
+              zip(nameheader, startheaders, infoheaders[datatype], typeheaders[datatype])]
+    return header
+
+
+def signals_to_csv(signals, file_name, data_folder, datatype="normal"):
     """save the data of one or more signals to the assigned filename in csv format"""
     output = ""
     columns = []
     for signal in signals:
-        header = signal._get_header()
-        data = signal.get_xy()
+        header = make_header(signal, datatype=datatype)
+        xy = {
+            "normal": get_xy(signal.signal_data),
+            "integrated": get_xy(signal.integrated_data)
+        }
+        data = xy[datatype]
         column1 = header[0] + data[0]
         column2 = header[1] + data[1]
         columns.append(column1)
@@ -105,27 +128,3 @@ def signals_to_csv(signals, file_name, data_folder):
     outfile = open(os.path.join(data_folder, file_name), "w")
     outfile.write(output)
     outfile.close()
-
-
-if __name__ == "__main__":
-    data_folder = os.getcwd()
-    for thisfile in list_files(data_folder):
-        fname = thisfile["name"]
-        file_dataset = Dataset(fname, thisfile["directory"])
-        ##########################################################################
-        ### Put in custom variables in next line                               ###
-        ### Starting point: first point where signal is expected [#datapoints] ###
-        ### Threshold: minimum increase to detect signal [RLU]                 ###
-        ### Bg bounds: what timepoints to include in background signal [s]     ###
-        ###     "start_short": (0,10)                                          ###
-        ###     "start_long": (0,100)                                          ###
-        ###     "peak_short": (pk-10, pk)                                      ###
-        ###     "peak_long": (pk-100, pk)                                      ###
-        ###     custom: (left, right)                                          ###
-        ##########################################################################
-        file_signals = file_dataset.analyse(starting_point=0, threshold=0.3, bg_bounds="start_short")
-        ##########################################################################
-        if len(file_signals) > 0:
-            signals_to_csv(file_signals, fname.replace(".td", ".csv"), os.cwd())
-        else:
-            print("No signals found in %s" % fname)

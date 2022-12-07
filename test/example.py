@@ -25,8 +25,6 @@ dataset01 = pt.Dataset(name01, directory01)
 
 # get all signals from the dataset
 allsignals01 = dataset01.analyse(starting_point=0, threshold=0.3, bg_bounds="start_short")
-for s01 in allsignals01:
-    print(s01.get_info_string())
 # save all the found signals to a csv file
 pt.signals_to_csv(allsignals01, "Example01.csv", csv_folder)
 
@@ -50,7 +48,7 @@ allsignals = []
 for name, signallist in parser.signals.items():
     allsignals.append(signallist[0])    # pick first detected signal from each file
 signalgroup = pt.Signalgroup(allsignals, "Example02.parsed")
-# fit all signals to the luminescence model
+# makefit all signals to the luminescence model
 for s_name in signalgroup.indexed:
     funct, popt, perr, p = signalgroup.fit_signal(s_name, "Luminescence model",
                                                   init_str="10000, 1, .3, .004")

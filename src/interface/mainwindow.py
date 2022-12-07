@@ -17,7 +17,7 @@ import sys
 import os
 import src.parsertools as pt
 from src.interface.anawindow import AnaFrame
-from parsewindow import ParseFrame
+from src.interface.parsewindow import ParseFrame
 import matplotlib.pyplot as plt
 import tkinter as tk
 from tkinter import N, S, W, E, TOP, BOTH, END
