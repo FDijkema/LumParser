@@ -92,7 +92,7 @@ def fit_data(x, y, start=0, fct="Exponential", inits=(), func_str='', param_str=
         try:
             popt, pcov = curve_fit(func, x, y, inits, bounds=func.bounds)
         except RuntimeError as RE:
-            print("Signal %s can't be fitted." % self.name)
+            print("Signal can't be fitted.")
             print(RE)
             return
     perr = np.sqrt(np.abs(np.diag(pcov)))

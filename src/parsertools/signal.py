@@ -1,4 +1,4 @@
-from src.parsertools import prepare_inits, fit_data
+from src.parsertools import prepare_inits, fit_data, FUNCTIONS
 
 
 class Signal:
@@ -60,6 +60,7 @@ class Signal:
         self.filename = filename
         self.integrated_data = self._integrate()
         self.total_int = get_highest(self.integrated_data)[1]
+        self.fit_data = {}
 
     def _integrate(self):
         """Integrate the signal and return a new signal object with that data"""
@@ -108,9 +109,21 @@ class Signal:
             # pcov is covariance of those parameters, variance on diagonal
             # perr is standard deviation error in one number
         """
-        x, y = get_xy(self.signal_data)
+        print("Fitting: {}".format(self.name))
+        x, y = get_xy(self.integrated_data)
         inits = prepare_inits(init_str, P=self.peak_height, I=self.total_int)
         func, popt, perr, p = fit_data(x, y, start=self.peak_time, fct=fct, inits=inits, func_str=func_str, param_str=param_str)
+        if fct == "Double exponential":
+            poptlist = list(popt)
+            if poptlist[4] > poptlist[2]:  # k2 > k1: always put biggest first
+                poptlist[1:5] = poptlist[3:5] + poptlist[1:3]  # swap 1 and 2
+            outparams = dict(zip(func.params, poptlist))
+        else:
+            outparams = dict(zip(func.params, list(popt)))
+        outparams["p"] = p
+        for P in outparams:
+            setattr(self.name, P, outparams[P])
+        self.fit_data = dict(zip(list(x), list(func(x, *popt))))
         return func, popt, perr, p
 
 

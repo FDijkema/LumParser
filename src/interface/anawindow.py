@@ -705,7 +705,7 @@ class AnaFrame(tk.Frame):
                                         normal=normal, integrate=inte)
         elif self.export_type.get() == "fit":
             fit_type = self.curve_name.get()
-            self.signalgroup.export_fits(exportname, os.path.join(self.controller.data_folder, "csv"), fit_type)
+            self.signalgroup.export_csv(exportname, os.path.join(self.controller.data_folder, "csv"), normal=0, integrate=1, fit=1)
         elif self.export_type.get() == "parameters":
             self.signalgroup.export_parameters(exportname, os.path.join(self.controller.data_folder, "csv"))
         print("Exported as %s" % exportname)

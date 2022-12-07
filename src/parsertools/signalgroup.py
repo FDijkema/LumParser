@@ -2,7 +2,7 @@ import os
 import copy
 import itertools
 import numpy as np
-from src.parsertools import Signal
+from src.parsertools import Signal, get_xy, signals_to_csv
 
 
 class Signalgroup:
@@ -194,65 +194,8 @@ class Signalgroup:
         else:
             self.filename += ".parsed"
 
-    def fit_signal(self, signal_name, fct="Exponential", init_str='', func_str='', param_str=''):
-        """
-        Take the signal of given name and fit to function, return fit information
-
-        Two modes of use possible:
-        1) put in a preset function name for fct:
-            "Exponential" - exponential function
-            "Double exponential" - double exponential function
-            "Luminescence model" - luminescence model
-        2) fct = "Other"
-            In this case func_str and param_str must further describe the function
-            func_str should be a string stating the  mathematical expression
-                for the function
-            param_str should give the parameters to optimise in the fit in this
-                format: 'param1, param2, param3'. X should not be included.
-            The function can only contain mathematical expression and parameters
-                that are described in the parameter string.
-
-        Advantage of using this function over Signal.fit_to method directly is
-        that the parameters and fit get stored in the signalgroup and can be
-        exported to csv.
-
-        :param signal_name: string, name of the signal that should be fitted
-        :param fct: string that describes desired type of function
-        :param init_str: string of initial values for parameters. String of numbers separated by comma's.
-            Letters I and P are accepted to denote total integral and peak height.
-        :param func_str: for fct='Other', function formula should be put in here
-        :param param_str: for fct='Other', function parameters should be put in here
-        :return: func, popt, perr, p
-            # func is function object used to fit
-                # includes func.name (str), func.formula (str) and func.params (list of str)
-            # popt is array of parameters
-            # pcov is covariance of those parameters, variance on diagonal
-            # perr is standard deviation error in one number
-        """
-        print("Fitting: {}".format(signal_name))
-        s = self.get(signal_name)
-        s = s.integrate()
-        funct, popt, perr, p = s.fit_data(fct, init_str=init_str, func_str=func_str,
-                                          param_str=param_str)  # calculating the fit
-        #  add the fit to the list
-        x, y = s.get_xy()
-        x = np.array(x)
-        self.fits[signal_name] = (list(x), list(funct(x, *popt)))
-        # add the parameters to the list
-        if funct.name == "Double exponential":
-            poptlist = list(popt)
-            if poptlist[4] > poptlist[2]:  # k2 > k1: always put biggest first
-                poptlist[1:5] = poptlist[3:5] + poptlist[1:3]  # swap 1 and 2
-            outparams = dict(zip(funct.params, poptlist))
-        else:
-            outparams = dict(zip(funct.params, list(popt)))
-        outparams["p"] = p
-        for P in outparams:
-            setattr(self.get(signal_name), P, outparams[P])
-        return funct, popt, perr, p
-
     def save(self, data_directory):
-        """Save the signalgroup to the given directory, by it's stored filename"""
+        """Save the signalgroup to the given directory, by its stored filename"""
         output = str(self.filename) + "\n"
         output += "NOTES\n" + self.notes + "\n"
         for s_name in self.indexed:
@@ -273,7 +216,7 @@ class Signalgroup:
         outfile.write(output)
         outfile.close()
 
-    def export_csv(self, exportname, data_folder, normal=True, integrate=False):
+    def export_csv(self, exportname, data_folder, normal=True, integrate=False, fit=False):
         """
         Export the data of the signals in the signalgroup to a csv file
 
@@ -289,44 +232,7 @@ class Signalgroup:
             must be saved.
         """
         signals_to_export = []
-        for s_name in self.indexed:
-            if normal:
-                signals_to_export.append(self.signals[s_name])
-            if integrate:
-                signals_to_export.append(self.signals[s_name].integrate())
-            elif not normal:
-                print("Could not save: no type of plot selected.")
-                return
-        signals_to_csv(signals_to_export, exportname, data_folder)
-
-    def export_fits(self, exportname, data_folder, fit_type):
-        """
-        Export all the latest fits that were made of the signals in the group
-
-        Note: when fits are created, only the latest fit for each signal is saved.
-        So when saving, make sure that all fit types are the same. Otherwise,
-        correct by hand.
-
-        :param exportname: string of desired file name to save to
-        :param data_folder: string of desired location to save file
-        :param fit_type: name or formula of the curve that the signal was fitted to
-        """
-        output = ""
-        row1 = []
-        row2 = []
-        rest = []
-        for s_name, f in self.fits.items():
-            row1 += ["Fit of " + s_name + " to", fit_type]
-            row2 += ["Time[s]", "Fitted integrated light intensity [RLU*s]"]
-            rest.extend(f)
-        rows = [row1, row2] + list(itertools.zip_longest(*rest))
-        for line in rows:
-            output_line = ",".join(map(str, line)) + "\n"
-            output += output_line
-        # save the string to the file
-        outfile = open(os.path.join(data_folder, exportname), "w")
-        outfile.write(output)
-        outfile.close()
+        signals_to_csv(signals_to_export, exportname, data_folder, normal=normal, integrated=integrate, fit=fit)
 
     def export_parameters(self, exportname, data_folder):
         """
