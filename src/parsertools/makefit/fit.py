@@ -6,9 +6,9 @@ from src.parsertools import FUNCTIONS, make_func
 
 def prepare_inits(initstring, **kwargs):
     """
-    Calculate initial values for makefit parameters and check if they are numerical
+    Calculate initial values for fit parameters and check if they are numerical
 
-    Return a list of floats that is safe to use as inits for makefit.
+    Return a list of floats that is safe to use as inits for fit.
     Input for initstring should be a string of numbers separated by comma's.
     Letters I and P are accepted to denote total integral and peak height.
     """
@@ -34,7 +34,7 @@ def prepare_inits(initstring, **kwargs):
 
 def fit_data(x, y, start=0, fct="Exponential", inits=(), func_str='', param_str=''):
     """
-    Fit x and y and makefit to given function, return makefit information
+    Fit x and y and fit to given function, return fit information
 
     Two modes of use possible:
     1) put in a preset function name for fct:
@@ -45,7 +45,7 @@ def fit_data(x, y, start=0, fct="Exponential", inits=(), func_str='', param_str=
         In this case func_str and param_str must further describe the function
         func_str should be a string stating the  mathematical expression
             for the function
-        param_str should give the parameters to optimise in the makefit in this
+        param_str should give the parameters to optimise in the fit in this
             format: 'param1, param2, param3'. X should not be included.
         The function can only contain mathematical expression and parameters
             that are described in the parameter string.
@@ -56,7 +56,7 @@ def fit_data(x, y, start=0, fct="Exponential", inits=(), func_str='', param_str=
     :param func_str: for fct='Other', function formula should be put in here
     :param param_str: for fct='Other', function parameters should be put in here
     :return: func, popt, perr, p
-        # func is function object used to makefit
+        # func is function object used to fit
             # includes func.name (str), func.formula (str) and func.params (list of str)
         # popt is array of parameters
         # pcov is covariance of those parameters, variance on diagonal
@@ -82,8 +82,8 @@ def fit_data(x, y, start=0, fct="Exponential", inits=(), func_str='', param_str=
         return
     inits = np.array(inits, dtype=np.float64)
 
-    # makefit signal
-    # only take signal after peak, easier to makefit
+    # fit signal
+    # only take signal after peak, easier to fit
     x = [item for item in x if item >= start]
     y = y[-len(x):]
     x = np.array(x, dtype=np.float64)  # transform data to numpy array

@@ -163,14 +163,14 @@ class AnaFrame(tk.Frame):
         print("Welcome to the Gaussia Luciferase data analysis interface")
 
         # extra options (right side of the screen)
-        ## lots of makefit settings and information
+        ## lots of fit settings and information
         # information about what signal is selected
         self.fitframe = tk.LabelFrame(extra_options, text="Fit to curve")
         self.fitframe.grid(row=0, column=0, columnspan=3, pady=2, sticky=N + S + W + E)
         self.fit_signal = tk.StringVar()
         fitlabel1 = tk.Label(self.fitframe, textvariable=self.selected_signal, width=38)
         fitlabel1.grid(row=0, column=0, columnspan=3, sticky=W)
-        # options for different types of makefit
+        # options for different types of fit
         fitlabel2 = tk.Label(self.fitframe, text="Fit to:  ")
         fitlabel2.grid(row=1, column=0, sticky=W)
         self.curve_name = tk.StringVar()
@@ -196,12 +196,12 @@ class AnaFrame(tk.Frame):
         fitlabel4.grid(row=4, column=0, columnspan=2, sticky="wns")
         self.inits_entry = tk.Entry(self.fitframe)
         self.inits_entry.grid(row=4, column=1, columnspan=2, sticky="wens")
-        # information about created makefit
+        # information about created fit
         self.solved_fit = tk.StringVar()
-        self.solved_fit.set("Best makefit:  ")
+        self.solved_fit.set("Best fit:  ")
         fitlabel3 = tk.Label(self.fitframe, textvariable=self.solved_fit, justify=LEFT)
         fitlabel3.grid(row=5, column=0, columnspan=3, sticky=W)
-        # buttons to create makefit or fits
+        # buttons to create fit or fits
         fit_button = tk.Button(self.fitframe, text="Fit", command=self.fit)
         fit_button.grid(row=6, column=1, sticky=N + E + S + W)
         fit_all_button = tk.Button(self.fitframe, text="Fit all", command=self.fit_all)
@@ -209,7 +209,7 @@ class AnaFrame(tk.Frame):
 
         ## layout for custom plot
         # title and some configuration of the frame for correct display
-        self.extraframe = tk.LabelFrame(extra_options, text="Plot makefit parameters")
+        self.extraframe = tk.LabelFrame(extra_options, text="Plot fit parameters")
         self.extraframe.grid(row=1, column=0, columnspan=3, pady=2, sticky="wens")
         self.extraframe.columnconfigure(0, weight=1)
         self.extraframe.columnconfigure(1, weight=1)
@@ -413,7 +413,7 @@ class AnaFrame(tk.Frame):
         """
         The selected signal is fitted to the selected curve.
 
-        Information about the makefit is presented and the makefit is plotted in the plot
+        Information about the fit is presented and the fit is plotted in the plot
         area. If the curve type is "Other", the formula and parameters put in
         by the user are collected first.
         :return:
@@ -427,7 +427,7 @@ class AnaFrame(tk.Frame):
         else:  # these parameters are not used
             fit_formula = ''
             fit_params = ''
-        # makefit signal data to curve
+        # fit signal data to curve
         funct, popt, perr, p = self.signalgroup.fit_signal(s_name, curve_name,
                                                            init_str=rawinits, func_str=fit_formula,
                                                            param_str=fit_params)
@@ -440,11 +440,11 @@ class AnaFrame(tk.Frame):
         paramtext = "\n".join(lines)
         print("p-value: " + str(p))
         # displaying the information
-        self.solved_fit.set("Best makefit:  %s\n%s" % (funct.formula, paramtext))
-        # prepare plotting the makefit
-        if "makefit" not in self.optionslist:
-            self.optionslist.append("makefit")
-        self.active_plot.set("makefit")
+        self.solved_fit.set("Best fit:  %s\n%s" % (funct.formula, paramtext))
+        # prepare plotting the fit
+        if "fit" not in self.optionslist:
+            self.optionslist.append("fit")
+        self.active_plot.set("fit")
         self.plot([self.signalgroup.get(s_name)])
 
     def fit_all(self):
@@ -465,15 +465,15 @@ class AnaFrame(tk.Frame):
             try:
                 funct, popt, perr, p = self.signalgroup.fit_signal(s_name, curve_name,
                                                                init_str=rawinits, func_str=fit_formula,
-                                                               param_str=fit_params)  # calculating the makefit
+                                                               param_str=fit_params)  # calculating the fit
             except TypeError:
                 pass
         print("Fitted all signals")
         self.solved_fit.set("Formula:  %s" % funct.formula)
         self.update_param_box()
-        if "makefit" not in self.optionslist:
-            self.optionslist.append("makefit")
-        self.active_plot.set("makefit")
+        if "fit" not in self.optionslist:
+            self.optionslist.append("fit")
+        self.active_plot.set("fit")
 
     def launch_add_p(self):
         """
@@ -608,7 +608,7 @@ class AnaFrame(tk.Frame):
                 x, y = signal.get_xy()
                 plt.plot(x, y)
                 names.append(signal.name)
-        elif plottype == "makefit":  # plot created makefit and original data for given signals
+        elif plottype == "fit":  # plot created fit and original data for given signals
             # label the axes
             plt.xlabel("Time (s)")
             plt.ylabel("Integrated light intensity (RLU*s)")
@@ -620,10 +620,10 @@ class AnaFrame(tk.Frame):
                 x, y = signal.get_xy()
                 plt.plot(x, y)
                 names.append(signal.name)
-                # then plot the latest created makefit of that data to a model curve
+                # then plot the latest created fit of that data to a model curve
                 fx, fy = self.signalgroup.fits[signal.name]
                 plt.plot(fx, fy)
-                names.append("makefit")
+                names.append("fit")
         # display the names of plotted signals in the legend and adjust plot size
         plt.legend(names, loc=(1.04, 0))
         plt.tight_layout()
@@ -649,11 +649,11 @@ class AnaFrame(tk.Frame):
         label2.grid(row=1, column=0, columnspan=2, sticky=W)
         # let user select different plot type if desired
         self.type_options = tk.OptionMenu(self.export_window, self.export_type,
-                                          "signals", "parameters", "makefit")
+                                          "signals", "parameters", "fit")
 
-        # if no fits have been created yet, do not show the option to export makefit
+        # if no fits have been created yet, do not show the option to export fit
         if self.signalgroup.fits == {}:
-            self.type_options["menu"].entryconfigure("makefit", state=DISABLED)
+            self.type_options["menu"].entryconfigure("fit", state=DISABLED)
         self.type_options.grid(row=1, column=2, columnspan=2, sticky=N + S + E + W)
 
         # let user set filename for export file, default is same name as previously
@@ -703,7 +703,7 @@ class AnaFrame(tk.Frame):
             inte = self.export_int.get()
             self.signalgroup.export_csv(exportname, os.path.join(self.controller.data_folder, "csv"),
                                         normal=normal, integrate=inte)
-        elif self.export_type.get() == "makefit":
+        elif self.export_type.get() == "fit":
             fit_type = self.curve_name.get()
             self.signalgroup.export_fits(exportname, os.path.join(self.controller.data_folder, "csv"), fit_type)
         elif self.export_type.get() == "parameters":

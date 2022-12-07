@@ -80,7 +80,7 @@ class Signal:
 
     def fit_to(self, fct="Exponential", init_str='', func_str='', param_str=''):
         """
-        Take the signal data and makefit to given function, return makefit information
+        Take the signal data and fit to given function, return fit information
 
         Two modes of use possible:
         1) put in a preset function name for fct:
@@ -91,7 +91,7 @@ class Signal:
             In this case func_str and param_str must further describe the function
             func_str should be a string stating the  mathematical expression
                 for the function
-            param_str should give the parameters to optimise in the makefit in this
+            param_str should give the parameters to optimise in the fit in this
                 format: 'param1, param2, param3'. X should not be included.
             The function can only contain mathematical expression and parameters
                 that are described in the parameter string.
@@ -102,7 +102,7 @@ class Signal:
         :param func_str: for fct='Other', function formula should be put in here
         :param param_str: for fct='Other', function parameters should be put in here
         :return: func, popt, perr, p
-            # func is function object used to makefit
+            # func is function object used to fit
                 # includes func.name (str), func.formula (str) and func.params (list of str)
             # popt is array of parameters
             # pcov is covariance of those parameters, variance on diagonal

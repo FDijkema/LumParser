@@ -48,7 +48,7 @@ allsignals = []
 for name, signallist in parser.signals.items():
     allsignals.append(signallist[0])    # pick first detected signal from each file
 signalgroup = pt.Signalgroup(allsignals, "Example02.parsed")
-# makefit all signals to the luminescence model
+# fit all signals to the luminescence model
 for s_name in signalgroup.indexed:
     funct, popt, perr, p = signalgroup.fit_signal(s_name, "Luminescence model",
                                                   init_str="10000, 1, .3, .004")

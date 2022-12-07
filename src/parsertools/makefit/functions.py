@@ -6,7 +6,7 @@ FUNCTIONS = {}
 
 def make_func(mystring, myparams):
     """
-    Create a customisable function to makefit data to
+    Create a customisable function to fit data to
 
     :param mystring: a string describing a mathematical function
     :param myparams: string of parameters, split by comma's
