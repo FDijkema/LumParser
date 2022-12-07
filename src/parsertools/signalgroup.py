@@ -53,10 +53,11 @@ class Signalgroup:
                 end = i
                 notes = "\n".join(rawlines[start_notes+1:start_signal])
                 s_info = {line.split("=")[0]:line.split("=")[1] for line in rawlines[start_signal+1, start_data]}
-                try:
-                    s_info[name] = float(value)    # convert numbers to floats
-                except ValueError:
-                    pass
+                for name, value in s_info.items():
+                    try:
+                        s_info[name] = float(value)    # convert numbers to floats
+                    except ValueError:
+                        pass
                 data = [{"time": float(line.split(",")[0]), "value": float(line.split(",")[1])} for line in rawlines[start_data+1, end]]
                 signal = Signal(s_info["name"], data, s_info["filename"])
                 for name in s_info:
