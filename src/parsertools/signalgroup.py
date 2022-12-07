@@ -37,46 +37,31 @@ class Signalgroup:
         """Load signalgroup from file. Returns itself. Alternative init method"""
         # read the file
         input = open(directory)
-        raww = input.readlines()
+        rawlines = input.read().splitlines()
         input.close()
         # get and store the information
         signals = []
-        r_notes = False
-        r_signal = False
-        r_data = False
-        data = []
-        s_info = {}
-        for line in raww:
+        filename = rawlines[0]
+        for i, line in enumerate(rawlines):
             if line.startswith("NOTES"):
-                r_notes = True
-                notes = ""
+                start_notes = i
             elif line.startswith("SIGNAL"):
-                r_signal = True
+                start_signal = i
             elif line.startswith("DATA"):
-                r_data = True
-            elif r_data:
-                if line.startswith("END"):  # create a new signal
-                    signal = Signal(s_info["name"], data, s_info["filename"])
-                    for name in s_info:
-                        setattr(signal, name, s_info[name])
-                    signals.append(signal)
-                    data = []
-                    s_info = {}
-                    r_signal = False
-                    r_data = False
-                else:
-                    time, value = line.split(",")
-                    data.append({"time": float(time), "value": float(value)})
-            elif r_signal:
-                name, value = line.split("=")
+                start_data = i
+            elif line.startswith("END"):  # create a new signal
+                end = i
+                notes = "\n".join(rawlines[start_notes+1:start_signal])
+                s_info = {line.split("=")[0]:line.split("=")[1] for line in rawlines[start_signal+1, start_data]}
                 try:
-                    s_info[name] = float(value)
+                    s_info[name] = float(value)    # convert numbers to floats
                 except ValueError:
-                    s_info[name] = value.strip("\n")
-            elif r_notes:
-                notes += line
-            else:
-                filename = line.strip("\n")
+                    pass
+                data = [{"time": float(line.split(",")[0]), "value": float(line.split(",")[1])} for line in rawlines[start_data+1, end]]
+                signal = Signal(s_info["name"], data, s_info["filename"])
+                for name in s_info:
+                    setattr(signal, name, s_info[name])
+                signals.append(signal)
         signalgroup = Signalgroup(signals, filename, notes)
         return signalgroup
 
