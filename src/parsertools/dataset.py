@@ -109,7 +109,7 @@ class Dataset:
                     i += 1
             else:  # we cannot compare to an average yet
                 i += 1
-        if signal_starts == []:
+        if not signal_starts:
             print("No signals were found in {}. Try to adjust the starting point or threshold.".format(self.name))
         return signal_starts  # right now, this is the count at which the signal occurs
 
@@ -197,7 +197,7 @@ class Dataset:
                     "peak_long": (pk-100, pk)
         """
         peaks = self._find_peaks(starting_point, threshold)
-        if peaks == []:
+        if not peaks:
             return []
         first_peak_time = self.data[peaks[0]]["time"]
         self.background = self._get_bg(first_peak_time, bounds=bg_bounds)
