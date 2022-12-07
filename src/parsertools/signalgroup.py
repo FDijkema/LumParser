@@ -229,11 +229,11 @@ class Signalgroup:
         :param data_folder: string, location to save the file
         :param normal: True or False, should normal data be saved?
         :param integrate: True or False, should integrated data be saved?
+        :param fit: True or False, should fitted data be saved?
         normal and integrate cannot both be false. Either normal or integrated
             must be saved.
         """
-        signals_to_export = []
-        signals_to_csv(signals_to_export, exportname, data_folder, normal=normal, integrated=integrate, fit=fit)
+        signals_to_csv(self.signals.values(), exportname, data_folder, normal=normal, integrated=integrate, fit=fit)
 
     def export_parameters(self, exportname, data_folder):
         """
