@@ -99,16 +99,4 @@ class Parser:
         normal and integrate cannot both be false. Either normal or integrated
             must be saved.
         """
-        signals_to_export = []
-        if normal:
-            signals_to_export.extend(self.signals[setname])
-        if integrate:
-            integrated_signals = []
-            for signal in self.signals[setname]:
-                integrated = signal.integrate()
-                integrated_signals.append(integrated)
-            signals_to_export.extend(integrated_signals)
-        elif not normal:
-            print("Could not save: normal and integrate cannot both be false.")
-            return
-        signals_to_csv(signals_to_export, exportname, data_folder)
+        signals_to_csv(self.signals[setname], exportname, data_folder, normal=normal, integrated=integrate, fit=False)

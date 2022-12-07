@@ -1,5 +1,5 @@
 from .dataset import Dataset
-from .parser import Parser
+from .timedriveparser import Parser
 from .signal import Signal, get_xy
 from .signalgroup import Signalgroup
 from .tools import list_files, signals_to_csv
