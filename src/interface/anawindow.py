@@ -20,6 +20,7 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 import tkinter as tk
 from tkinter import N, S, W, E, DISABLED, EXTENDED, TOP, RIGHT, LEFT, X, Y, BOTH, END, ANCHOR
+from subframe_from_anaframe import ToolFrame
 
 
 class Std_redirector(object):
@@ -55,84 +56,85 @@ class AnaFrame(tk.Frame):
 
         # initiate the frame and start filling it up
         tk.Frame.__init__(self, self.parent)
-        self.create_output_menu()   # Create custom option is menubar
+        self.create_output_menu()   # Create custom option in menubar
 
         # make sure the analysis window fills the entire main window
-        main_window = tk.PanedWindow(self)
-        main_window.pack(fill=BOTH, expand=1)
-        main_window.grid_columnconfigure(1, weight=1)
-        main_window.grid_rowconfigure(0, weight=1)
+        self.main_window = tk.PanedWindow(self)
+        self.main_window.pack(fill=BOTH, expand=1)
+        self.main_window.grid_columnconfigure(1, weight=1)
+        self.main_window.grid_rowconfigure(0, weight=1)
 
         # create the overall layout of the screen:
         # tools on the left, plot and terminal in the middle and extra options
         # on the right
-        tools = tk.Frame(main_window, borderwidth=5)
+        #tools = tk.Frame(self.main_window, borderwidth=5)
+        tools = ToolFrame(self.main_window, self, borderwidth=5)
         tools.grid(row=0, rowspan=2, column=0, sticky="nswe", pady=2)
         tools.grid_columnconfigure(0, weight=1)
 
-        plotframe = tk.LabelFrame(main_window, borderwidth=1, text="View")
+        plotframe = tk.LabelFrame(self.main_window, borderwidth=1, text="View")
         plotframe.grid(row=0, column=1, sticky="nswe", pady=2, padx=2)
 
-        terminal_frame = tk.Frame(main_window)
+        terminal_frame = tk.Frame(self.main_window)
         terminal_frame.grid(row=1, column=1, sticky=N + S + W + E, pady=10)
 
-        extra_options = tk.Frame(main_window)
+        extra_options = tk.Frame(self.main_window)
         extra_options.grid(row=0, rowspan=2, column=2, pady=2, sticky=N + S + W + E)
 
-        # fill the toolbar (left side of the screen)
-        self.browser = tk.Frame(tools)
-        self.browser.grid(row=0, column=0, columnspan=2, pady=2, sticky=N + S + W + E)
-        ## notes on the file
-        notes_title = tk.Label(self.browser, text="Dataset notes:  ")
-        notes_title.grid(row=0, column=0, columnspan=2, sticky=W)
-        self.browser_notes = tk.Text(self.browser, width=30, height=5)
-        self.browser_notes.insert(END, self.signalgroup.notes)
-        self.browser_notes.grid(row=1, column=0, columnspan=2, sticky=N + E + S + W)
-        ## browsing through the signals in the file
-        browser_title = tk.Label(self.browser, text="Signals in dataset:  ")
-        browser_title.grid(row=2, column=0, columnspan=2, sticky=W)
-        browser_scrollbar = tk.Scrollbar(self.browser)
-        browser_scrollbar.grid(row=3, column=2, sticky=N + S)
-        self.browser_box = tk.Listbox(self.browser, exportselection=0,
-                                      selectmode=EXTENDED, yscrollcommand=browser_scrollbar.set)
-        self.browser_box.grid(row=3, column=0, columnspan=2, sticky=W + E + N + S)
-        self.update_browser_box()
-        browser_scrollbar.config(command=self.browser_box.yview)
-        ## buttons with options for signal operations
-        delete_button = tk.Button(self.browser, text="Delete", command=self.remove_signal)
-        delete_button.grid(row=4, column=0, sticky=N + E + S + W)
-        move_button = tk.Button(self.browser, text="Move", command=self.launch_move)
-        move_button.grid(row=4, column=1, columnspan=2, sticky=N + E + S + W)
-        ## options for keyboard operated signal operations
-        self.browser_box.bind('<Control-Up>', self.move_signal_up)
-        self.browser_box.bind('<Control-Down>', self.move_signal_down)
-        self.browser_box.bind('<<ListboxSelect>>', self.on_select)
-        self.browser_box.bind('<Double-1>', lambda *args: self.open_rename_window())
-        self.browser_box.bind('<Control-n>', lambda *args: self.open_rename_window())
-        ## signal information
-        signalframe = tk.Frame(tools)
-        signalframe.grid(row=2, column=0, pady=2, sticky=N + E + S + W)
-        self.selected_signal = tk.StringVar()
-        signal_title = tk.Label(signalframe, textvariable=self.selected_signal)
-        signal_title.grid(row=0, column=0, sticky=W)
-        self.signal_info = tk.StringVar()
-        info_label = tk.Label(signalframe, textvariable=self.signal_info, justify=LEFT)
-        info_label.grid(row=1, column=0, sticky=W)
-        ## plot settings
-        plotsetter = tk.LabelFrame(tools, text="Settings for view")
-        plotsetter.grid(row=3, column=0, pady=2, sticky=N + S + W + E)
-        plotsetter.grid_columnconfigure(0, weight=1)
-        plotsetter.grid_columnconfigure(1, weight=1)
-        selected_button = tk.Button(plotsetter, text="Show selected", command=self.show_selected)
-        selected_button.grid(row=1, column=0, sticky=N + E + S + W)
-        all_button = tk.Button(plotsetter, text="Show all", command=self.show_all)
-        all_button.grid(row=1, column=1, sticky=N + E + S + W)
-        menulabel = tk.Label(plotsetter, text="Plot type:")
-        menulabel.grid(row=0, column=0, sticky=W + N + S)
-        self.active_plot = tk.StringVar(value="signals")
-        self.optionslist = ["signals", "integrated"]
-        self.plotoptions = tk.OptionMenu(plotsetter, self.active_plot, *self.optionslist)
-        self.plotoptions.grid(row=0, column=1, sticky=N + E + S)
+        # # fill the toolbar (left side of the screen)
+        # self.browser = tk.Frame(tools)
+        # self.browser.grid(row=0, column=0, columnspan=2, pady=2, sticky=N + S + W + E)
+        # ## notes on the file
+        # notes_title = tk.Label(self.browser, text="Dataset notes:  ")
+        # notes_title.grid(row=0, column=0, columnspan=2, sticky=W)
+        # self.browser_notes = tk.Text(self.browser, width=30, height=5)
+        # self.browser_notes.insert(END, self.signalgroup.notes)
+        # self.browser_notes.grid(row=1, column=0, columnspan=2, sticky=N + E + S + W)
+        # ## browsing through the signals in the file
+        # browser_title = tk.Label(self.browser, text="Signals in dataset:  ")
+        # browser_title.grid(row=2, column=0, columnspan=2, sticky=W)
+        # browser_scrollbar = tk.Scrollbar(self.browser)
+        # browser_scrollbar.grid(row=3, column=2, sticky=N + S)
+        # self.browser_box = tk.Listbox(self.browser, exportselection=0,
+        #                               selectmode=EXTENDED, yscrollcommand=browser_scrollbar.set)
+        # self.browser_box.grid(row=3, column=0, columnspan=2, sticky=W + E + N + S)
+        # self.update_browser_box()
+        # browser_scrollbar.config(command=self.browser_box.yview)
+        # ## buttons with options for signal operations
+        # delete_button = tk.Button(self.browser, text="Delete", command=self.remove_signal)
+        # delete_button.grid(row=4, column=0, sticky=N + E + S + W)
+        # move_button = tk.Button(self.browser, text="Move", command=self.launch_move)
+        # move_button.grid(row=4, column=1, columnspan=2, sticky=N + E + S + W)
+        # ## options for keyboard operated signal operations
+        # self.browser_box.bind('<Control-Up>', self.move_signal_up)
+        # self.browser_box.bind('<Control-Down>', self.move_signal_down)
+        # self.browser_box.bind('<<ListboxSelect>>', self.on_select)
+        # self.browser_box.bind('<Double-1>', lambda *args: self.open_rename_window())
+        # self.browser_box.bind('<Control-n>', lambda *args: self.open_rename_window())
+        # ## signal information
+        # signalframe = tk.Frame(tools)
+        # signalframe.grid(row=2, column=0, pady=2, sticky=N + E + S + W)
+        # self.selected_signal = tk.StringVar()
+        # signal_title = tk.Label(signalframe, textvariable=self.selected_signal)
+        # signal_title.grid(row=0, column=0, sticky=W)
+        # self.signal_info = tk.StringVar()
+        # info_label = tk.Label(signalframe, textvariable=self.signal_info, justify=LEFT)
+        # info_label.grid(row=1, column=0, sticky=W)
+        # ## plot settings
+        # plotsetter = tk.LabelFrame(tools, text="Settings for view")
+        # plotsetter.grid(row=3, column=0, pady=2, sticky=N + S + W + E)
+        # plotsetter.grid_columnconfigure(0, weight=1)
+        # plotsetter.grid_columnconfigure(1, weight=1)
+        # selected_button = tk.Button(plotsetter, text="Show selected", command=self.show_selected)
+        # selected_button.grid(row=1, column=0, sticky=N + E + S + W)
+        # all_button = tk.Button(plotsetter, text="Show all", command=self.show_all)
+        # all_button.grid(row=1, column=1, sticky=N + E + S + W)
+        # menulabel = tk.Label(plotsetter, text="Plot type:")
+        # menulabel.grid(row=0, column=0, sticky=W + N + S)
+        # self.active_plot = tk.StringVar(value="signals")
+        # self.optionslist = ["signals", "integrated"]
+        # self.plotoptions = tk.OptionMenu(plotsetter, self.active_plot, *self.optionslist)
+        # self.plotoptions.grid(row=0, column=1, sticky=N + E + S)
 
         # middle part of the screen: plot and terminal
         ## plot

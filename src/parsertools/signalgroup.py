@@ -1,6 +1,7 @@
 import os
 import copy
-from src.parsertools import Signal, signals_to_csv
+from src.parsertools.signal import Signal
+from src.parsertools.tools import signals_to_csv
 
 
 class Signalgroup:
@@ -51,13 +52,13 @@ class Signalgroup:
             elif line.startswith("END"):  # create a new signal
                 end = i
                 notes = "\n".join(rawlines[start_notes+1:start_signal])
-                s_info = {line.split("=")[0]:line.split("=")[1] for line in rawlines[start_signal+1, start_data]}
+                s_info = {line.split("=")[0]:line.split("=")[1] for line in rawlines[start_signal+1: start_data]}
                 for name, value in s_info.items():
                     try:
                         s_info[name] = float(value)    # convert numbers to floats
                     except ValueError:
                         pass
-                data = [{"time": float(line.split(",")[0]), "value": float(line.split(",")[1])} for line in rawlines[start_data+1, end]]
+                data = [{"time": float(line.split(",")[0]), "value": float(line.split(",")[1])} for line in rawlines[start_data+1: end]]
                 signal = Signal(s_info["name"], data, s_info["filename"])
                 for name in s_info:
                     setattr(signal, name, s_info[name])

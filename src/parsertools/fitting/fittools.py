@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.optimize import curve_fit
 from scipy.stats import chisquare
-from src.parsertools import FUNCTIONS, make_func
+from src.parsertools.fitting.functions import FUNCTIONS, make_func
 
 
 def prepare_inits(initstring, **kwargs):

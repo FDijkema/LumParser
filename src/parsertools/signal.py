@@ -1,4 +1,5 @@
-from src.parsertools import prepare_inits, fit_data, FUNCTIONS, get_xy, get_highest
+from src.parsertools.tools import get_xy, get_highest
+from src.parsertools.fitting.fittools import prepare_inits, fit_data
 
 
 class Signal:
