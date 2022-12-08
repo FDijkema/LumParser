@@ -1,8 +1,6 @@
 import os
 import copy
-import itertools
-import numpy as np
-from src.parsertools import Signal, get_xy, signals_to_csv
+from src.parsertools import Signal, signals_to_csv
 
 
 class Signalgroup:
@@ -249,23 +247,18 @@ class Signalgroup:
         """
         output = "name, filename,"
         some_signal = self.get_at(0)
+        # collect numeric variables for each signal
+        numvars = []
         for var in vars(some_signal):  # create the title row
-            try:
-                float(vars(some_signal)[var])
-            except (ValueError, TypeError):  # only take attributes with numeric values
-                pass
-            else:
-                output += str(var) + ","
+            if var.isnumeric():
+                numvars.append(var)
+        for var in numvars:
+            output += str(var) + ","
         output += "\n"
         for signal in self.get_all():  # row of values for each signal
             line = signal.name + ", " + signal.filename + ","
-            for var in vars(signal):
-                try:
-                    float(vars(signal)[var])
-                except (ValueError, TypeError):  # only take attributes with numeric values
-                    pass
-                else:
-                    line += str(vars(signal)[var]) + ","
+            for var in numvars:
+                line += str(vars(signal)[var]) + ","
             output += line + "\n"
         # save the string to the file
         outfile = open(os.path.join(data_folder, exportname), "w")
