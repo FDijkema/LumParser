@@ -1,10 +1,11 @@
 import os
 import copy
 import itertools
+from src.parsertools.defaultvalues import default_background_bounds, default_starting_point, default_threshold
 from src.parsertools import Signal, get_xy
 
 
-class Dataset:
+class TimeDriveData:
     """
     Extract the data from a given time drive file and store it in a dataset instance.
 
@@ -69,13 +70,13 @@ class Dataset:
         Find sudden increases in value (the signal starts).
 
         Record a signal start when the value is higher than the average of the previous 10 values
-        by at least the treshold.
+        by at least the threshold.
         Values before the starting point do not count.
         Signals cannot be closer together than 100 datapoints.
 
         parameters:
             starting point [#datapoints]: datapoint after which signals are expected
-            treshold [relative light units]: minimum value increase to record signal
+            threshold [relative light units]: minimum value increase to record signal
         """
         stp = starting_point
         th = threshold
@@ -113,7 +114,7 @@ class Dataset:
             print("No signals were found in {}. Try to adjust the starting point or threshold.".format(self.name))
         return signal_starts  # right now, this is the count at which the signal occurs
 
-    def _get_bg(self, first_peak, bounds):
+    def _get_bg(self, first_peak, bounds=default_background_bounds):
         """
         Define the background boundaries and calculate the average signal between them.
         Use different preset modes or put in boundaries of background.
@@ -121,28 +122,15 @@ class Dataset:
         # unit = seconds
         data = self.data
         pk = first_peak
-        preset_bounds = {
-            "start_short": (0, 10),
-            "start_long": (0, 100),
-            "peak_short": (pk - 10, pk),
-            "peak_long": (pk - 100, pk)
-        }
-        if bounds in preset_bounds:
-            left, right = preset_bounds[bounds]
-        else:  # find out if the input consist of valid numbers
-            try:
-                left, right = bounds
-                if right > pk:
-                    print("Background of {} could not be calculated: background "
-                          "boundary at {} seconds overlaps with peak at {} "
-                          "seconds".format(self.name, right, pk))
-                    return 0
-                elif right < left:
-                    right, left = left, right
-            except:
-                print("Background could not be calculated: "
-                      "%s not recognised as background boundaries" % bounds)
-                return 0
+        # find out if the input consist of valid numbers
+        left, right = bounds
+        if right > pk:
+            print("Background of {} could not be calculated: background "
+                  "boundary at {} seconds overlaps with peak at {} "
+                  "seconds".format(self.name, right, pk))
+            return 0
+        elif right < left:
+            right, left = left, right
         bg_sum = 0
         num = 0
         for point in data:
@@ -173,7 +161,7 @@ class Dataset:
             corrected.append({"time": time, "value": corr_value})
         self.corrected = corrected
 
-    def analyse(self, starting_point=0, threshold=0.3, bg_bounds="start_short"):
+    def extract_signals(self, starting_point=default_starting_point, threshold=default_threshold, bg_bounds=default_background_bounds):
         """
         Analyse the data, return a list of corrected signals.
 
@@ -189,12 +177,7 @@ class Dataset:
             starting point [#datapoints]: the earliest time when the peak is expected
             threshold [rlu]: the smallest increase that will count as peak start
             bg_bounds [s]:
-                tuple (left, right) OR
-                string, preset options:
-                    "start_short": (0,10)
-                    "start_long": (0,100)
-                    "peak_short": (pk-10, pk)
-                    "peak_long": (pk-100, pk)
+                tuple (left, right)
         """
         peaks = self._find_peaks(starting_point, threshold)
         if not peaks:
@@ -231,7 +214,7 @@ class Dataset:
         output = ""
         columns = []
         header = ([self.name, ""], [oftype, ""])
-        data = self.get_xy_bytype()
+        data = self.get_xy_bytype(oftype=oftype)
         # put informative headers above the data
         column1 = header[0] + data[0]
         column2 = header[1] + data[1]

@@ -5,7 +5,7 @@ if __name__ == "__main__":
     data_folder = os.getcwd()
     for thisfile in pt.list_files(data_folder):
         fname = thisfile["name"]
-        file_dataset = pt.Dataset(fname, thisfile["directory"])
+        file_dataset = pt.TimeDriveData(fname, thisfile["directory"])
         ##########################################################################
         ### Put in custom variables in next line                               ###
         ### Starting point: first point where signal is expected [#datapoints] ###
@@ -17,7 +17,7 @@ if __name__ == "__main__":
         ###     "peak_long": (pk-100, pk)                                      ###
         ###     custom: (left, right)                                          ###
         ##########################################################################
-        file_signals = file_dataset.analyse(starting_point=0, threshold=0.3, bg_bounds="start_short")
+        file_signals = file_dataset.extract_signals(starting_point=0, threshold=0.3, bg_bounds="start_short")
         ##########################################################################
         if len(file_signals) > 0:
             pt.signals_to_csv(file_signals, fname.replace(".td", ".csv"), os.cwd())

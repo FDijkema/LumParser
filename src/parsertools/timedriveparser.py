@@ -1,4 +1,5 @@
-from src.parsertools import Dataset, list_files, signals_to_csv
+from src.parsertools import TimeDriveData, list_files, signals_to_csv
+from src.parsertools.defaultvalues import default_threshold, default_starting_point, default_background_bounds
 
 
 class Parser:
@@ -34,12 +35,12 @@ class Parser:
     def __init__(self):
         """Create an empty parser object"""
         self.datasets = {}  # dict of datasets to be analysed, by filename
-        self.anasettings = {}   # settings for analysis, saved by filename
+        self.parse_settings = {}   # settings for parsing from td, saved by filename
         self.default_settings = {   # the default analysis settings
-            "starting_point": 0,
-            "threshold": 0.3,
-            "bg_bound_L": 0,
-            "bg_bound_R": 10
+            "starting_point": default_starting_point,
+            "threshold": default_threshold,
+            "bg_bound_L": default_background_bounds[0],
+            "bg_bound_R": default_background_bounds[1]
         }
         self.signals = {}   # list of signals per dataset, by filename
 
@@ -56,32 +57,32 @@ class Parser:
         for thisfile in list_files(data_folder):
             # dataset
             filename = thisfile["name"]
-            file_dataset = Dataset(filename, thisfile["directory"])
+            file_dataset = TimeDriveData(filename, thisfile["directory"])
             self.datasets[filename] = file_dataset  # save the data so it can be retrieved by filename
             # variables used per file (initialize default)
-            self.anasettings[filename] = self.default_settings.copy()  # very important to copy!!
+            self.parse_settings[filename] = self.default_settings.copy()  # very important to copy!!
 
     def remove_file(self, filename):
         """Remove this dataset and the associated settings from the analysis."""
         del self.datasets[filename]
-        del self.anasettings[filename]
+        del self.parse_settings[filename]
 
     def set_vars(self, setname, var_name, var_value):
         """Set the given analysis variable for the dataset to the value given"""
-        self.anasettings[setname][var_name] = var_value
+        self.parse_settings[setname][var_name] = var_value
 
     def apply_all(self, var_name, var_value):
         """Set the given analysis variable to the value given for all datasets"""
-        for setname in self.anasettings:
-            self.anasettings[setname][var_name] = var_value
+        for setname in self.parse_settings:
+            self.parse_settings[setname][var_name] = var_value
 
     def update_signals(self, setname):
         """Create or update the list of signals for a dataset using the stored parameters"""
-        stp = self.anasettings[setname]["starting_point"]
-        th = self.anasettings[setname]["threshold"]
-        bg = (self.anasettings[setname]["bg_bound_L"], self.anasettings[setname]["bg_bound_R"])
-        self.signals[setname] = self.datasets[setname].analyse(starting_point=stp,
-                                                                 threshold=th, bg_bounds=bg)
+        stp = self.parse_settings[setname]["starting_point"]
+        th = self.parse_settings[setname]["threshold"]
+        bg = (self.parse_settings[setname]["bg_bound_L"], self.parse_settings[setname]["bg_bound_R"])
+        self.signals[setname] = self.datasets[setname].extract_signals(starting_point=stp,
+                                                                       threshold=th, bg_bounds=bg)
 
     def export_csv(self, setname, exportname, data_folder, normal=True, integrate=False):
         """

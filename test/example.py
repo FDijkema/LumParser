@@ -21,10 +21,10 @@ print(all_files)
 # make a dataset of the first file in the list
 name01 = all_files[0]["name"]
 directory01 = all_files[0]["directory"]
-dataset01 = pt.Dataset(name01, directory01)
+dataset01 = pt.TimeDriveData(name01, directory01)
 
 # get all signals from the dataset
-allsignals01 = dataset01.analyse(starting_point=0, threshold=0.3, bg_bounds="start_short")
+allsignals01 = dataset01.extract_signals(starting_point=0, threshold=0.3)
 # save all the found signals to a csv file
 pt.signals_to_csv(allsignals01, "Example01.csv", csv_folder)
 

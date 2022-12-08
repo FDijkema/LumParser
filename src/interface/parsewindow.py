@@ -293,7 +293,7 @@ class ParseFrame(tk.Frame):
         clicked_file = self.loader_box.get(self.loader_box.curselection())
         # set the displayed variables to variables of the selected file
         for i, v in enumerate(self.variables):
-            value = self.parser.anasettings[clicked_file][v["name"]]
+            value = self.parser.parse_settings[clicked_file][v["name"]]
             self.variables[i]["var"].set(value)
         self.display(clicked_file)
 
@@ -367,8 +367,8 @@ class ParseFrame(tk.Frame):
             for signal in self.parser.signals[thisfile]:
                 x_line = signal.start
                 plt.axvline(x=x_line, color="r")  # vertical line at detected signal starts
-            L = self.parser.anasettings[thisfile]["bg_bound_L"]
-            R = self.parser.anasettings[thisfile]["bg_bound_R"]
+            L = self.parser.parse_settings[thisfile]["bg_bound_L"]
+            R = self.parser.parse_settings[thisfile]["bg_bound_R"]
             background = self.parser.datasets[thisfile].background
             if background > 0.1:
                 height = 10 * background
