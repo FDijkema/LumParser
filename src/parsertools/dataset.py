@@ -1,7 +1,7 @@
 import os
 import copy
 import itertools
-from src.parsertools import Signal
+from src.parsertools import Signal, get_xy
 
 
 class Dataset:
@@ -212,7 +212,7 @@ class Dataset:
             signals.append(Signal(signal_name, signal_data, self.name))  # create a Signal instance
         return signals  # list of signal objects
 
-    def get_xy(self, oftype="original"):
+    def get_xy_bytype(self, oftype="original"):
         """
         Output list of time and list of values.
 
@@ -223,8 +223,7 @@ class Dataset:
         """
         typedict = {"original": self.data, "corrected": self.corrected}
         data = typedict[oftype]
-        timelist = [datapoint["time"] for datapoint in data]
-        valuelist = [datapoint["value"] for datapoint in data]
+        timelist, valuelist = get_xy(data)
         return timelist, valuelist
 
     def export_to_csv(self, filename, data_folder, oftype="original"):
@@ -232,7 +231,7 @@ class Dataset:
         output = ""
         columns = []
         header = ([self.name, ""], [oftype, ""])
-        data = self.get_xy()
+        data = self.get_xy_bytype()
         # put informative headers above the data
         column1 = header[0] + data[0]
         column2 = header[1] + data[1]

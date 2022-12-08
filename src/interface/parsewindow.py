@@ -344,7 +344,7 @@ class ParseFrame(tk.Frame):
         # check if the background was calculated, otherwise just plot the
         # uncorrected data
         if not hasattr(self.parser.datasets[thisfile],"background"):
-            x, y = self.parser.datasets[thisfile].get_xy()
+            x, y = self.parser.datasets[thisfile].get_xy_bytype()
             plt.plot(x, y)
             plt.xlabel("Time (s)")
             plt.ylabel("Light intensity (RLU)")
@@ -357,7 +357,7 @@ class ParseFrame(tk.Frame):
         plottype = self.active_plot.get()
         if plottype == "original":  # uncorrected data as in the time drive
             # plot data
-            x, y = self.parser.datasets[thisfile].get_xy()
+            x, y = self.parser.datasets[thisfile].get_xy_bytype()
             plt.plot(x, y)
             # set axes names
             plt.xlabel("Time (s)")
@@ -378,7 +378,7 @@ class ParseFrame(tk.Frame):
             plt.plot([R, R], [0, height], color='g')
         elif plottype == "corrected":   # corrected time drive data
             # plot data
-            x, y = self.parser.datasets[thisfile].get_xy(oftype="corrected")
+            x, y = self.parser.datasets[thisfile].get_xy_bytype(oftype="corrected")
             plt.plot(x, y)
             # set axes names
             plt.xlabel("Time (s)")
@@ -390,7 +390,7 @@ class ParseFrame(tk.Frame):
             plt.ylabel("Light intensity (RLU)")
             # plot data for all signals in the selected time drive
             for signal in self.parser.signals[thisfile]:
-                x, y = signal.get_xy()
+                x, y = signal.get_xy_bytype()
                 plt.plot(x, y)
                 names.append(signal.name + "at %s s" % signal.start)
             # show the signal names in a legend
@@ -403,7 +403,7 @@ class ParseFrame(tk.Frame):
             # plot integrated data for all signals in the selected time drive
             for signal in self.parser.signals[thisfile]:
                 isignal = signal.integrate()
-                x, y = isignal.get_xy()
+                x, y = isignal.get_xy_bytype()
                 plt.plot(x, y)
                 names.append(isignal.name + "at %s s" % isignal.start)
             # show the signal names in a legend

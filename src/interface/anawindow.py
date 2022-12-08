@@ -346,7 +346,7 @@ class AnaFrame(tk.Frame):
                   "filename=%s\n"
                   "start=%.6g\n"
                   "DATA\n" % (signal.name, signal.filename, signal.start))
-        x, y = signal.get_xy()
+        x, y = signal.get_xy_bytype()
         rows = zip(x, y)
         for line in rows:
             output_line = ",".join(map(str, line)) + "\n"
@@ -595,7 +595,7 @@ class AnaFrame(tk.Frame):
             plt.ylabel("Light intensity (RLU)")
             # for each signal, retrieve the data to plot and remember name
             for signal in signals:
-                x, y = signal.get_xy()
+                x, y = signal.get_xy_bytype()
                 plt.plot(x, y)
                 names.append(signal.name)
         elif plottype == "integrated":  # plot integrated data for given signals
@@ -605,7 +605,7 @@ class AnaFrame(tk.Frame):
             # for each signal, retrieve the data to plot and remember name
             signals = [signal.integrate() for signal in signals]
             for signal in signals:
-                x, y = signal.get_xy()
+                x, y = signal.get_xy_bytype()
                 plt.plot(x, y)
                 names.append(signal.name)
         elif plottype == "fit":  # plot created fit and original data for given signals
@@ -617,7 +617,7 @@ class AnaFrame(tk.Frame):
             for signal in signals:
                 self.title_text.set("Fit of %s" % signal.name)
                 # first plot original signal data
-                x, y = signal.get_xy()
+                x, y = signal.get_xy_bytype()
                 plt.plot(x, y)
                 names.append(signal.name)
                 # then plot the latest created fit of that data to a model curve

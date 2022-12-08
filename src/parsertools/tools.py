@@ -69,7 +69,29 @@ signals_to_csv(signals, file_name, data_folder) - Save all signals in the list
 
 import os
 import itertools
-from src.parsertools import get_xy
+
+
+def get_xy(data_dictionary):
+    """Return list of time and list of values"""
+    timelist = [datapoint["time"] for datapoint in data_dictionary]
+    valuelist = [datapoint["value"] for datapoint in data_dictionary]
+    return timelist, valuelist
+
+
+def get_highest(data_dictionary):
+    """
+    Return time and value of the highest value
+
+    For normal signal this will be the time and value of the peak
+    For integrated signal this will be the total integral
+    """
+    highest_value = 0.
+    highest_time = 0.
+    for point in data_dictionary:
+        if point["value"] >= highest_value:
+            highest_value = point["value"]
+            highest_time = point["time"]
+    return highest_time, highest_value
 
 
 def list_files(data_folder):

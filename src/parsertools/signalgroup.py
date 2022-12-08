@@ -213,7 +213,7 @@ class Signalgroup:
                 if var != "signal_data":
                     output += "%s=%s\n" % (var, str(vars(signal)[var]))
             output += "DATA\n"
-            x, y = signal.get_xy()
+            x, y = signal.get_xy_bytype()
             rows = zip(x, y)
             for line in rows:
                 output_line = ",".join(map(str, line)) + "\n"
