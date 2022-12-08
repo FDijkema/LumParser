@@ -29,6 +29,7 @@ class Signalgroup:
         self.notes = notes  # notes are for user
         self.filename = filename    # filename is used for saving
         self.fits = {}  # latest created fits of signals by signal name
+        self._currentindex = 0
 
     @classmethod
     def loadfrom(cls, directory):
@@ -63,6 +64,14 @@ class Signalgroup:
                 signals.append(signal)
         signalgroup = Signalgroup(signals, filename, notes)
         return signalgroup
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self._currentindex < len(self.indexed):
+            return self.get_at(self._currentindex)
+        raise StopIteration
 
     def add(self, signals):
         """Append signals to group, both by name and index"""
@@ -255,7 +264,7 @@ class Signalgroup:
         for var in numvars:
             output += str(var) + ","
         output += "\n"
-        for signal in self.get_all():  # row of values for each signal
+        for signal in self:  # row of values for each signal
             line = signal.name + ", " + signal.filename + ","
             for var in numvars:
                 line += str(vars(signal)[var]) + ","

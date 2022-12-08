@@ -304,7 +304,7 @@ class AnaFrame(tk.Frame):
 
     def update_browser_box(self):
         self.browser_box.delete(0, END)
-        for signal in self.signalgroup.get_all():
+        for signal in self.signalgroup:
             self.browser_box.insert(END, signal.name)
 
     def launch_move(self):
@@ -506,7 +506,7 @@ class AnaFrame(tk.Frame):
         if len(self.signalgroup.indexed) != len(value):
             print("The number of values does not match the number of signals. Try again")
             return
-        for i, signal in enumerate(self.signalgroup.get_all()):
+        for i, signal in enumerate(self.signalgroup):
             try:
                 setattr(signal, name, float(value[i]))
             except TypeError:
@@ -519,7 +519,7 @@ class AnaFrame(tk.Frame):
     def delete_p(self):
         """Delete a parameter for all signal in the set."""
         selected_p = self.param_box.get("active")
-        for signal in self.signalgroup.get_all():
+        for signal in self.signalgroup:
             delattr(signal, selected_p)
         self.update_param_box()
 
@@ -555,7 +555,7 @@ class AnaFrame(tk.Frame):
         y_name = self.y_var.get()
         x = []
         y = []
-        for signal in self.signalgroup.get_all():
+        for signal in self.signalgroup:
             try:
                 x.append(float(getattr(signal, x_name)))
             except AttributeError:
@@ -573,7 +573,7 @@ class AnaFrame(tk.Frame):
     def show_all(self):
         """Plot all signals in the file."""
         self.title_text.set("All signals in dataset")
-        signals = [signal for signal in self.signalgroup.get_all()]
+        signals = [signal for signal in self.signalgroup]
         self.plot(signals)
 
     def show_selected(self):
