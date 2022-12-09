@@ -45,8 +45,8 @@ class ToolFrame(tk.Frame):
         ## signal information
         signalframe = tk.Frame(self)
         signalframe.grid(row=2, column=0, pady=2, sticky=N + E + S + W)
-        self.selected_signal = tk.StringVar()
-        signal_title = tk.Label(signalframe, textvariable=self.selected_signal)
+        self.controller.selected_signal = tk.StringVar()
+        signal_title = tk.Label(signalframe, textvariable=self.controller.selected_signal)
         signal_title.grid(row=0, column=0, sticky=W)
         self.signal_info = tk.StringVar()
         info_label = tk.Label(signalframe, textvariable=self.signal_info, justify=LEFT)
@@ -62,9 +62,9 @@ class ToolFrame(tk.Frame):
         all_button.grid(row=1, column=1, sticky=N + E + S + W)
         menulabel = tk.Label(plotsetter, text="Plot type:")
         menulabel.grid(row=0, column=0, sticky=W + N + S)
-        self.active_plot = tk.StringVar(value="signals")
+        self.controller.active_plot = tk.StringVar(value="signals")
         self.optionslist = ["signals", "integrated"]
-        self.plotoptions = tk.OptionMenu(plotsetter, self.active_plot, *self.optionslist)
+        self.plotoptions = tk.OptionMenu(plotsetter, self.controller.active_plot, *self.optionslist)
         self.plotoptions.grid(row=0, column=1, sticky=N + E + S)
         print("sucessfully created toolframe")
 
@@ -183,7 +183,7 @@ class ToolFrame(tk.Frame):
         labeltext2 = "Total integral:  %.6g RLU*s" % signal.total_int
         labeltext3 = "Peak start:  %.6g s" % signal.start
         labeltext4 = "File of origin:  %s" % signal.filename
-        self.selected_signal.set("Selected signal: " + signal.name)
+        self.controller.selected_signal.set("Selected signal: " + signal.name)
         self.signal_info.set("\n".join([labeltext1, labeltext2, labeltext3, labeltext4]))
         self.controller.fit_signal = signal
         self.controller.title_text.set(signal.name)
