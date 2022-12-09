@@ -196,26 +196,16 @@ class TimeDriveData:
             signals.append(Signal(signal_name, signal_data, self.name))  # create a Signal instance
         return signals  # list of signal objects
 
-    def get_xy_bytype(self, oftype="original"):
-        """
-        Output list of time and list of values.
-
-        Parameters:
-            oftype ["original" or "corrected"]: indicates whether the original data
-                or the data corrected for the background noise and reset to t0 = 0
-                should be used
-        """
-        typedict = {"original": self.data, "corrected": self.corrected}
-        data = typedict[oftype]
-        timelist, valuelist = get_xy(data)
-        return timelist, valuelist
-
     def export_to_csv(self, filename, data_folder, oftype="original"):
         """Save data to the assigned filename."""
         output = ""
         columns = []
         header = ([self.name, ""], [oftype, ""])
-        data = self.get_xy_bytype(oftype=oftype)
+        data_by_type = {
+            "original": get_xy(self.data),
+            "corrected": get_xy(self.corrected)
+        }
+        data = data_by_type[oftype]
         # put informative headers above the data
         column1 = header[0] + data[0]
         column2 = header[1] + data[1]

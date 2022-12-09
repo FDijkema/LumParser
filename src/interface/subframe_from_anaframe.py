@@ -1,6 +1,7 @@
 import os
 import tkinter as tk
 from tkinter import N, S, W, E, DISABLED, EXTENDED, TOP, RIGHT, LEFT, X, Y, BOTH, END, ANCHOR
+import src.parsertools as pt
 
 
 class ToolFrame(tk.Frame):
@@ -161,7 +162,7 @@ class ToolFrame(tk.Frame):
                   "filename=%s\n"
                   "start=%.6g\n"
                   "DATA\n" % (signal.name, signal.filename, signal.start))
-        x, y = signal.get_xy_bytype()
+        x, y = pt.get_xy(signal.signal_data)
         rows = zip(x, y)
         for line in rows:
             output_line = ",".join(map(str, line)) + "\n"
