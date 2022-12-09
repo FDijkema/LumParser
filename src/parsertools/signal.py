@@ -123,6 +123,8 @@ class Signal:
             outparams = dict(zip(func.params, list(popt)))
         outparams["p"] = p
         for P in outparams:
-            setattr(self.name, P, outparams[P])
-        self.fit_data = dict(zip(list(x), list(func(x, *popt))))
+            setattr(self, P, outparams[P])
+        self.fit_data = []
+        for time, value in zip(x, list([func(time, *popt) for time in x])):
+            self.fit_data.append({"time": float(time), "value": float(value)})
         return func, popt, perr, p

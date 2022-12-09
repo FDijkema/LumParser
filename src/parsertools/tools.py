@@ -71,10 +71,10 @@ import os
 import itertools
 
 
-def get_xy(data_dictionary):
+def get_xy(data):
     """Return list of time and list of values"""
-    timelist = [datapoint["time"] for datapoint in data_dictionary]
-    valuelist = [datapoint["value"] for datapoint in data_dictionary]
+    timelist = [datapoint["time"] for datapoint in data]
+    valuelist = [datapoint["value"] for datapoint in data]
     return timelist, valuelist
 
 
@@ -117,15 +117,14 @@ def make_header(signal, datatype="normal"):
     infoheaders = {
         "normal": ["Peak height [RLU]:", "%.6g" % signal.peak_height],
         "integrated": ["Total integral [RLU*s]:", "%.6g" % signal.total_int],
-        "fit": [""]
+        "fit": ["", ""]
     }
     typeheaders = {
         "normal": ["Time[s]", "Light signal[RLU]"],
         "integrated": ["Time[s]", "Integrated light signal[RLU]"],
         "fit": ["Time[s]", "Fit of integrated light signal[RLU]"]
     }
-    header = [list(h) for h in
-              zip(nameheader, startheaders, infoheaders[datatype], typeheaders[datatype])]
+    header = [list(h) for h in zip(nameheader, startheaders, infoheaders[datatype], typeheaders[datatype])]
     return header
 
 
@@ -137,15 +136,15 @@ def signals_to_csv(signals, file_name, data_folder, normal=1, integrated=0, fit=
         if normal:
             x, y = get_xy(signal.signal_data)
             header = make_header(signal, datatype="normal")
-            columns.extend((header[0] + x, header[1] + y))
+            columns.extend([header[0] + x, header[1] + y])
         if integrated:
             x, y = get_xy(signal.integrated_data)
             header = make_header(signal, datatype="integrated")
-            columns.extend((header[0] + x, header[1] + y))
+            columns.extend([header[0] + x, header[1] + y])
         if fit:
             x, y = get_xy(signal.fit_data)
             header = make_header(signal, datatype="fit")
-            columns.extend((header[0] + x, header[1] + y))
+            columns.extend([header[0] + x, header[1] + y])
     rows = itertools.zip_longest(*columns)
     for line in rows:
         output_line = ",".join(map(str, line)) + "\n"

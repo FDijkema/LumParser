@@ -51,7 +51,7 @@ class ToolFrame(tk.Frame):
         info_label = tk.Label(signalframe, textvariable=self.signal_info, justify=LEFT)
         info_label.grid(row=1, column=0, sticky=W)
         ## plot settings
-        plotsetter = tk.LabelFrame(tools, text="Settings for view")
+        plotsetter = tk.LabelFrame(self, text="Settings for view")
         plotsetter.grid(row=3, column=0, pady=2, sticky=N + S + W + E)
         plotsetter.grid_columnconfigure(0, weight=1)
         plotsetter.grid_columnconfigure(1, weight=1)
@@ -65,6 +65,7 @@ class ToolFrame(tk.Frame):
         self.optionslist = ["signals", "integrated"]
         self.plotoptions = tk.OptionMenu(plotsetter, self.active_plot, *self.optionslist)
         self.plotoptions.grid(row=0, column=1, sticky=N + E + S)
+        print("sucessfully created toolframe")
 
     def open_rename_window(self):
         """

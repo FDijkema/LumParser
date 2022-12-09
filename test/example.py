@@ -49,12 +49,12 @@ for name, signallist in parser.signals.items():
     allsignals.append(signallist[0])    # pick first detected signal from each file
 signalgroup = pt.Signalgroup(allsignals, "Example02.parsed")
 # fit all signals to the luminescence model
-for s_name in signalgroup.indexed:
-    funct, popt, perr, p = signalgroup.fit_signal(s_name, "Luminescence model",
-                                                  init_str="10000, 1, .3, .004")
+for s in signalgroup:
+    funct, popt, perr, p = s.fit_to("Exponential", init_str="10000, 1, .3")
 # export the fits and the parameters that were found
-signalgroup.export_fits("Fits_of_Example02.csv", csv_folder, "Luminescence model")
+signalgroup.export_csv("Fits_of_Example02.csv", csv_folder, normal=False, integrate=True, fit=True)
 signalgroup.export_parameters("Fitparams_of_Example02.csv", csv_folder)
 
 # save the files for later use
+signalgroup.change_filename("test_output.parsed")
 signalgroup.save(parsed_folder)

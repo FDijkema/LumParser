@@ -1,7 +1,8 @@
 import os
 import copy
+from numbers import Number
 from src.parsertools.signal import Signal
-from src.parsertools.tools import signals_to_csv
+from src.parsertools.tools import signals_to_csv, get_xy
 
 
 class Signalgroup:
@@ -71,7 +72,9 @@ class Signalgroup:
 
     def __next__(self):
         if self._currentindex < len(self.indexed):
-            return self.get_at(self._currentindex)
+            current_signal = self.get_at(self._currentindex)
+            self._currentindex += 1
+            return current_signal
         raise StopIteration
 
     def add(self, signals):
@@ -214,7 +217,7 @@ class Signalgroup:
                 if var != "signal_data":
                     output += "%s=%s\n" % (var, str(vars(signal)[var]))
             output += "DATA\n"
-            x, y = signal.get_xy_bytype()
+            x, y = get_xy(signal.signal_data)
             rows = zip(x, y)
             for line in rows:
                 output_line = ",".join(map(str, line)) + "\n"
@@ -260,12 +263,13 @@ class Signalgroup:
         # collect numeric variables for each signal
         numvars = []
         for var in vars(some_signal):  # create the title row
-            if var.isnumeric():
+            if isinstance(vars(some_signal)[var], Number):
                 numvars.append(var)
         for var in numvars:
             output += str(var) + ","
         output += "\n"
-        for signal in self:  # row of values for each signal
+        for s_name in self.indexed:  # row of values for each signal
+            signal = self.signals[s_name]
             line = signal.name + ", " + signal.filename + ","
             for var in numvars:
                 line += str(vars(signal)[var]) + ","
