@@ -365,11 +365,8 @@ class AnaFrame(tk.Frame):
         """Display information on a signal when one is selected."""
         s_name = self.browser_box.get(ANCHOR)
         signal = self.signalgroup.get(s_name)
-        peak_time, peak_value = signal.get_highest()
-        intsignal = signal.integrate()
-        int_time, int_value = intsignal.get_highest()
-        labeltext1 = "Peak maximum:  %.6g RLU at %.6g s" % (peak_value, peak_time)
-        labeltext2 = "Total integral:  %.6g RLU*s" % int_value
+        labeltext1 = "Peak maximum:  %.6g RLU at %.6g s" % (signal.peak_height, signal.peak_time)
+        labeltext2 = "Total integral:  %.6g RLU*s" % signal.total_int
         labeltext3 = "Peak start:  %.6g s" % signal.start
         labeltext4 = "File of origin:  %s" % signal.filename
         self.selected_signal.set("Selected signal: " + signal.name)
@@ -430,9 +427,8 @@ class AnaFrame(tk.Frame):
             fit_formula = ''
             fit_params = ''
         # fit signal data to curve
-        funct, popt, perr, p = self.signalgroup.fit_signal(s_name, curve_name,
-                                                           init_str=rawinits, func_str=fit_formula,
-                                                           param_str=fit_params)
+        funct, popt, perr, p = self.signalgroup.get(s_name).fit_to(
+            fct=curve_name, init_str=rawinits, func_str=fit_formula, param_str=fit_params)
         outparams = dict(zip(funct.params, list(popt)))
         # display the parameter information
         lines = []
@@ -463,11 +459,10 @@ class AnaFrame(tk.Frame):
         else:  # these parameters are not used
             fit_formula = ''
             fit_params = ''
-        for s_name in self.signalgroup.indexed:
+        for signal in self.signalgroup:
             try:
-                funct, popt, perr, p = self.signalgroup.fit_signal(s_name, curve_name,
-                                                               init_str=rawinits, func_str=fit_formula,
-                                                               param_str=fit_params)  # calculating the fit
+                funct, popt, perr, p = signal.fit_to(
+                    fct=curve_name, init_str=rawinits, func_str=fit_formula, param_str=fit_params)  # calculating the fit
             except TypeError:
                 pass
         print("Fitted all signals")
@@ -476,6 +471,7 @@ class AnaFrame(tk.Frame):
         if "fit" not in self.optionslist:
             self.optionslist.append("fit")
         self.active_plot.set("fit")
+        self.plot(self.signalgroup.get_all())
 
     def launch_add_p(self):
         """
@@ -605,7 +601,6 @@ class AnaFrame(tk.Frame):
             plt.xlabel("Time (s)")
             plt.ylabel("Integrated light intensity (RLU*s)")
             # for each signal, retrieve the data to plot and remember name
-            signals = [signal.integrate() for signal in signals]
             for signal in signals:
                 x, y = pt.get_xy(signal.integrated_data)
                 plt.plot(x, y)
@@ -615,15 +610,14 @@ class AnaFrame(tk.Frame):
             plt.xlabel("Time (s)")
             plt.ylabel("Integrated light intensity (RLU*s)")
             # for each signal, retrieve the data to plot and remember name
-            signals = [signal.integrate() for signal in signals]
             for signal in signals:
                 self.title_text.set("Fit of %s" % signal.name)
                 # first plot original signal data
-                x, y = pt.get_xy(signal.fit_data)
+                x, y = pt.get_xy(signal.integrated_data)
                 plt.plot(x, y)
                 names.append(signal.name)
                 # then plot the latest created fit of that data to a model curve
-                fx, fy = self.signalgroup.fits[signal.name]
+                fx, fy = pt.get_xy(signal.fit_data)
                 plt.plot(fx, fy)
                 names.append("fit")
         # display the names of plotted signals in the legend and adjust plot size

@@ -20,7 +20,7 @@ def prepare_inits(initstring, **kwargs):
     for num in rawinits:
         for arg_name, arg_value in kwargs.items():
             if str(arg_name) in num:
-                num = num.replace(str(arg_name), arg_value)
+                num = num.replace(str(arg_name), str(arg_value))
         if "__" in num:
             num = ""
             print("Value not allowed")

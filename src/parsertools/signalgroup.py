@@ -43,6 +43,7 @@ class Signalgroup:
         # get and store the information
         signals = []
         filename = rawlines[0]
+        notes_written = False
         for i, line in enumerate(rawlines):
             if line.startswith("NOTES"):
                 start_notes = i
@@ -52,7 +53,9 @@ class Signalgroup:
                 start_data = i
             elif line.startswith("END"):  # create a new signal
                 end = i
-                notes = "\n".join(rawlines[start_notes+1:start_signal])
+                if not notes_written:
+                    notes = "\n".join(rawlines[start_notes+1:start_signal])
+                    notes_written = True
                 s_info = {line.split("=")[0]:line.split("=")[1] for line in rawlines[start_signal+1: start_data]}
                 for name, value in s_info.items():
                     try:
@@ -68,6 +71,7 @@ class Signalgroup:
         return signalgroup
 
     def __iter__(self):
+        self._currentindex=0
         return self
 
     def __next__(self):
@@ -214,7 +218,8 @@ class Signalgroup:
             signal = self.signals[s_name]
             output += "SIGNAL\n"
             for var in vars(signal):
-                if var != "signal_data":
+                vars_to_skip = ["signal_data", "integrated_data", "fit_data"]
+                if var not in vars_to_skip:
                     output += "%s=%s\n" % (var, str(vars(signal)[var]))
             output += "DATA\n"
             x, y = get_xy(signal.signal_data)
