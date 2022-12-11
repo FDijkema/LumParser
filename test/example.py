@@ -1,9 +1,9 @@
 """
-This script shows an example of data parsing using Parser_tools.py
+This script shows an example of data parsing using tools.py
 """
 
 import os
-import Parser_tools as pt
+import src.parsertools as pt
 
 # location to store data
 data_folder = os.path.join(os.getcwd(), "..", "data")
@@ -21,12 +21,10 @@ print(all_files)
 # make a dataset of the first file in the list
 name01 = all_files[0]["name"]
 directory01 = all_files[0]["directory"]
-dataset01 = pt.Dataset(name01, directory01)
+dataset01 = pt.TimeDriveData(name01, directory01)
 
 # get all signals from the dataset
-allsignals01 = dataset01.analyse(starting_point=0, threshold=0.3, bg_bounds="start_short")
-for s01 in allsignals01:
-    print(s01.get_info())
+allsignals01 = dataset01.extract_signals(starting_point=0, threshold=0.3)
 # save all the found signals to a csv file
 pt.signals_to_csv(allsignals01, "Example01.csv", csv_folder)
 
@@ -51,12 +49,12 @@ for name, signallist in parser.signals.items():
     allsignals.append(signallist[0])    # pick first detected signal from each file
 signalgroup = pt.Signalgroup(allsignals, "Example02.parsed")
 # fit all signals to the luminescence model
-for s_name in signalgroup.indexed:
-    funct, popt, perr, p = signalgroup.fit_signal(s_name, "Luminescence model",
-                                                  init_str="10000, 1, .3, .004")
+for s in signalgroup:
+    funct, popt, perr, p = s.fit_to("Exponential", init_str="10000, 1, .3")
 # export the fits and the parameters that were found
-signalgroup.export_fits("Fits_of_Example02.csv", csv_folder, "Luminescence model")
+signalgroup.export_csv("Fits_of_Example02.csv", csv_folder, normal=False, integrate=True, fit=True)
 signalgroup.export_parameters("Fitparams_of_Example02.csv", csv_folder)
 
 # save the files for later use
+signalgroup.change_filename("test_output.parsed")
 signalgroup.save(parsed_folder)

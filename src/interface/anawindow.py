@@ -15,11 +15,12 @@ methods upon user interaction.
 
 import sys
 import os
-import Parser_tools as pt
+import src.parsertools as pt
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 import tkinter as tk
 from tkinter import N, S, W, E, DISABLED, EXTENDED, TOP, RIGHT, LEFT, X, Y, BOTH, END, ANCHOR
+from subframe_from_anaframe import ToolFrame
 
 
 class Std_redirector(object):
@@ -55,28 +56,29 @@ class AnaFrame(tk.Frame):
 
         # initiate the frame and start filling it up
         tk.Frame.__init__(self, self.parent)
-        self.create_output_menu()   # Create custom option is menubar
+        self.create_output_menu()   # Create custom option in menubar
 
         # make sure the analysis window fills the entire main window
-        main_window = tk.PanedWindow(self)
-        main_window.pack(fill=BOTH, expand=1)
-        main_window.grid_columnconfigure(1, weight=1)
-        main_window.grid_rowconfigure(0, weight=1)
+        self.main_window = tk.PanedWindow(self)
+        self.main_window.pack(fill=BOTH, expand=1)
+        self.main_window.grid_columnconfigure(1, weight=1)
+        self.main_window.grid_rowconfigure(0, weight=1)
 
         # create the overall layout of the screen:
         # tools on the left, plot and terminal in the middle and extra options
         # on the right
-        tools = tk.Frame(main_window, borderwidth=5)
+        tools = tk.Frame(self.main_window, borderwidth=5)
+        # tools = ToolFrame(self.main_window, self, borderwidth=5)
         tools.grid(row=0, rowspan=2, column=0, sticky="nswe", pady=2)
         tools.grid_columnconfigure(0, weight=1)
 
-        plotframe = tk.LabelFrame(main_window, borderwidth=1, text="View")
+        plotframe = tk.LabelFrame(self.main_window, borderwidth=1, text="View")
         plotframe.grid(row=0, column=1, sticky="nswe", pady=2, padx=2)
 
-        terminal_frame = tk.Frame(main_window)
+        terminal_frame = tk.Frame(self.main_window)
         terminal_frame.grid(row=1, column=1, sticky=N + S + W + E, pady=10)
 
-        extra_options = tk.Frame(main_window)
+        extra_options = tk.Frame(self.main_window)
         extra_options.grid(row=0, rowspan=2, column=2, pady=2, sticky=N + S + W + E)
 
         # fill the toolbar (left side of the screen)
@@ -304,7 +306,7 @@ class AnaFrame(tk.Frame):
 
     def update_browser_box(self):
         self.browser_box.delete(0, END)
-        for signal in self.signalgroup.get_all():
+        for signal in self.signalgroup:
             self.browser_box.insert(END, signal.name)
 
     def launch_move(self):
@@ -346,7 +348,7 @@ class AnaFrame(tk.Frame):
                   "filename=%s\n"
                   "start=%.6g\n"
                   "DATA\n" % (signal.name, signal.filename, signal.start))
-        x, y = signal.get_xy()
+        x, y = pt.get_xy(signal.signal_data)
         rows = zip(x, y)
         for line in rows:
             output_line = ",".join(map(str, line)) + "\n"
@@ -363,11 +365,8 @@ class AnaFrame(tk.Frame):
         """Display information on a signal when one is selected."""
         s_name = self.browser_box.get(ANCHOR)
         signal = self.signalgroup.get(s_name)
-        peak_time, peak_value = signal.get_highest()
-        intsignal = signal.integrate()
-        int_time, int_value = intsignal.get_highest()
-        labeltext1 = "Peak maximum:  %.6g RLU at %.6g s" % (peak_value, peak_time)
-        labeltext2 = "Total integral:  %.6g RLU*s" % int_value
+        labeltext1 = "Peak maximum:  %.6g RLU at %.6g s" % (signal.peak_height, signal.peak_time)
+        labeltext2 = "Total integral:  %.6g RLU*s" % signal.total_int
         labeltext3 = "Peak start:  %.6g s" % signal.start
         labeltext4 = "File of origin:  %s" % signal.filename
         self.selected_signal.set("Selected signal: " + signal.name)
@@ -428,9 +427,8 @@ class AnaFrame(tk.Frame):
             fit_formula = ''
             fit_params = ''
         # fit signal data to curve
-        funct, popt, perr, p = self.signalgroup.fit_signal(s_name, curve_name,
-                                                           init_str=rawinits, func_str=fit_formula,
-                                                           param_str=fit_params)
+        funct, popt, perr, p = self.signalgroup.get(s_name).fit_to(
+            fct=curve_name, init_str=rawinits, func_str=fit_formula, param_str=fit_params)
         outparams = dict(zip(funct.params, list(popt)))
         # display the parameter information
         lines = []
@@ -461,11 +459,10 @@ class AnaFrame(tk.Frame):
         else:  # these parameters are not used
             fit_formula = ''
             fit_params = ''
-        for s_name in self.signalgroup.indexed:
+        for signal in self.signalgroup:
             try:
-                funct, popt, perr, p = self.signalgroup.fit_signal(s_name, curve_name,
-                                                               init_str=rawinits, func_str=fit_formula,
-                                                               param_str=fit_params)  # calculating the fit
+                funct, popt, perr, p = signal.fit_to(
+                    fct=curve_name, init_str=rawinits, func_str=fit_formula, param_str=fit_params)  # calculating the fit
             except TypeError:
                 pass
         print("Fitted all signals")
@@ -474,6 +471,7 @@ class AnaFrame(tk.Frame):
         if "fit" not in self.optionslist:
             self.optionslist.append("fit")
         self.active_plot.set("fit")
+        self.plot(self.signalgroup.get_all())
 
     def launch_add_p(self):
         """
@@ -506,7 +504,7 @@ class AnaFrame(tk.Frame):
         if len(self.signalgroup.indexed) != len(value):
             print("The number of values does not match the number of signals. Try again")
             return
-        for i, signal in enumerate(self.signalgroup.get_all()):
+        for i, signal in enumerate(self.signalgroup):
             try:
                 setattr(signal, name, float(value[i]))
             except TypeError:
@@ -519,7 +517,7 @@ class AnaFrame(tk.Frame):
     def delete_p(self):
         """Delete a parameter for all signal in the set."""
         selected_p = self.param_box.get("active")
-        for signal in self.signalgroup.get_all():
+        for signal in self.signalgroup:
             delattr(signal, selected_p)
         self.update_param_box()
 
@@ -555,7 +553,7 @@ class AnaFrame(tk.Frame):
         y_name = self.y_var.get()
         x = []
         y = []
-        for signal in self.signalgroup.get_all():
+        for signal in self.signalgroup:
             try:
                 x.append(float(getattr(signal, x_name)))
             except AttributeError:
@@ -573,7 +571,7 @@ class AnaFrame(tk.Frame):
     def show_all(self):
         """Plot all signals in the file."""
         self.title_text.set("All signals in dataset")
-        signals = [signal for signal in self.signalgroup.get_all()]
+        signals = [signal for signal in self.signalgroup]
         self.plot(signals)
 
     def show_selected(self):
@@ -595,7 +593,7 @@ class AnaFrame(tk.Frame):
             plt.ylabel("Light intensity (RLU)")
             # for each signal, retrieve the data to plot and remember name
             for signal in signals:
-                x, y = signal.get_xy()
+                x, y = pt.get_xy(signal.signal_data)
                 plt.plot(x, y)
                 names.append(signal.name)
         elif plottype == "integrated":  # plot integrated data for given signals
@@ -603,9 +601,8 @@ class AnaFrame(tk.Frame):
             plt.xlabel("Time (s)")
             plt.ylabel("Integrated light intensity (RLU*s)")
             # for each signal, retrieve the data to plot and remember name
-            signals = [signal.integrate() for signal in signals]
             for signal in signals:
-                x, y = signal.get_xy()
+                x, y = pt.get_xy(signal.integrated_data)
                 plt.plot(x, y)
                 names.append(signal.name)
         elif plottype == "fit":  # plot created fit and original data for given signals
@@ -613,15 +610,14 @@ class AnaFrame(tk.Frame):
             plt.xlabel("Time (s)")
             plt.ylabel("Integrated light intensity (RLU*s)")
             # for each signal, retrieve the data to plot and remember name
-            signals = [signal.integrate() for signal in signals]
             for signal in signals:
                 self.title_text.set("Fit of %s" % signal.name)
                 # first plot original signal data
-                x, y = signal.get_xy()
+                x, y = pt.get_xy(signal.integrated_data)
                 plt.plot(x, y)
                 names.append(signal.name)
                 # then plot the latest created fit of that data to a model curve
-                fx, fy = self.signalgroup.fits[signal.name]
+                fx, fy = pt.get_xy(signal.fit_data)
                 plt.plot(fx, fy)
                 names.append("fit")
         # display the names of plotted signals in the legend and adjust plot size
@@ -705,7 +701,7 @@ class AnaFrame(tk.Frame):
                                         normal=normal, integrate=inte)
         elif self.export_type.get() == "fit":
             fit_type = self.curve_name.get()
-            self.signalgroup.export_fits(exportname, os.path.join(self.controller.data_folder, "csv"), fit_type)
+            self.signalgroup.export_csv(exportname, os.path.join(self.controller.data_folder, "csv"), normal=0, integrate=1, fit=1)
         elif self.export_type.get() == "parameters":
             self.signalgroup.export_parameters(exportname, os.path.join(self.controller.data_folder, "csv"))
         print("Exported as %s" % exportname)

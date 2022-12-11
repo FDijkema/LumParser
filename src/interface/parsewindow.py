@@ -17,12 +17,12 @@ methods upon user interaction.
 import copy
 import os
 import sys
-import Parser_tools as pt
-from Ana_window import AnaFrame
+import src.parsertools as pt
+from src.interface.anawindow import AnaFrame
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 import tkinter as tk
-from tkinter import N, S, W, E, DISABLED, EXTENDED, TOP, RIGHT, LEFT, X, Y, BOTH, END, ANCHOR
+from tkinter import N, S, W, E, DISABLED, EXTENDED, TOP, RIGHT, LEFT, X, BOTH, END, ANCHOR
 
 
 class Std_redirector(object):
@@ -293,7 +293,7 @@ class ParseFrame(tk.Frame):
         clicked_file = self.loader_box.get(self.loader_box.curselection())
         # set the displayed variables to variables of the selected file
         for i, v in enumerate(self.variables):
-            value = self.parser.anasettings[clicked_file][v["name"]]
+            value = self.parser.parse_settings[clicked_file][v["name"]]
             self.variables[i]["var"].set(value)
         self.display(clicked_file)
 
@@ -343,8 +343,8 @@ class ParseFrame(tk.Frame):
 
         # check if the background was calculated, otherwise just plot the
         # uncorrected data
-        if not hasattr(self.parser.datasets[thisfile],"background"):
-            x, y = self.parser.datasets[thisfile].get_xy()
+        if not hasattr(self.parser.datasets[thisfile], "background"):
+            x, y = pt.get_xy(self.parser.datasets[thisfile].data)
             plt.plot(x, y)
             plt.xlabel("Time (s)")
             plt.ylabel("Light intensity (RLU)")
@@ -357,7 +357,7 @@ class ParseFrame(tk.Frame):
         plottype = self.active_plot.get()
         if plottype == "original":  # uncorrected data as in the time drive
             # plot data
-            x, y = self.parser.datasets[thisfile].get_xy()
+            x, y = pt.get_xy(self.parser.datasets[thisfile].data)
             plt.plot(x, y)
             # set axes names
             plt.xlabel("Time (s)")
@@ -367,8 +367,8 @@ class ParseFrame(tk.Frame):
             for signal in self.parser.signals[thisfile]:
                 x_line = signal.start
                 plt.axvline(x=x_line, color="r")  # vertical line at detected signal starts
-            L = self.parser.anasettings[thisfile]["bg_bound_L"]
-            R = self.parser.anasettings[thisfile]["bg_bound_R"]
+            L = self.parser.parse_settings[thisfile]["bg_bound_L"]
+            R = self.parser.parse_settings[thisfile]["bg_bound_R"]
             background = self.parser.datasets[thisfile].background
             if background > 0.1:
                 height = 10 * background
@@ -378,7 +378,7 @@ class ParseFrame(tk.Frame):
             plt.plot([R, R], [0, height], color='g')
         elif plottype == "corrected":   # corrected time drive data
             # plot data
-            x, y = self.parser.datasets[thisfile].get_xy(oftype="corrected")
+            x, y = pt.get_xy(self.parser.datasets[thisfile].corrected)
             plt.plot(x, y)
             # set axes names
             plt.xlabel("Time (s)")
@@ -390,7 +390,7 @@ class ParseFrame(tk.Frame):
             plt.ylabel("Light intensity (RLU)")
             # plot data for all signals in the selected time drive
             for signal in self.parser.signals[thisfile]:
-                x, y = signal.get_xy()
+                x, y = pt.get_xy(signal.signal_data)
                 plt.plot(x, y)
                 names.append(signal.name + "at %s s" % signal.start)
             # show the signal names in a legend
@@ -402,10 +402,9 @@ class ParseFrame(tk.Frame):
             plt.ylabel("Integrated light intensity (RLU*s)")
             # plot integrated data for all signals in the selected time drive
             for signal in self.parser.signals[thisfile]:
-                isignal = signal.integrate()
-                x, y = isignal.get_xy()
+                x, y = pt.get_xy(signal.integrated_data)
                 plt.plot(x, y)
-                names.append(isignal.name + "at %s s" % isignal.start)
+                names.append(signal.name + "at %s s" % signal.start)
             # show the signal names in a legend
             plt.legend(names, loc=(1.04, 0))
         # adjust the plot size and show the created plot

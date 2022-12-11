@@ -15,9 +15,9 @@ App - the application that is created.
 
 import sys
 import os
-import Parser_tools as pt
-from Ana_window import AnaFrame
-from Parse_window import ParseFrame
+import src.parsertools as pt
+from src.interface.anawindow import AnaFrame
+from src.interface.parsewindow import ParseFrame
 import matplotlib.pyplot as plt
 import tkinter as tk
 from tkinter import N, S, W, E, TOP, BOTH, END
@@ -50,7 +50,7 @@ class App(tk.Tk):
         self.default_name = "parsed_file"
         self.name_count = 0
         # set path names for data retrieval
-        self.data_folder = os.path.join(os.getcwd(), "..", "data")
+        self.data_folder = os.path.join(os.getcwd(), "../..", "data")
         self.import_folder = os.path.join(self.data_folder, "td")
 
         # create screen layout
