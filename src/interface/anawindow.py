@@ -67,7 +67,6 @@ class AnaFrame(tk.Frame):
         # create the overall layout of the screen:
         # tools on the left, plot and terminal in the middle and extra options
         # on the right
-        # tools = tk.Frame(self.main_window, borderwidth=5)
         self.tools = ToolFrame(self.main_window, self, borderwidth=5)
         self.tools.grid(row=0, rowspan=2, column=0, sticky="nswe", pady=2)
         self.tools.grid_columnconfigure(0, weight=1)
