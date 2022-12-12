@@ -1,6 +1,6 @@
-import os
 import tkinter as tk
-from tkinter import N, S, W, E, DISABLED, EXTENDED, TOP, RIGHT, LEFT, X, Y, BOTH, END, ANCHOR
+from tkinter import N, S, W, E, LEFT, END
+from src.parsertools.fitting.functions import DEFAULT_INITS
 
 
 class FitOptionsFrame(tk.Frame):
@@ -105,13 +105,7 @@ class FitOptionsFrame(tk.Frame):
         """
         c_name = self.curve_name.get()
         # set inits
-        default = {
-            "Exponential": "I, 1, .005",
-            "Double exponential": "I, 1, .3, .04, .0025",
-            "Double exponential 2": "I, 1, .3, .04",
-            "Double with baseline": "I, .3, .04, .0025, 1, 1",
-            "Other": ""
-        }
+        default = DEFAULT_INITS
         self.inits_entry.delete(0, END)
         self.inits_entry.insert(END, default[c_name])
         # display formula and parameter field for "Other"

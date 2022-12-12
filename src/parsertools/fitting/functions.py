@@ -1,7 +1,11 @@
 import numpy as np
+from math import acos, asin, atan, atan2, pow
+from numpy import ceil, cos, cosh, degrees, e, exp, fabs, floor, fmod, frexp, hypot, ldexp, \
+    log, log10, modf, pi, radians, sin, sinh, sqrt, tan, tanh
 
 
 FUNCTIONS = {}
+DEFAULT_INITS = {"Other": ""}
 
 
 def make_func(mystring, myparams):
@@ -50,7 +54,9 @@ def make_func(mystring, myparams):
     func.name = "Other"
     func.formula = mystring
     func.params = params
+    func.bounds = (-np.inf, np.inf)
     FUNCTIONS[func.name] = func
+    DEFAULT_INITS[func.name] = ", ".join(["1"]*len(params))
 
 
 # preset functions
@@ -61,6 +67,7 @@ exp_func.formula = "a * (b - (exp(-k * x)))"
 exp_func.params = ["a", "b", "k"]
 exp_func.bounds = (np.array([0, 0.5, 0]), np.array([np.inf, 1.5, 1]))
 FUNCTIONS[exp_func.name] = exp_func
+DEFAULT_INITS[exp_func.name] = "I, 1, .005"
 
 
 def dexp_func(x, a, b, c, k1, k2):
@@ -70,6 +77,7 @@ dexp_func.formula = "a * (b - (c * exp(-k1 * x) + (1 - c) * exp(-k2 * x)))"
 dexp_func.params = ["a", "b", "c", "k1", "k2"]
 dexp_func.bounds = (-np.inf, np.inf)
 FUNCTIONS[dexp_func.name] = dexp_func
+DEFAULT_INITS[dexp_func.name] = "I, 1, .3, .04, .0025"
 
 
 def dexp_func_2(x, a, b, c, k1):
@@ -79,7 +87,7 @@ dexp_func_2.formula = "a * (b - (c * exp(-k1 * x) + (1 - c) * exp(-0.032 * x)))"
 dexp_func_2.params = ["a", "b", "c", "k1"]
 dexp_func_2.bounds = (-np.inf, np.inf)
 FUNCTIONS[dexp_func_2.name] = dexp_func_2
-
+DEFAULT_INITS[dexp_func_2.name] = "I, 1, .3, .04"
 
 def dexp_baseline(x, a, c, k1, k2, d, b):
     return a - a * (c * np.exp(-k1 * x) + (1 - c) * np.exp(-k2 * x)) + d * x + b
@@ -88,7 +96,7 @@ dexp_baseline.formula = "a - a * (c * np.exp(-k1 * x) + (1 - c) * np.exp(-k2 * x
 dexp_baseline.params = ["a", "c", "k1", "k2", "d", "b"]
 dexp_baseline.bounds = (np.array([0, 0, 0, 0, -np.inf, -np.inf]), np.array([np.inf, np.inf, 0.1, 0.02, np.inf, np.inf]))
 FUNCTIONS[dexp_baseline.name] = dexp_baseline
-
+DEFAULT_INITS[dexp_baseline.name] = "I, .3, .04, .0025, 1, 1"
 
 # def lum_model(x, E0, S0, kcat, kE):
 #    return 450.3E9 * kcat*E0*S0*np.exp((-kE-0.0003)*x + kcat/kE*E0*np.exp(-kE*x))

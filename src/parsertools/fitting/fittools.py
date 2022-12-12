@@ -67,14 +67,12 @@ def fit_data(x, y, start=0, fct="Exponential", inits=(), func_str='', param_str=
     global pcov
 
     # create function from user input if desired, otherwise use preset function
-    if fct in FUNCTIONS:
-        pass
-    elif fct == "Other":
+    if fct == "Other":
         make_func(func_str, param_str)
-    else:
-        print("function type not recognised")
-        return
-    func = FUNCTIONS[fct]
+    try:
+        func = FUNCTIONS[fct]
+    except KeyError:
+        print("Function type not recognised.")
 
     # check initial values
     if len(inits) != len(func.params):
