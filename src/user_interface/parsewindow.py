@@ -15,7 +15,6 @@ methods upon user interaction.
 """
 
 import copy
-import os
 import sys
 import src.parsertools as pt
 from src.user_interface.anawindow import AnaFrame
