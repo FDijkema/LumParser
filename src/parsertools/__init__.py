@@ -1,4 +1,5 @@
 import src.parsertools.fitting as fitting
+import src.parsertools.defaultvalues
 from .timedrivedata import TimeDriveData
 from .timedriveparser import Parser
 from .signal import Signal

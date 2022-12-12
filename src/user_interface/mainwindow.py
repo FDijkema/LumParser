@@ -38,8 +38,6 @@ class App(tk.Tk):
         self.controller = self
         self.default_name = "parsed_file"
         self.name_count = 0
-        # set path names for data retrieval
-        self.data_folder = os.path.join(os.getcwd(), "../..", "data")
 
         # create screen layout
         self.mainframe = tk.Frame(self)
@@ -109,7 +107,7 @@ class App(tk.Tk):
         self.open_box.grid(row=1, column=0, columnspan=2, sticky=W + E + N + S)
         loader_scrollbar.config(command=self.open_box.yview)
 
-        folder = os.path.join(self.data_folder, "parsed")  # directory of script
+        folder = pt.defaultvalues.default_parsed_folder  # directory of script
         files = []
         for f in os.listdir(folder):
             if f.endswith('.parsed'):

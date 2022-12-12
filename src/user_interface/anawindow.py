@@ -258,13 +258,13 @@ class AnaFrame(tk.Frame):
         if self.export_type.get() == "signals":
             normal = self.export_normal.get()
             inte = self.export_int.get()
-            self.signalgroup.export_csv(exportname, os.path.join(self.controller.data_folder, "csv"),
+            self.signalgroup.export_csv(exportname, pt.defaultvalues.default_csv_folder,
                                         normal=normal, integrate=inte)
         elif self.export_type.get() == "fit":
             fit_type = self.extra_options.curve_name.get()
-            self.signalgroup.export_csv(exportname, os.path.join(self.controller.data_folder, "csv"), normal=0, integrate=1, fit=1)
+            self.signalgroup.export_csv(exportname, pt.defaultvalues.default_csv_folder, normal=0, integrate=1, fit=1)
         elif self.export_type.get() == "parameters":
-            self.signalgroup.export_parameters(exportname, os.path.join(self.controller.data_folder, "csv"))
+            self.signalgroup.export_parameters(exportname, pt.defaultvalues.default_csv_folder)
         print("Exported as %s" % exportname)
         self.export_window.destroy()
 
@@ -275,7 +275,7 @@ class AnaFrame(tk.Frame):
         else:
             print("Saving...")
             self.signalgroup.notes = self.tools.browser_notes.get(1.0, END)
-            self.signalgroup.save(os.path.join(self.controller.data_folder, "parsed"))
+            self.signalgroup.save(pt.defaultvalues.default_parsed_folder)
             print("Saved dataset as %s" % self.signalgroup.filename)
 
     def launch_save_as(self):
@@ -306,7 +306,7 @@ class AnaFrame(tk.Frame):
         self.signalgroup.change_filename(new_name)
         new_name = self.signalgroup.filename    # make sure the two names are the same to prevent errors
         print("Changed filename to {}".format(self.signalgroup.filename))
-        self.signalgroup.save(os.path.join(self.controller.data_folder, "parsed"))
+        self.signalgroup.save(pt.defaultvalues.default_parsed_folder)
         # rename the window #
         if new_name != old_name:
             self.controller.windownames[index] = new_name

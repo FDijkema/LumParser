@@ -141,7 +141,7 @@ class AnaToolFrame(tk.Frame):
         self.lister_box.grid(row=1, column=0, columnspan=2, sticky=W + E + N + S)
         lister_scrollbar.config(command=self.lister_box.yview)
 
-        folder = os.path.join(self.controller.data_folder, "parsed")  # directory of script
+        folder = pt.defaultvalues.default_parsed_folder  # directory of script
         files = []
         for f in os.listdir(folder):
             if f.endswith('.parsed'):

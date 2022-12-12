@@ -322,13 +322,13 @@ class ParseFrame(tk.Frame):
         """Export the data based on the user input, then close export window."""
         filename = self.export_file.get()
         if self.export_type.get() == "original":
-            self.tools.parser.datasets[filename].export_to_csv(exportname, os.path.join(self.controller.data_folder, "csv"), oftype="original")
+            self.tools.parser.datasets[filename].export_to_csv(exportname, pt.defaultvalues.default_csv_folder, oftype="original")
         elif self.export_type.get() == "corrected":
-            self.tools.parser.datasets[filename].export_to_csv(exportname, os.path.join(self.controller.data_folder, "csv"), oftype="corrected")
+            self.tools.parser.datasets[filename].export_to_csv(exportname, pt.defaultvalues.default_csv_folder, oftype="corrected")
         elif self.export_type.get() == "signals":
             normal = self.export_normal.get()
             inte = self.export_int.get()
-            self.tools.parser.export_csv(filename, exportname, os.path.join(self.controller.data_folder, "csv"), normal=normal, integrate=inte)
+            self.tools.parser.export_csv(filename, exportname, pt.defaultvalues.default_csv_folder, normal=normal, integrate=inte)
         print("Exported file as {}".format(exportname))
         self.export_window.destroy()
 
