@@ -80,7 +80,7 @@ class Signal:
             prev_val = cur_val
         return int_data
 
-    def fit_to(self, fct="Exponential", init_str='', func_str='', param_str=''):
+    def fit_to(self, fct='', init_str='', func_str='', param_str=''):
         """
         Take the signal data and fit to given function, return fit information
 

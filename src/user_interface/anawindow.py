@@ -166,6 +166,8 @@ class AnaFrame(tk.Frame):
                 plt.plot(x, y)
                 names.append(signal.name)
         elif plottype == "fit":  # plot created fit and original data for given signals
+            if len(signals) == 1 and len(signals[0].fit_data) == 0:
+                self.tools.active_plot.set("integrated")
             # label the axes
             plt.xlabel("Time (s)")
             plt.ylabel("Integrated light intensity (RLU*s)")
@@ -179,7 +181,7 @@ class AnaFrame(tk.Frame):
                 # then plot the latest created fit of that data to a model curve
                 fx, fy = pt.get_xy(signal.fit_data)
                 plt.plot(fx, fy)
-                names.append("fit")
+                names.append("Fit of %s" % signal.name)
         # display the names of plotted signals in the legend and adjust plot size
         plt.legend(names, loc=(1.04, 0))
         plt.tight_layout()

@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import N, S, W, E, LEFT, END
-from src.parsertools.fitting.functions import DEFAULT_INITS
+from src.parsertools.fitting.functions import FUNCTIONS, DEFAULT_INITS
 
 
 class FitOptionsFrame(tk.Frame):
@@ -23,11 +23,9 @@ class FitOptionsFrame(tk.Frame):
         fitlabel2.grid(row=1, column=0, sticky=W)
         self.curve_name = tk.StringVar()
         self.curve_name.trace("w", lambda *args: self.on_curve_select())
-        fitlabel_options = tk.OptionMenu(self.fitframe, self.curve_name,
-                                         "Exponential", "Double exponential", "Double exponential 2",
-                                         "Double with baseline", "Other")
+        fitlabel_options = tk.OptionMenu(self.fitframe, self.curve_name, *FUNCTIONS.keys())
         fitlabel_options.grid(row=1, column=1, columnspan=4, sticky=N + E + S + W)
-        # extra options for a manual formula, only displayed in "Other" mode
+        # extra options for a manual formula, only displayed in "Custom" mode
         self.fitlabel5 = tk.Label(self.fitframe, text="Formula: ")
         self.fitlabel5.grid(row=2, column=0, columnspan=2, sticky="wns")
         self.fitlabel5.grid_remove()
@@ -100,7 +98,7 @@ class FitOptionsFrame(tk.Frame):
         Default initial estimates for parameters are shown depending on which
         formula is selected.
 
-        If the selected formula type is "Other", additional options are presented
+        If the selected formula type is "Custom", additional options are presented
         to the user to enter a formula and parameters.
         """
         c_name = self.curve_name.get()
@@ -108,8 +106,8 @@ class FitOptionsFrame(tk.Frame):
         default = DEFAULT_INITS
         self.inits_entry.delete(0, END)
         self.inits_entry.insert(END, default[c_name])
-        # display formula and parameter field for "Other"
-        if c_name == "Other":
+        # display formula and parameter field for "Custom"
+        if c_name == "Custom":
             self.fitlabel5.grid()
             self.formula_entry.grid()
             self.fitlabel6.grid()
@@ -125,14 +123,14 @@ class FitOptionsFrame(tk.Frame):
         The selected signal is fitted to the selected curve.
 
         Information about the fit is presented and the fit is plotted in the plot
-        area. If the curve type is "Other", the formula and parameters put in
+        area. If the curve type is "Custom", the formula and parameters put in
         by the user are collected first.
         :return:
         """
         s_name = self.controller.tools.browser_box.get("active")
         curve_name = self.curve_name.get()
         rawinits = self.inits_entry.get()
-        if curve_name == "Other":
+        if curve_name == "Custom":
             fit_formula = self.formula_entry.get()
             fit_params = self.param_entry.get()
         else:  # these parameters are not used
@@ -154,6 +152,9 @@ class FitOptionsFrame(tk.Frame):
         # prepare plotting the fit
         if "fit" not in self.controller.tools.optionslist:
             self.controller.tools.optionslist.append("fit")
+            self.controller.tools.plotoptions = tk.OptionMenu(self.controller.tools.plotsetter, self.controller.tools.active_plot, *self.controller.tools.optionslist)
+            self.controller.tools.plotoptions.grid(row=0, column=1, sticky=N + E + S)
+#            self.controller.tools.plotoptions["menu"].add_command(label="fit")
         self.controller.tools.active_plot.set("fit")
         self.controller.plot([self.signalgroup.get(s_name)])
 
@@ -165,7 +166,7 @@ class FitOptionsFrame(tk.Frame):
         """
         curve_name = self.curve_name.get()
         rawinits = self.inits_entry.get()
-        if curve_name == "Other":
+        if curve_name == "Custom":
             fit_formula = self.formula_entry.get()
             fit_params = self.param_entry.get()
         else:  # these parameters are not used
@@ -182,6 +183,11 @@ class FitOptionsFrame(tk.Frame):
         self.update_param_box()
         if "fit" not in self.controller.tools.optionslist:
             self.controller.tools.optionslist.append("fit")
+            self.controller.tools.plotoptions = tk.OptionMenu(self.controller.tools.plotsetter,
+                                                              self.controller.tools.active_plot,
+                                                              *self.controller.tools.optionslist)
+            self.controller.tools.plotoptions.grid(row=0, column=1, sticky=N + E + S)
+        #            self.controller.tools.plotoptions["menu"].add_command(label="fit")
         self.controller.tools.active_plot.set("fit")
         self.controller.plot(self.signalgroup.get_all())
 

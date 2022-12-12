@@ -4,8 +4,8 @@ from numpy import ceil, cos, cosh, degrees, e, exp, fabs, floor, fmod, frexp, hy
     log, log10, modf, pi, radians, sin, sinh, sqrt, tan, tanh
 
 
-FUNCTIONS = {}
-DEFAULT_INITS = {"Other": ""}
+FUNCTIONS = {"Custom": None}
+DEFAULT_INITS = {"Custom": ""}
 
 
 def make_func(mystring, myparams):
@@ -51,14 +51,13 @@ def make_func(mystring, myparams):
             print('Syntax error in formula. Please try again.')
             return
 
-    func.name = "Other"
+    func.name = "Custom"
     func.formula = mystring
     func.params = params
     func.bounds = (-np.inf, np.inf)
-    FUNCTIONS[func.name] = func
-    DEFAULT_INITS[func.name] = ", ".join(["1"]*len(params))
+    FUNCTIONS["Custom"] = func
 
-
+# MAY BE CHANGED #
 # preset functions
 def exp_func(x, a, b, k):
     return a * (b - (np.exp(-k * x)))

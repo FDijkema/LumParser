@@ -52,21 +52,21 @@ class AnaToolFrame(tk.Frame):
         info_label = tk.Label(signalframe, textvariable=self.signal_info, justify=LEFT)
         info_label.grid(row=1, column=0, sticky=W)
         ## plot settings
-        plotsetter = tk.LabelFrame(self, text="Settings for view")
-        plotsetter.grid(row=3, column=0, pady=2, sticky=N + S + W + E)
-        plotsetter.grid_columnconfigure(0, weight=1)
-        plotsetter.grid_columnconfigure(1, weight=1)
-        selected_button = tk.Button(plotsetter, text="Show selected", command=self.controller.show_selected)
+        self.plotsetter = tk.LabelFrame(self, text="Settings for view")
+        self.plotsetter.grid(row=3, column=0, pady=2, sticky=N + S + W + E)
+        self.plotsetter.grid_columnconfigure(0, weight=1)
+        self.plotsetter.grid_columnconfigure(1, weight=1)
+        selected_button = tk.Button(self.plotsetter, text="Show selected", command=self.controller.show_selected)
         selected_button.grid(row=1, column=0, sticky=N + E + S + W)
-        all_button = tk.Button(plotsetter, text="Show all", command=self.controller.show_all)
+        all_button = tk.Button(self.plotsetter, text="Show all", command=self.controller.show_all)
         all_button.grid(row=1, column=1, sticky=N + E + S + W)
-        menulabel = tk.Label(plotsetter, text="Plot type:")
+        menulabel = tk.Label(self.plotsetter, text="Plot type:")
         menulabel.grid(row=0, column=0, sticky=W + N + S)
         self.active_plot = tk.StringVar(value="signals")
         self.optionslist = ["signals", "integrated"]
-        self.plotoptions = tk.OptionMenu(plotsetter, self.active_plot, *self.optionslist)
+        self.plotoptions = tk.OptionMenu(self.plotsetter, self.active_plot, *self.optionslist,
+                                         command=self.controller.show_selected)
         self.plotoptions.grid(row=0, column=1, sticky=N + E + S)
-        print("sucessfully created toolframe")
 
     def open_rename_window(self):
         """

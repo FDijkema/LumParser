@@ -32,7 +32,7 @@ def prepare_inits(initstring, **kwargs):
     return inits
 
 
-def fit_data(x, y, start=0, fct="Exponential", inits=(), func_str='', param_str=''):
+def fit_data(x, y, start=0, fct='', inits=(), func_str='', param_str=''):
     """
     Fit x and y and fit to given function, return fit information
 
@@ -41,7 +41,7 @@ def fit_data(x, y, start=0, fct="Exponential", inits=(), func_str='', param_str=
         "Exponential" - exponential function
         "Double exponential" - double exponential function
         "Luminescence model" - luminescence model
-    2) fct = "Other"
+    2) fct = "Custom"
         In this case func_str and param_str must further describe the function
         func_str should be a string stating the  mathematical expression
             for the function
@@ -53,8 +53,8 @@ def fit_data(x, y, start=0, fct="Exponential", inits=(), func_str='', param_str=
     :param fct: string that describes desired type of function
     :param init_str: string of initial values for parameters. String of numbers separated by comma's.
         Letters I and P are accepted to denote total integral and peak height.
-    :param func_str: for fct='Other', function formula should be put in here
-    :param param_str: for fct='Other', function parameters should be put in here
+    :param func_str: for fct='Custom', function formula should be put in here
+    :param param_str: for fct='Custom', function parameters should be put in here
     :return: func, popt, perr, p
         # func is function object used to fit
             # includes func.name (str), func.formula (str) and func.params (list of str)
@@ -67,7 +67,7 @@ def fit_data(x, y, start=0, fct="Exponential", inits=(), func_str='', param_str=
     global pcov
 
     # create function from user input if desired, otherwise use preset function
-    if fct == "Other":
+    if fct == "Custom":
         make_func(func_str, param_str)
     try:
         func = FUNCTIONS[fct]
