@@ -1,7 +1,6 @@
 import os
 import tkinter as tk
 from tkinter import N, S, W, E, DISABLED, EXTENDED, TOP, RIGHT, LEFT, X, Y, BOTH, END, ANCHOR
-import src.parsertools as pt
 
 
 class PlotOptionsFrame(tk.Frame):
@@ -14,10 +13,10 @@ class PlotOptionsFrame(tk.Frame):
 
         ## lots of fit settings and information
         # information about what signal is selected
-        self.fitframe = tk.LabelFrame(self.extra_options, text="Fit to curve")
+        self.fitframe = tk.LabelFrame(self, text="Fit to curve")
         self.fitframe.grid(row=0, column=0, columnspan=3, pady=2, sticky=N + S + W + E)
         self.fit_signal = tk.StringVar()
-        fitlabel1 = tk.Label(self.fitframe, textvariable=self.selected_signal, width=38)
+        fitlabel1 = tk.Label(self.fitframe, textvariable=self.controller.selected_signal, width=38)
         fitlabel1.grid(row=0, column=0, columnspan=3, sticky=W)
         # options for different types of fit
         fitlabel2 = tk.Label(self.fitframe, text="Fit to:  ")
@@ -59,7 +58,7 @@ class PlotOptionsFrame(tk.Frame):
 
         ## layout for custom plot
         # title and some configuration of the frame for correct display
-        self.extraframe = tk.LabelFrame(self.extra_options, text="Plot fit parameters")
+        self.extraframe = tk.LabelFrame(self, text="Plot fit parameters")
         self.extraframe.grid(row=1, column=0, columnspan=3, pady=2, sticky="wens")
         self.extraframe.columnconfigure(0, weight=1)
         self.extraframe.columnconfigure(1, weight=1)
@@ -84,7 +83,7 @@ class PlotOptionsFrame(tk.Frame):
         set_x_button.grid(row=2, column=2, sticky="wens")
         set_y_button = tk.Button(self.extraframe, text="Set as Y", command=self.set_as_y)
         set_y_button.grid(row=2, column=3, sticky="wens")
-        show_plot_button = tk.Button(self.extraframe, text="Show", command=self.show_custom)
+        show_plot_button = tk.Button(self.extraframe, text="Show", command=self.controller.show_custom)
         show_plot_button.grid(row=2, column=4, columnspan=2, sticky="wens")
         # information about selected parameters
         self.x_var = tk.StringVar()
@@ -93,3 +92,173 @@ class PlotOptionsFrame(tk.Frame):
         self.extra_label2.grid(row=3, column=0, columnspan=4, sticky="wns")
         self.extra_label3 = tk.Label(self.extraframe, text="Y-axis: ")
         self.extra_label3.grid(row=4, column=0, columnspan=4, sticky="wns")
+
+    def on_curve_select(self):
+        """
+        Set initial values and check if more options need to be shown
+
+        Default initial estimates for parameters are shown depending on which
+        formula is selected.
+
+        If the selected formula type is "Other", additional options are presented
+        to the user to enter a formula and parameters.
+        """
+        c_name = self.curve_name.get()
+        # set inits
+        default = {
+            "Exponential": "I, 1, .005",
+            "Double exponential": "I, 1, .3, .04, .0025",
+            "Double exponential 2": "I, 1, .3, .04",
+            "Double with baseline": "I, .3, .04, .0025, 1, 1",
+            "Other": ""
+        }
+        self.inits_entry.delete(0, END)
+        self.inits_entry.insert(END, default[c_name])
+        # display formula and parameter field for "Other"
+        if c_name == "Other":
+            self.fitlabel5.grid()
+            self.formula_entry.grid()
+            self.fitlabel6.grid()
+            self.param_entry.grid()
+        else:
+            self.fitlabel5.grid_remove()
+            self.formula_entry.grid_remove()
+            self.fitlabel6.grid_remove()
+            self.param_entry.grid_remove()
+
+    def fit(self):
+        """
+        The selected signal is fitted to the selected curve.
+
+        Information about the fit is presented and the fit is plotted in the plot
+        area. If the curve type is "Other", the formula and parameters put in
+        by the user are collected first.
+        :return:
+        """
+        s_name = self.controller.tools.browser_box.get("active")
+        curve_name = self.curve_name.get()
+        rawinits = self.inits_entry.get()
+        if curve_name == "Other":
+            fit_formula = self.formula_entry.get()
+            fit_params = self.param_entry.get()
+        else:  # these parameters are not used
+            fit_formula = ''
+            fit_params = ''
+        # fit signal data to curve
+        funct, popt, perr, p = self.signalgroup.get(s_name).fit_to(
+            fct=curve_name, init_str=rawinits, func_str=fit_formula, param_str=fit_params)
+        outparams = dict(zip(funct.params, list(popt)))
+        # display the parameter information
+        lines = []
+        for i, P in enumerate(funct.params):
+            lines.append(" = ".join([P, "%.6g" % outparams[P]]))
+            print("%s = %.6g +- %.6g" % (P, popt[i], perr[i]))
+        paramtext = "\n".join(lines)
+        print("p-value: " + str(p))
+        # displaying the information
+        self.solved_fit.set("Best fit:  %s\n%s" % (funct.formula, paramtext))
+        # prepare plotting the fit
+        if "fit" not in self.controller.tools.optionslist:
+            self.controller.tools.optionslist.append("fit")
+        self.controller.tools.active_plot.set("fit")
+        self.controller.plot([self.signalgroup.get(s_name)])
+
+    def fit_all(self):
+        """
+        All signals in the set are fitted to the selected curve.
+
+        The parameter box is updated with the newly created parameters.
+        """
+        curve_name = self.curve_name.get()
+        rawinits = self.inits_entry.get()
+        if curve_name == "Other":
+            fit_formula = self.formula_entry.get()
+            fit_params = self.param_entry.get()
+        else:  # these parameters are not used
+            fit_formula = ''
+            fit_params = ''
+        for signal in self.signalgroup:
+            try:
+                funct, popt, perr, p = signal.fit_to(
+                    fct=curve_name, init_str=rawinits, func_str=fit_formula, param_str=fit_params)  # calculating the fit
+            except TypeError:
+                pass
+        print("Fitted all signals")
+        self.solved_fit.set("Formula:  %s" % funct.formula)
+        self.update_param_box()
+        if "fit" not in self.controller.tools.optionslist:
+            self.controller.tools.optionslist.append("fit")
+        self.controller.tools.active_plot.set("fit")
+        self.controller.plot(self.signalgroup.get_all())
+
+    def launch_add_p(self):
+        """
+        Open a new window to let the user add a parameter to the parameter box.
+
+        add_p is called upon finish.
+        """
+        self.p_frame = tk.Toplevel(self.extraframe)
+        label1 = tk.Label(self.p_frame, text="Enter the name of the parameter to add "
+                                             "and the values for all signals in the order "
+                                             "they are in the list, separated by comma\'s")
+        label1.grid(row=0, column=0, columnspan=2, sticky="nsw")
+        name_label = tk.Label(self.p_frame, text="Name: ")
+        name_label.grid(row=1, column=0, sticky="w")
+        self.p_name = tk.StringVar()
+        name_entry = tk.Entry(self.p_frame, textvariable=self.p_name)
+        name_entry.grid(row=1, column=1, sticky="wens")
+        value_label = tk.Label(self.p_frame, text="Values: ")
+        value_label.grid(row=2, column=0, sticky="w")
+        self.p_value = tk.StringVar()
+        value_entry = tk.Entry(self.p_frame, textvariable=self.p_value)
+        value_entry.grid(row=2, column=1, sticky="wens")
+        add_button = tk.Button(self.p_frame, text="Add", command=self.add_p)
+        add_button.grid(row=3, column=1, sticky="wens")
+
+    def add_p(self):
+        """Add a parameter to the parameter box. This can then be used in a plot."""
+        name = self.p_name.get()
+        value = self.p_value.get().split(",")
+        if len(self.signalgroup.indexed) != len(value):
+            print("The number of values does not match the number of signals. Try again")
+            return
+        for i, signal in enumerate(self.signalgroup):
+            try:
+                setattr(signal, name, float(value[i]))
+            except TypeError:
+                print("The values must be numbers. Try again")
+                return
+        self.update_param_box()
+        self.p_frame.destroy()
+        print("Variable %s, with values %s added to signals" % (name, str(value)))
+
+    def delete_p(self):
+        """Delete a parameter for all signal in the set."""
+        selected_p = self.param_box.get("active")
+        for signal in self.signalgroup:
+            delattr(signal, selected_p)
+        self.update_param_box()
+
+    def update_param_box(self):
+        """Make sure all existing parameters are shown to the user."""
+        signal = self.signalgroup.get_at(0)
+        self.param_box.delete(0, END)
+        for var in vars(signal):
+            try:
+                float(vars(signal)[var])
+            except (ValueError, TypeError):  # only take attributes with numeric values
+                pass
+            else:
+                self.param_box.insert(END, var)
+
+    def set_as_x(self):
+        """Set selected parameter to use on X-axis."""
+        x = self.param_box.get("active")
+        self.x_var.set(x)
+        self.extra_label2.configure(text="X-axis:  " + x)
+
+    def set_as_y(self):
+        """Set selected parameter to use on Y-axis."""
+        y = self.param_box.get("active")
+        self.y_var.set(y)
+        self.extra_label3.configure(text="Y-axis:  " + y)

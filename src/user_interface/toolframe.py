@@ -1,6 +1,6 @@
 import os
 import tkinter as tk
-from tkinter import N, S, W, E, DISABLED, EXTENDED, TOP, RIGHT, LEFT, X, Y, BOTH, END, ANCHOR
+from tkinter import N, S, W, E, EXTENDED, LEFT, END, ANCHOR
 import src.parsertools as pt
 
 
@@ -62,9 +62,9 @@ class ToolFrame(tk.Frame):
         all_button.grid(row=1, column=1, sticky=N + E + S + W)
         menulabel = tk.Label(plotsetter, text="Plot type:")
         menulabel.grid(row=0, column=0, sticky=W + N + S)
-        self.controller.active_plot = tk.StringVar(value="signals")
+        self.active_plot = tk.StringVar(value="signals")
         self.optionslist = ["signals", "integrated"]
-        self.plotoptions = tk.OptionMenu(plotsetter, self.controller.active_plot, *self.optionslist)
+        self.plotoptions = tk.OptionMenu(plotsetter, self.active_plot, *self.optionslist)
         self.plotoptions.grid(row=0, column=1, sticky=N + E + S)
         print("sucessfully created toolframe")
 
