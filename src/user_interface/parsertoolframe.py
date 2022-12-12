@@ -37,7 +37,7 @@ class ParserToolFrame(tk.Frame):
         self.loader_box.bind('<<ListboxSelect>>', self.on_select)
         self.loader_box.bind('<Delete>', self.remove_file)
         self.loader_box.bind('<BackSpace>', self.remove_file)
-        self.loader_box.bind('<Right>', lambda *args: self.controller.signalbox.focus_set())
+        self.loader_box.bind('<Right>', lambda *args: self.controller.parse_options.signalbox.focus_set())
 
         ##setting adjustment
         setter = tk.LabelFrame(self, text="Settings for parsing")
@@ -182,9 +182,9 @@ class ParserToolFrame(tk.Frame):
 
     def update_signalbox(self, thisfile):
         """Display signals detected in given file."""
-        self.controller.signalbox.delete(0, END)
+        self.controller.parse_options.signalbox.delete(0, END)
         for signal in self.parser.signals[thisfile]:
-            self.controller.signalbox.insert(END, signal.name)
+            self.controller.parse_options.signalbox.insert(END, signal.name)
 
     def open_rename_window(self):
         """
@@ -193,7 +193,7 @@ class ParserToolFrame(tk.Frame):
         Call rename_signal upon finish.
         """
         thisfile = self.loader_box.get("active")
-        signal_index = self.controller.signalbox.index(ANCHOR)
+        signal_index = self.controller.parse_options.signalbox.index(ANCHOR)
         signal = self.parser.signals[thisfile][signal_index]
         self.rename_window = tk.Toplevel(self.controller.parse_options)
         self.rename_window.title("Rename signal")
