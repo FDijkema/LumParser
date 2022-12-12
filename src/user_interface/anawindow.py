@@ -19,9 +19,9 @@ import src.parsertools as pt
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 import tkinter as tk
-from tkinter import N, S, W, E, DISABLED, EXTENDED, TOP, RIGHT, LEFT, X, Y, BOTH, END, ANCHOR
-from toolframe import ToolFrame
-from plotoptionsframe import PlotOptionsFrame
+from tkinter import N, S, W, E, DISABLED, TOP, LEFT, X, BOTH, END
+from src.user_interface.anawindow_subframes.toolframe import ToolFrame
+from src.user_interface.anawindow_subframes.plotoptionsframe import PlotOptionsFrame
 
 
 class Std_redirector(object):
