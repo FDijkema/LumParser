@@ -1,16 +1,15 @@
 """
-Parser interface for luminescence time drive data
+Main window of LumParser user_interface
 
-This is the script that opens the main window and controls the parser and
-analysis windows.
-Parser_tools contains the underlying methods and deals with all data operations.
+This module is part of the user interface of the LumParsing package for working with luminescence time drive data.
+Class App controls the Main window, menubar and instances of ParseFrame and AnaFrame that are used to interact with data
+Instances of ParseFrame and AnaFrame are initiated from here and the menubar is filled with the appropriate options to
+interact with them. Previously saved data can be opened, creating an AnaFrame to interact with it.
 
-The script contains two classes:
-Std_redirector - used to redirect printed messages to the interface instead of
-    printing them on the console.
-App - the application that is created.
-    The __init__ method creates all visible objects on the screen, which in turn
-    call the other methods upon user interaction.
+ParseFrame  Used to open .td ascii files and export the data to csv or parse it to work with it in an AnaFrame
+AnaFrame    Used to analyse signal, either parsed from ascii in ParseFrame or previously savec
+
+StdRedirector is used to redirect output from print statements to a widget in the application
 """
 
 import sys

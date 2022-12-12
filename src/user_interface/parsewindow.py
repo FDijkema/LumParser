@@ -1,17 +1,23 @@
 """
 Parsing window of the luminescence time drive data parser.
 
-This script is part of the parser interface for luminescence time drive data. The
-Parsing window is controlled by the Main_window.
+This module is part of the user interface of the LumParsing package for working with luminescence time drive data.
+The Parsing window is controlled by the Main_window.
 This window deals with the parsing of time drive files into workable data.
 Settings for data parsing can be chosen, after which the data can be exported
 directly or opened in a parsed file in the Analysis window.
-The imported script Parser_self.tools deals with all data operations, whereas user
+All data operations use the use modules from the parsertools folder in this package, whereas user
 interactions are described below.
 
 The class ParseFrame describes the interactions of the Parser window.
-The __init__ method creates all objects on the screen, which then call the other
-methods upon user interaction.
+The window has two subframes that are described in separate modules:
+ParserToolFrame     Tools for choosing a file to parse and what settings to use (Left side of ParseFrame)
+ParserMixFrame      Shows the signals obtained after parsing and allows user to select which ones to use
+                    for further analysis. A mixed dataset can be created with signals obtained from different files.
+                    (Right side of ParseFrame)
+
+StdRedirector is used to redirect output from print statements to a widget in the application
+Plotting of data and export and saving are controlled directly by ParseFrame
 """
 
 import sys

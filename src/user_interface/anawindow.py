@@ -1,16 +1,22 @@
 """
 Analysis window of the luminescence time drive data parser.
 
-This script is part of the parser interface for luminescence time drive data. The
-Analysis window is controlled by the Main_window.
+This module is part of the user interface of the LumParsing package for working with luminescence time drive data.
+The Analysis window is controlled by the Main_window.
 This window deals with the analysis of signals. Ao: moving and removing, saving
 a file of multiple signals, exporting, fitting to a curve.
-The imported script Parser_tools deals with all data operations, whereas user
+All data operations use the use modules from the parsertools folder in this package, whereas user
 interactions are described below.
 
 The class AnaFrame describes the interactions of the Analysis window.
-The __init__ method creates all objects on the screen, which then call the other
-methods upon user interaction.
+The window has two subframes that are described in separate modules:
+AnaToolFrame        Tools for interacting with data. User notes, list of signals in the file and options for what type
+                    of plot to show (Left side of the Frame)
+FitOptionsFrame     Extra options to create a fit of one or more signals to the selected function type. Obtained
+                    parameters are saved and shown and can be plotted too. (Right side of the Frame)
+
+StdRedirector is used to redirect output from print statements to a widget in the application
+Plotting of data and export and saving are controlled directly by AnaFrame
 """
 
 import sys
