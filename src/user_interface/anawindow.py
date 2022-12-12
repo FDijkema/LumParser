@@ -22,18 +22,7 @@ import tkinter as tk
 from tkinter import N, S, W, E, DISABLED, TOP, LEFT, X, BOTH, END
 from src.user_interface.anawindow_subframes.toolframe import ToolFrame
 from src.user_interface.anawindow_subframes.plotoptionsframe import PlotOptionsFrame
-
-
-class Std_redirector(object):
-    def __init__(self, widget):
-        self.widget = widget
-
-    def flush(self):
-        pass
-
-    def write(self, string):
-        self.widget.insert(END, string)
-        self.widget.see(END)
+from src.user_interface.stdredirector import StdRedirector
 
 
 class AnaFrame(tk.Frame):
@@ -105,7 +94,7 @@ class AnaFrame(tk.Frame):
         self.textout = tk.Text(terminal_frame, width=90, height=15)
         self.textout.grid(row=0, column=0, sticky=N + W + S + E)
         scrollb.config(command=self.textout.yview)
-        sys.stdout = Std_redirector(self.textout)
+        sys.stdout = StdRedirector(self.textout)
         # standard welcome message
         print("Welcome to the Gaussia Luciferase data analysis interface")
 

@@ -21,18 +21,7 @@ from src.user_interface.parsewindow import ParseFrame
 import matplotlib.pyplot as plt
 import tkinter as tk
 from tkinter import N, S, W, E, TOP, BOTH, END
-
-
-class Std_redirector(object):
-    def __init__(self, widget):
-        self.widget = widget
-
-    def flush(self):
-        pass
-
-    def write(self, string):
-        self.widget.insert(END, string)
-        self.widget.see(END)
+from src.user_interface.stdredirector import StdRedirector
 
 
 class App(tk.Tk):
@@ -65,7 +54,7 @@ class App(tk.Tk):
         self.textout = tk.Text(self.mainframe, width=90, height=15)
         self.textout.grid(row=0, column=0, sticky=N + W + S + E)
         scrollb.config(command=self.textout.yview)
-        sys.stdout = Std_redirector(self.textout)
+        sys.stdout = StdRedirector(self.textout)
         print("Welcome to the Gaussia Luciferase data analysis kit")
         print("Click Start-Import to start importing .td files")
         print("Click Start-Open to load previously parsed files")
@@ -157,7 +146,7 @@ class App(tk.Tk):
 
         # update widgets to display in active window
         plt.figure(self.active_window.fig.number)   # plot
-        sys.stdout = Std_redirector(self.active_window.textout)  # text widget
+        sys.stdout = StdRedirector(self.active_window.textout)  # text widget
 
         # update the view menu
         self.viewmenu.delete(0, END)

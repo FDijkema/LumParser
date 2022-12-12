@@ -23,18 +23,7 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 import tkinter as tk
 from tkinter import N, S, W, E, DISABLED, EXTENDED, TOP, RIGHT, LEFT, X, BOTH, END, ANCHOR
-
-
-class Std_redirector(object):
-    def __init__(self, widget):
-        self.widget = widget
-
-    def flush(self):
-        pass
-
-    def write(self, string):
-        self.widget.insert(END, string)
-        self.widget.see(END)
+from src.user_interface.stdredirector import StdRedirector
 
 
 class ParseFrame(tk.Frame):
@@ -184,7 +173,7 @@ class ParseFrame(tk.Frame):
         self.textout = tk.Text(terminal_frame, width=90, height=15)
         self.textout.grid(row=0, column=0, sticky=N + W + S + E)
         scrollb.config(command=self.textout.yview)
-        sys.stdout = Std_redirector(self.textout)
+        sys.stdout = StdRedirector(self.textout)
         print("Welcome to the Gaussia Luciferase data parser interface. Click \"Import\" to import files")
 
         # extra options (right side of the screen)
