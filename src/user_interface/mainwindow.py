@@ -172,8 +172,3 @@ class App(tk.Tk):
             self.viewmenu.add_command(label=w_name, command=lambda w_name=w_name: self.show_frame(w_name))
         # update the Output menu
         self.menubar.entryconfig(3, menu=self.outputmenu)
-
-if __name__ == "__main__":
-    app = App()
-    app.mainloop()  # initialize event loop (start interaction with user)
-    app.quit()

@@ -21,8 +21,8 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 import tkinter as tk
 from tkinter import N, S, W, E, DISABLED, TOP, LEFT, X, BOTH
-from src.user_interface.parsertoolframe import ParserToolFrame
-from src.user_interface.parsermixframe import ParserMixFrame
+from src.user_interface.parsewindow_subframes.parsertoolframe import ParserToolFrame
+from src.user_interface.parsewindow_subframes.parsermixframe import ParserMixFrame
 from src.user_interface.stdredirector import StdRedirector
 
 
