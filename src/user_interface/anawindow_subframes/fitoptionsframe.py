@@ -3,7 +3,7 @@ import tkinter as tk
 from tkinter import N, S, W, E, DISABLED, EXTENDED, TOP, RIGHT, LEFT, X, Y, BOTH, END, ANCHOR
 
 
-class PlotOptionsFrame(tk.Frame):
+class FitOptionsFrame(tk.Frame):
 
     def __init__(self, parent, controller):
         self.parent = parent

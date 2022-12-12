@@ -40,7 +40,6 @@ class App(tk.Tk):
         self.name_count = 0
         # set path names for data retrieval
         self.data_folder = os.path.join(os.getcwd(), "../..", "data")
-        self.import_folder = os.path.join(self.data_folder, "td")
 
         # create screen layout
         self.mainframe = tk.Frame(self)

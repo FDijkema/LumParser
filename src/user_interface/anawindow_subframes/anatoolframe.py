@@ -4,7 +4,7 @@ from tkinter import N, S, W, E, EXTENDED, LEFT, END, ANCHOR
 import src.parsertools as pt
 
 
-class ToolFrame(tk.Frame):
+class AnaToolFrame(tk.Frame):
 
     def __init__(self, parent, controller, borderwidth=5):
         self.parent = parent

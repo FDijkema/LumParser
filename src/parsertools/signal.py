@@ -1,4 +1,4 @@
-from src.parsertools.tools import get_xy, get_highest
+from src.parsertools.pttools import get_xy, get_highest
 from src.parsertools.fitting.fittools import prepare_inits, fit_data
 
 

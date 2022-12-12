@@ -2,7 +2,7 @@ import os
 import copy
 from numbers import Number
 from src.parsertools.signal import Signal
-from src.parsertools.tools import signals_to_csv, get_xy
+from src.parsertools.pttools import signals_to_csv, get_xy
 
 
 class Signalgroup:

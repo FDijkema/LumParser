@@ -20,8 +20,8 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 import tkinter as tk
 from tkinter import N, S, W, E, DISABLED, TOP, LEFT, X, BOTH, END
-from src.user_interface.anawindow_subframes.toolframe import ToolFrame
-from src.user_interface.anawindow_subframes.plotoptionsframe import PlotOptionsFrame
+from src.user_interface.anawindow_subframes.anatoolframe import AnaToolFrame
+from src.user_interface.anawindow_subframes.fitoptionsframe import FitOptionsFrame
 from src.user_interface.stdredirector import StdRedirector
 
 
@@ -57,7 +57,7 @@ class AnaFrame(tk.Frame):
         # create the overall layout of the screen:
         # tools on the left, plot and terminal in the middle and extra options
         # on the right
-        self.tools = ToolFrame(self.main_window, self, borderwidth=5)
+        self.tools = AnaToolFrame(self.main_window, self, borderwidth=5)
         self.tools.grid(row=0, rowspan=2, column=0, sticky="nswe", pady=2)
         self.tools.grid_columnconfigure(0, weight=1)
 
@@ -67,7 +67,7 @@ class AnaFrame(tk.Frame):
         terminal_frame = tk.Frame(self.main_window)
         terminal_frame.grid(row=1, column=1, sticky=N + S + W + E, pady=10)
 
-        self.extra_options = PlotOptionsFrame(self.main_window, self)
+        self.extra_options = FitOptionsFrame(self.main_window, self)
         self.extra_options.grid(row=0, rowspan=2, column=2, pady=2, sticky=N + S + W + E)
 
         # middle part of the screen: plot and terminal
