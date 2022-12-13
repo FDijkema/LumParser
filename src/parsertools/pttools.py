@@ -51,8 +51,8 @@ def get_highest(data: list):
     return highest_time, highest_value
 
 
-def list_td_files(data_folder):
-    """give list of dicts with name and directory of files as keys for all files ending in .td in directory"""
+def list_td_files(data_folder: str) -> list:
+    """Give list of dicts with name and directory of files as keys for all files ending in .td in directory."""
     folder = data_folder
     files = []
     for f in os.listdir(folder):
@@ -62,12 +62,21 @@ def list_td_files(data_folder):
     return files
 
 
-def make_header(signal, datatype="normal"):
+def make_header(signal, datatype="normal") -> list:
     """
-    Return list of header columns
+    Create list of header columns with signal info to use in a csv file.
 
-    Headers give information about signal and function as titles for columns of
-    data in a csv file
+    The csv file will contain columns with time and value datapoints of the signal.
+    This function creates some meaningful column titles and extra information in a header.
+
+    :param signal: a signal object that will be saved to csv, to take the information from
+    :param datatype: what type of data from the signal should be saved. If multiple types of data are to be saved,
+        execute this function multiple times to create headers for each datatype.
+        Possible values:
+        # "normal"      will give header for plain data
+        # "integrated"  will give header for integrated data
+        # "fit"         will give header for fitted data
+    :return: a list of lists. Each list represents a column in the csv file.
     """
     nameheader = [signal.name, ""]
     startheaders = ["Start at [s]:", "%.6g" % signal.start]
@@ -85,8 +94,15 @@ def make_header(signal, datatype="normal"):
     return header
 
 
-def signals_to_csv(signals, file_name, data_folder, normal=1, integrated=0, fit=0):
-    """save the data of one or more signals to the assigned filename in csv format"""
+def signals_to_csv(signals, file_name: str, data_folder: str, normal=1, integrated=0, fit=0):
+    """
+    Save the data of one or more signals to the assigned filename in csv format.
+
+    :param signals: list of signal objects or a signalgroup (also an iterable of signal objects)
+    :param file_name: name to save file to
+    :param data_folder: where to save the file
+    :param normal:
+    """
     output = ""
     columns = []
     for signal in signals:
