@@ -1,3 +1,22 @@
+"""
+Right side tool frame for the Analysis window of the luminescence time drive data parser.
+
+This module is part of the user interface of the LumParsing package for working with luminescence time drive data.
+The parser mix frame is controlled by the Analysis window.
+This frame lets the user fit the selected signal to a curve and manage and plot parameters.
+
+The class FitOptionsFrame describes the interactions of the frame.
+In the interface, it is initiated with the frame it resides within as parent and the Analysis window as controller.
+
+Plotting data, selecting signals and writing notes are controlled by the Analysis window and its sub frame
+the analysis tool frame, respectively.
+
+User interactions through mouse and keyboard:
+
+Keyboard:
+Typing in designated fields.
+"""
+
 import tkinter as tk
 from tkinter import N, S, W, E, LEFT, END
 from src.parsertools.fitting.functions import FUNCTIONS, DEFAULT_INITS

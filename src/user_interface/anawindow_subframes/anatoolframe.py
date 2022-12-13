@@ -1,3 +1,32 @@
+"""
+Left side tool frame for the Analysis window of the luminescence time drive data parser.
+
+This module is part of the user interface of the LumParsing package for working with luminescence time drive data.
+The analysis tool frame is controlled by the Analysis window.
+This frame lets the user interacted with parsed data. The data can be created through parsing or opened from a parsed
+ file from previous parsing. It shows the user previously saved notes and a list of signals in the file.
+ The type of plot can also be selected.
+
+The class AnaToolFrame describes the interactions of the frame.
+In the interface, it is initiated with the frame it resides within as parent and the Ana window as controller.
+
+Plotting data and fitting signals are controlled by the Ana window and its sub frame the fit options frame,
+respectively.
+
+User interactions through mouse and keyboard:
+
+Mouse:
+Left click on a signal              Select the signal and plot it in currently selected plot type
+Hold SHIFT + left click             Select a range of signals
+Hold CTRL + left click              Select multiple signals
+
+Keyboard:
+CTRL + arrow up                     Move signal up one slot in the list
+CTRL + arrow down                   Move signal down one slot in the list
+CTRL + N                            Rename signal (rename window opens)
+"""
+
+
 import os
 import tkinter as tk
 from tkinter import N, S, W, E, EXTENDED, LEFT, END, ANCHOR
