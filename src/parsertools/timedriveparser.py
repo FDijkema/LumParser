@@ -1,5 +1,5 @@
 from src.parsertools.timedrivedata import TimeDriveData
-from src.parsertools.pttools import list_files, signals_to_csv
+from src.parsertools.pttools import list_td_files, signals_to_csv
 from src.parsertools.defaultvalues import default_threshold, default_starting_point, default_background_bounds
 
 
@@ -55,7 +55,7 @@ class Parser:
 
         :param data_folder: string of the datafolder to load datasets from
         """
-        for thisfile in list_files(data_folder):
+        for thisfile in list_td_files(data_folder):
             # dataset
             filename = thisfile["name"]
             file_dataset = TimeDriveData(filename, thisfile["directory"])

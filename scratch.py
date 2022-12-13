@@ -1,7 +1,7 @@
 
 if __name__ == "__main__":
     data_folder = os.getcwd()
-    for thisfile in parsertools.list_files(data_folder):
+    for thisfile in parsertools.list_td_files(data_folder):
         fname = thisfile["name"]
         file_dataset = parsertools.TimeDriveData(fname, thisfile["directory"])
         ##########################################################################

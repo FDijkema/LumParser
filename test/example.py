@@ -13,7 +13,7 @@ parsed_folder = os.path.join(data_folder, "parsed")
 import_folder = os.path.join(data_folder, "td")
 
 # retrieve a list of files
-all_files = pt.list_files(import_folder)
+all_files = pt.list_td_files(import_folder)
 print(all_files)
 
 

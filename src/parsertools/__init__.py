@@ -27,7 +27,7 @@ Signalgroup
 FUNCTIONS
 get_xy
 get_highest
-list_files
+list_td_files
 make_header
 signals_to_csv
 fitting.prepare_inits
@@ -90,4 +90,4 @@ from .timedrivedata import TimeDriveData
 from .timedriveparser import Parser
 from .signal import Signal
 from .signalgroup import Signalgroup
-from .pttools import list_files, signals_to_csv, get_xy, get_highest
+from .pttools import list_td_files, signals_to_csv, get_xy, get_highest

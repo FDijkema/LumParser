@@ -5,7 +5,8 @@ fitting
 DESCRIPTION
 This package is part of the parsertools toolset to process luminescence time drives. It provides functions for fitting
 signals to curves. The variables FUNCTIONS contains predefined types of curves that the data can be fitted to.
-Additional types of curves can be defined using make_func.
+Additional types of curves can be defined using make_func. The corresponding initial parameter guesses are stored in
+DEFAULT_INITS.
 When used as a package for scripting, using fit_data directly is the easiest way. prepare_inits and make_func are used
 by the interface.
 
