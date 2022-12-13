@@ -1,4 +1,8 @@
 """
+NAME
+anatoolframe
+
+DESCRIPTION
 Left side tool frame for the Analysis window of the luminescence time drive data parser.
 
 This module is part of the user interface of the LumParsing package for working with luminescence time drive data.
@@ -24,6 +28,9 @@ Keyboard:
 CTRL + arrow up                     Move signal up one slot in the list
 CTRL + arrow down                   Move signal down one slot in the list
 CTRL + N                            Rename signal (rename window opens)
+
+CLASSES
+AnaToolFrame (subclass of tk.Frame)
 """
 
 

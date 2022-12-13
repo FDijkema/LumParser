@@ -1,4 +1,8 @@
 """
+NAME
+parsermixframe
+
+DESCRIPTION
 Right side tool frame for the Parse window of the luminescence time drive data parser.
 
 This module is part of the user interface of the LumParsing package for working with luminescence time drive data.
@@ -30,6 +34,9 @@ Left arrow                          Move to the file selection box in the parser
                                     selected file
 Delete                              Remove the selected signal from the mixed dataset
 Backspace                           Remove the selected signal from the mixed dataset
+
+CLASSES
+ParserMixFrame (subclass of tk.Frame)
 """
 
 import copy

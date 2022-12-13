@@ -1,4 +1,8 @@
 """
+NAME
+fitoptionsframe
+
+DESCRIPTION
 Right side tool frame for the Analysis window of the luminescence time drive data parser.
 
 This module is part of the user interface of the LumParsing package for working with luminescence time drive data.
@@ -15,6 +19,9 @@ User interactions through mouse and keyboard:
 
 Keyboard:
 Typing in designated fields.
+
+CLASSES
+FitOptionsFrame (subclass of tk.Frame)
 """
 
 import tkinter as tk

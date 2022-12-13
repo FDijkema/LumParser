@@ -1,4 +1,8 @@
 """
+NAME
+parsewindow
+
+DESCRIPTION
 Parsing window of the luminescence time drive data parser.
 
 This module is part of the user interface of the LumParsing package for working with luminescence time drive data.
@@ -18,6 +22,9 @@ ParserMixFrame      Shows the signals obtained after parsing and allows user to 
 
 StdRedirector is used to redirect output from print statements to a widget in the application
 Plotting of data and export and saving are controlled directly by ParseFrame
+
+CLASSES
+ParseFrame (Subclass of tk.Frame)
 """
 
 import sys

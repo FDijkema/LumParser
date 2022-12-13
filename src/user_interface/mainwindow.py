@@ -1,4 +1,8 @@
 """
+NAME
+mainwindow
+
+DESCRIPTION
 Main window of LumParser user_interface
 
 This module is part of the user interface of the LumParsing package for working with luminescence time drive data.
@@ -10,6 +14,9 @@ ParseFrame  Used to open .td ascii files and export the data to csv or parse it 
 AnaFrame    Used to analyse signal, either parsed from ascii in ParseFrame or previously savec
 
 StdRedirector is used to redirect output from print statements to a widget in the application
+
+CLASSES
+App (Subclass of tk.Tk)
 """
 
 import sys

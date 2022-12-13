@@ -1,4 +1,8 @@
 """
+NAME
+parsertoolframe
+
+DESCRIPTION
 Left side tool frame for the Parse window of the luminescence time drive data parser.
 
 This module is part of the user interface of the LumParsing package for working with luminescence time drive data.
@@ -25,6 +29,9 @@ Arrow up                            Select the file above the current selection
 Arrow down                          Select the file below the current selection
 Right arrow                         Move to the signal box in the parser mix frame and select the first signal
                                     found in the file
+
+CLASSES
+ParserToolFrame (subclass of tk.Frame)
 """
 
 import src.parsertools as pt

@@ -1,4 +1,8 @@
 """
+NAME
+anawindow
+
+DESCRIPTION
 Analysis window of the luminescence time drive data parser.
 
 This module is part of the user interface of the LumParsing package for working with luminescence time drive data.
@@ -17,6 +21,9 @@ FitOptionsFrame     Extra options to create a fit of one or more signals to the 
 
 StdRedirector is used to redirect output from print statements to a widget in the application
 Plotting of data and export and saving are controlled directly by AnaFrame
+
+CLASSES
+AnaFrame (Subclass of tk.Frame)
 """
 
 import sys
