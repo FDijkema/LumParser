@@ -98,10 +98,16 @@ def signals_to_csv(signals, file_name: str, data_folder: str, normal=1, integrat
     """
     Save the data of one or more signals to the assigned filename in csv format.
 
+    The type of data saved depends on which parameters are set to 1. If all are set to 1,
+        all types of data are saved, etc.
+
     :param signals: list of signal objects or a signalgroup (also an iterable of signal objects)
     :param file_name: name to save file to
     :param data_folder: where to save the file
-    :param normal:
+    :param bool normal: should normal (plain, unintegrated, but background corrected and rezeroed) data be saved
+    :param bool integrated: should integrated data be saved
+    :param bool fit: should the fit be saved (if there is one)
+    :return: None   writes a csv file with the saved data
     """
     output = ""
     columns = []
