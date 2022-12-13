@@ -171,9 +171,10 @@ class FitOptionsFrame(tk.Frame):
         # prepare plotting the fit
         if "fit" not in self.controller.tools.optionslist:
             self.controller.tools.optionslist.append("fit")
-            self.controller.tools.plotoptions = tk.OptionMenu(self.controller.tools.plotsetter, self.controller.tools.active_plot, *self.controller.tools.optionslist)
+            self.controller.tools.plotoptions = tk.OptionMenu(
+                self.controller.tools.plotsetter, self.controller.tools.active_plot, *self.controller.tools.optionslist
+            )
             self.controller.tools.plotoptions.grid(row=0, column=1, sticky=N + E + S)
-#            self.controller.tools.plotoptions["menu"].add_command(label="fit")
         self.controller.tools.active_plot.set("fit")
         self.controller.plot([self.signalgroup.get(s_name)])
 
@@ -194,7 +195,7 @@ class FitOptionsFrame(tk.Frame):
         for signal in self.signalgroup:
             try:
                 funct, popt, perr, p = signal.fit_to(
-                    fct=curve_name, init_str=rawinits, func_str=fit_formula, param_str=fit_params)  # calculating the fit
+                    fct=curve_name, init_str=rawinits, func_str=fit_formula, param_str=fit_params)    # fitting
             except TypeError:
                 pass
         print("Fitted all signals")
