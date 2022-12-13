@@ -10,7 +10,7 @@ All data operations use the use modules from the parsertools folder in this pack
 interactions are described below.
 
 The class ParseFrame describes the interactions of the Parser window.
-The window has two subframes that are described in separate modules:
+The window has two sub frames that are described in separate modules:
 ParserToolFrame     Tools for choosing a file to parse and what settings to use (Left side of ParseFrame)
 ParserMixFrame      Shows the signals obtained after parsing and allows user to select which ones to use
                     for further analysis. A mixed dataset can be created with signals obtained from different files.

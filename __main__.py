@@ -1,3 +1,5 @@
+"""Execute this file to run the LumParsing user interface"""
+
 from src.user_interface import mainwindow
 
 app = mainwindow.App()

@@ -1,3 +1,32 @@
+"""
+Left side tool frame for the Parse window of the luminescence time drive data parser.
+
+This module is part of the user interface of the LumParsing package for working with luminescence time drive data.
+The parser tool frame is controlled by the Parse window.
+This frame lets the user interact with time drive (.td) files, to select which files to parse and to set parsing
+settings per file or for all files at once.
+The type of plot to show can also be adjusted.
+
+The class ParserToolFrame describes the interactions of the frame.
+In the interface, it is initiated with the frame it resides within as parent and the Parse window as controller.
+
+Plotting data and choosing signals are controlled by the Parse window and its sub frame the parser mix frame,
+respectively.
+
+User interactions through mouse and keyboard:
+
+Mouse:
+Left click on a time drive file     Select the file and plot with current settings
+Left click on a setting and type    Change the setting value
+
+Keyboard:
+Return                              Apply the changed setting
+Arrow up                            Select the file above the current selection
+Arrow down                          Select the file below the current selection
+Right arrow                         Move to the signal box in the parser mix frame and select the first signal
+                                    found in the file
+"""
+
 import src.parsertools as pt
 import tkinter as tk
 from tkinter import N, S, W, E, DISABLED, RIGHT, END, ANCHOR

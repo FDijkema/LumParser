@@ -1,3 +1,37 @@
+"""
+Right side tool frame for the Parse window of the luminescence time drive data parser.
+
+This module is part of the user interface of the LumParsing package for working with luminescence time drive data.
+The parser mix frame is controlled by the Parse window.
+This frame lets the user see what signals are detected in a time drive (.td) file with certain parsing settings.
+There is also an option to pick and mix signals from different time drives to create a mixed dataset.
+
+The class ParserMixFrame describes the interactions of the frame.
+In the interface, it is initiated with the frame it resides within as parent and the Parse window as controller.
+
+Plotting data, choosing files and setting parse settings are controlled by the Parse window and its
+sub frame the parser tool frame, respectively.
+
+User interactions through mouse and keyboard:
+
+Mouse:
+Left-click on a signal              Select the signal
+Double left-click on a signal in
+     the box of detected signals
+     (Signalbox)                    Add the signal to the mixed dataset
+Double left-click on a signal in
+    the mixed dataset               Remove the signal from the mixed dataset
+
+Keyboard:
+Space                               Add the selected signal to the mixed dataset
+Arrow up                            Select the signal above the current selection
+Arrow down                          Select the signal below the current selection
+Left arrow                          Move to the file selection box in the parser tool frame and select the last
+                                    selected file
+Delete                              Remove the selected signal from the mixed dataset
+Backspace                           Remove the selected signal from the mixed dataset
+"""
+
 import copy
 import src.parsertools as pt
 import tkinter as tk
