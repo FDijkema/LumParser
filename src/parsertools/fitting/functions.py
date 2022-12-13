@@ -1,8 +1,11 @@
+"""
+
+"""
+
 import numpy as np
 from math import acos, asin, atan, atan2, pow
 from numpy import ceil, cos, cosh, degrees, e, exp, fabs, floor, fmod, frexp, hypot, ldexp, \
     log, log10, modf, pi, radians, sin, sinh, sqrt, tan, tanh
-
 
 FUNCTIONS = {"Custom": None}
 DEFAULT_INITS = {"Custom": ""}
