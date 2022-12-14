@@ -158,7 +158,7 @@ class ParseFrame(tk.Frame):
             plt.plot([R, R], [0, height], color='g')
         elif plottype == "corrected":   # corrected time drive data
             # plot data
-            x, y = pt.get_xy(self.tools.parser.datasets[thisfile].corrected)
+            x, y = pt.get_xy(self.tools.parser.datasets[thisfile].corrected_data)
             plt.plot(x, y)
             # set axes names
             plt.xlabel("Time (s)")

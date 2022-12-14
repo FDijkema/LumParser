@@ -53,7 +53,6 @@ class Signal:
 
         Time is reset to 0 at signal start.
 
-        PARAMETERS
         :param name:        Name to use for the signal, to identify it by.
         :param data:        List of dictionaries containing (numerical) time: value datapoints.
                             Background corrected data, from the time drive that the signal
