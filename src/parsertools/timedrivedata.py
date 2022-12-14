@@ -111,34 +111,34 @@ class TimeDriveData:
         th = threshold
         data = self.data
 
+        x, y = get_xy(data)
         signal_starts = []  # list of observed peaks
-        local = []  # list of local datapoints
-        i = 0
-        while i < len(data):
+        local = y[:9]  # list of local datapoints
+        i = 9
+        while i < len(data)-100:    # no signals in the last 100 datapoints of the file
             value = data[i]["value"]
-            # create a list of 10 most recent points, calc average
+
+            # calc average of 10 most recent points
             local.append(value)
-            if len(local) > 10:
-                local = local[-10:]
-                local_average = sum(local) / len(local)
-                # start looking for signals after the expected time point
-                if i > stp and value > (local_average + th):  # sudden increase
-                    for index in range(i, i + 100):
-                        try:
-                            value = data[index]["value"]
-                            if value < local_average:  # no signal
-                                i += 1
-                                break
-                        except IndexError:  # the end of the file has been reached
-                            continue
-                    else:  # there is a signal
-                        signal_starts.append(i)
-                        i += 100  # skip 100 points ahead to avoid counting the same signal twice
-                        local = []
-                else:  # no signal
-                    i += 1
-            else:  # we cannot compare to an average yet
+            local = local[-10:]
+            local_average = sum(local) / len(local)
+
+            # start looking for signals after the expected time point
+            if i > stp and value > (local_average + th):    # sudden increase, possible signal start
+                for index in range(i, i + 100):    # check the first 100 datapoints after the putative signal start
+                    value = data[index]["value"]
+                    # if the light goes down within 100 datapoints from the putative signal start, the peak is assumed
+                    # to be noise and no signal is recorded
+                    if value < local_average:
+                        i += 1
+                        break
+                else:    # there is a signal
+                    signal_starts.append(i)
+                    i += 100    # skip 100 points ahead to avoid counting the same signal twice
+                    local = []
+            else:    # no signal
                 i += 1
+
         if not signal_starts:
             print("No signals were found in {}. Try to adjust the starting point or threshold.".format(self.name))
         return signal_starts    # List of datapoint indices at which signal starts occur
