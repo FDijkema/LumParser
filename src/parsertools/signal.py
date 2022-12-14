@@ -1,55 +1,66 @@
+"""
+NAME
+signal
+
+DESCRIPTION
+Module describing the Signal object. A signal is a part of a time drive starting from where a peak of light occurs,
+ending either at the end of the file or at the next peak. The data, integrated data and potential fits of a single
+signal are stored as attributes.
+
+CLASSES
+Signal
+"""
+
 from src.parsertools.pttools import get_xy, get_highest
 from src.parsertools.fitting.fittools import prepare_inits, fit_data
 
 
 class Signal:
     """
-    Signal object contains the data and information for one signal found in a time drive.
+    A signal object contains the data and information for one light signal found in a time drive.
 
-    Information about the object can be retrieved via the following methods:
-    signal.integrate()      Return a new signal object containing the integrated
-                            data. The _datatype parameter of the new object is "integrated".
-                            When an integrated signal is put in, this parameter is used
-                            to recognise it as already integrated and the input signal is returned.
-    signal.get_xy()         Return a list of timevalues and a list of datavalues
-                            in a tuple ([time], [data]). Can be used to write the
-                            data to csv. The header fits above these columns.
-    signal.get_highest()    Return the highest value in the signal data. This is
-                            the peak for normal data and the total integral for
-                            integrated data.
-    signal.get_info()       Return a string stating the peak height or total integral
-                            depending on the data type (normal or integrated)
-    signal.fit_to(self, fct="Exponential", init_str='', func_str='', param_str='')
-                            Fit the signal to a model curve. fct is a string indicating
-                            one of the preset function types or "Other". inits is
-                            a string consisting of initial parameter values
-                            separated by comma's. The number of parameters needed
-                            determined by the function type. func_str and param_str
-                            are only used with fct="Other" and give a string with
-                            the function formula and list of parameter names,
-                            respectively.
+    ATTRIBUTES
+    :ivar start:            Starting time of the signal in the original time drive file
+    :ivar name:             Name of the signal. Automatically generated, can be altered
+                            by user.
+    :ivar filename:         Name of the original time drive file the signal was taken from.
+    :ivar peak_height:      The highest value found in the signal_data
+                            (should be the initial peak at the start of the signal)
+    :ivar peak_time:        The time point at which the highest value occurs
+    :ivar total_int:        Total area under the signal curve, equivalent to the value at the end of the
+                            integrated signal and the highest value of the integrated signal data.
+    :ivar signal_data:      List of dictionaries containing (numerical) time: value datapoints.
+                            Background corrected data with starting time set to t=0, from the time drive that the signal
+                            was taken from.
+                            Format example:
+                            [{"time": 0.0, "value": 1.0}, {"time": 0.1, "value": 5.0}, {"time": 0.2, "value": 3.0}]
+    :ivar integrated_data:  List of dictionaries containing (numerical) time: value datapoints.
+                            Integrated signal data (from signal_data).
+                            Format example:
+                            [{"time": 0.0, "value": 1.0}, {"time": 0.1, "value": 6.0}, {"time": 0.2, "value": 9.0}]
+    :ivar fit_data:         Initially, an empty dictionary. Once the integrated  signal has been fitted to a curve, the
+                            fitted curve will be stored here as a list of dictionaries containing (numerical)
+                            time: value datapoints.
+                            Format example:
+                            [{"time": 0.0, "value": 1.0}, {"time": 0.1, "value": 6.0}, {"time": 0.2, "value": 10.0}]
+
+    METHODS
+    fit_to                  Fits the integrated signal data to a curve.
     """
-    def __init__(self, name, data, filename):
+    def __init__(self, name: str, data: list, filename: str):
         """
-        Signal object contains the data for the duration of that signal
+        Construct a signal object.
 
         Time is reset to 0 at signal start.
 
-        Parameters:
-        name (str)      signal name, used to identify
-        data (dict) {time1: value1,
-                    time2: value2}
-                        dictionary containing the signal data in time, value pairs.
-        filename (str)  original filename of the time drive the signal was taken from
-        integrated (Boolean)
-                        used to identify is the data is integrated or not
-
-        Attributes:
-        self.start      starting time of the signal in the original time drive
-        self.name       name of the signal. Automatically generated, can be altered
-                        by user
-        self.signal_data
-                        dictionary of datapoints
+        PARAMETERS
+        :param name:        Name to use for the signal, to identify it by.
+        :param data:        List of dictionaries containing (numerical) time: value datapoints.
+                            Background corrected data, from the time drive that the signal
+                            was taken from.
+                            Format example:
+                            [{"time": 10.0, "value": 1.0}, {"time": 10.1, "value": 5.0}, {"time": 10.2, "value": 3.0}]
+        :param filename:    Original filename of the time drive the signal was taken from.
         """
         data = data
         self.start = data[0]["time"]
@@ -64,7 +75,7 @@ class Signal:
         self.fit_data = {}
 
     def _integrate(self):
-        """Integrate the signal and return a new signal object with that data"""
+        """Integrate the signal and return integrated data as a list of data point dictionaries"""
         # initialize parameters
         int_data = []
         prev_time = 0.
@@ -78,37 +89,37 @@ class Signal:
             # update
             prev_time = cur_time
             prev_val = cur_val
-        return int_data
+        return int_data    # Format example: [{"time": 0.0, "value": 1.0}, {"time": 0.1, "value": 6.0}]
 
-    def fit_to(self, fct='', init_str='', func_str='', param_str=''):
+    def fit_to(self, fct: str, init_str: str, func_str='', param_str=''):
         """
-        Take the signal data and fit to given function, return fit information
+        Take the signal data and fit to given function, return fit information.
 
         Two modes of use possible:
-        1) put in a preset function name for fct:
-            "Exponential" - exponential function
-            "Double exponential" - double exponential function
-            "Luminescence model" - luminescence model
-        2) fct = "Other"
+        1) put in a preset function name for fct. This function must be a key in fitting.FUNCTIONS, written in
+            the module fitting.functions.
+        2) fct = "Custom"
             In this case func_str and param_str must further describe the function
             func_str should be a string stating the  mathematical expression
                 for the function
             param_str should give the parameters to optimise in the fit in this
                 format: 'param1, param2, param3'. X should not be included.
-            The function can only contain mathematical expression and parameters
+            The function can only contain mathematical expressions and parameters
                 that are described in the parameter string.
 
-        :param fct: string that describes desired type of function
+        :param fct: String with the name of the desired type of function. This function must be a key in
+                    fitting.FUNCTIONS, written in the module fitting.functions.
         :param init_str: string of initial values for parameters. String of numbers separated by comma's.
-            Letters I and P are accepted to denote total integral and peak height.
-        :param func_str: for fct='Other', function formula should be put in here
-        :param param_str: for fct='Other', function parameters should be put in here
+                    Letters I and P are accepted to denote total integral and peak height.
+        :param func_str: for fct='Custom', function formula should be put in here. The formula may only contain
+                    mathematical expressions and parameters that are described in the parameter string.
+        :param param_str: for fct='Custom', function parameters should be put in here
         :return: func, popt, perr, p
-            # func is function object used to fit
-                # includes func.name (str), func.formula (str) and func.params (list of str)
-            # popt is array of parameters
-            # pcov is covariance of those parameters, variance on diagonal
-            # perr is standard deviation error in one number
+                # func is function object used to fit
+                    # includes func.name (str), func.formula (str) and func.params (list of str)
+                # popt is array of parameters
+                # pcov is covariance of those parameters, variance on diagonal
+                # perr is standard deviation error in one number
         """
         print("Fitting: {}".format(self.name))
         x, y = get_xy(self.integrated_data)
