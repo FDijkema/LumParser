@@ -1,0 +1,3 @@
+import test_signal
+
+test_signal.test_save_a_very_simple_signal()

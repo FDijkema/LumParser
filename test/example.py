@@ -1,20 +1,30 @@
 """
-This script shows an example of data parsing using tools.py
+This script shows an example of data parsing using the tools in the LumParser package
 """
 
 import os
 import src.parsertools as pt
 
-# location to store data
-data_folder = os.path.join(os.getcwd(), "..", "data")
-csv_folder = os.path.join(data_folder, "csv")
-parsed_folder = os.path.join(data_folder, "parsed")
-# location to load time drive files from
-import_folder = os.path.join(data_folder, "td")
+# Data paths
+# input
+td_in = os.path.join(os.getcwd(), "data", "test_input_data", "td")
+parsed_in = os.path.join(os.getcwd(), "data", "test_input_data", "parsed")
 
-# retrieve a list of files
-all_files = pt.list_td_files(import_folder)
-print(all_files)
+# output
+parsed_out = os.path.join(os.getcwd(), "data", "output_data", "parsed")
+csv_out = os.path.join(os.getcwd(), "data", "output_data", "csv")
+
+# expected output
+parsed_exp = os.path.join(os.getcwd(), "data", "expected_put_data", "parsed")
+csv_exp = os.path.join(os.getcwd(), "data", "expected_put_data", "csv")
+
+
+# Parsing a single file
+# Create a time drive data object from the first file in the input folder
+td_files = pt.list_td_files(td_in)
+test_file_01 = td_files[0]
+td_data_01 = pt.TimeDriveData(test_file_01, td_in)
+
 
 
 ## First example: parsing one file

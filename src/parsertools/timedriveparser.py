@@ -11,7 +11,7 @@ Parser
 """
 
 from src.parsertools.defaultvalues import default_threshold, default_starting_point, default_background_bounds
-from src.parsertools.pttools import list_td_files, signals_to_csv
+from src.parsertools.ptools import list_td_files, signals_to_csv
 from src.parsertools.timedrivedata import TimeDriveData
 
 

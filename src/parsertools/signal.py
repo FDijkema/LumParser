@@ -11,7 +11,7 @@ CLASSES
 Signal
 """
 
-from src.parsertools.pttools import get_xy, get_highest
+from src.parsertools.ptools import get_xy, get_highest
 from src.parsertools.fitting.fittools import prepare_inits, fit_data
 
 
@@ -75,7 +75,7 @@ class Signal:
 
     def __str__(self):
         x, y = get_xy(self.signal_data)
-        lines = ["   ".join(rowlist) for rowlist in zip(x, y)]
+        lines = ["       ".join(rowlist) for rowlist in zip(x, y)]
         description = "Signal object " + self.name + " from " + self.filename + "\n" \
                       + "Time[s]    Value[RLU]\n" \
                       + "\n".join(lines)
