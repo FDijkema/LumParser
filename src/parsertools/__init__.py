@@ -89,5 +89,5 @@ import src.parsertools.defaultvalues
 from .timedrivedata import TimeDriveData
 from .timedriveparser import Parser
 from .signal import Signal
-from .signalgroup import Signalgroup
+from .signalgroup import SignalGroup
 from .pttools import list_td_files, signals_to_csv, get_xy, get_highest

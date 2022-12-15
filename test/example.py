@@ -47,7 +47,7 @@ for name, dataset in parser.datasets.items():
 allsignals = []
 for name, signallist in parser.signals.items():
     allsignals.append(signallist[0])    # pick first detected signal from each file
-signalgroup = pt.Signalgroup(allsignals, "Example02.parsed")
+signalgroup = pt.SignalGroup(allsignals, "Example02.parsed")
 # fit all signals to the luminescence model
 for s in signalgroup:
     funct, popt, perr, p = s.fit_to("Exponential", init_str="10000, 1, .3")

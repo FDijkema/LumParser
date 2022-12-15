@@ -128,7 +128,7 @@ class App(tk.Tk):
         """Open an analyis window with the chosen data."""
         index = self.open_box.index("active")
         self.open_window.destroy()
-        group = pt.Signalgroup.loadfrom(files[index]["directory"])
+        group = pt.SignalGroup.loadfrom(files[index]["directory"])
         name = group.filename
         if name in self.windownames:
             self.show_frame(name)

@@ -52,9 +52,9 @@ class AnaFrame(tk.Frame):
         if group is None:
             no_data = [{"time": 0.0, "value": 0.0}, {"time": 0.1, "value": 1.0}]
             no_signal = pt.Signal("No signals", no_data, "No file")
-            group = pt.Signalgroup([no_signal], self.controller.default_name, notes="Empty")
+            group = pt.SignalGroup([no_signal], self.controller.default_name, notes="Empty")
         self.signalgroup = group
-        self.signalgroup.fits = {}
+        # self.signalgroup.fits = {}
 
         # initiate the frame and start filling it up
         tk.Frame.__init__(self, self.parent)
@@ -221,10 +221,6 @@ class AnaFrame(tk.Frame):
         # let user select different plot type if desired
         self.type_options = tk.OptionMenu(self.export_window, self.export_type,
                                           "signals", "parameters", "fit")
-
-        # if no fits have been created yet, do not show the option to export fit
-        if self.signalgroup.fits == {}:
-            self.type_options["menu"].entryconfigure("fit", state=DISABLED)
         self.type_options.grid(row=1, column=2, columnspan=2, sticky=N + S + E + W)
 
         # let user set filename for export file, default is same name as previously

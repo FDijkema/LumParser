@@ -274,7 +274,7 @@ class ParseFrame(tk.Frame):
         """Parse the data in the selected time drive and open in analysis window."""
         thisfile = self.tools.loader_box.get("active")
         signals = self.tools.parser.signals[thisfile]
-        group = pt.Signalgroup(signals, thisfile)
+        group = pt.SignalGroup(signals, thisfile)
         name = group.filename
         if name in self.controller.windownames:
             print("File is already parsed. Please change the name of the parsed file before parsing again")
@@ -285,7 +285,7 @@ class ParseFrame(tk.Frame):
 
     def parse_mixed(self):
         """Parse the data of the mixed group of signals and open in analysis window."""
-        group = pt.Signalgroup(self.parse_options.mixsignals, "")
+        group = pt.SignalGroup(self.parse_options.mixsignals, "")
         group.change_filename(self.controller.default_name + "_" + str(self.controller.name_count))
         self.controller.name_count += 1
         name = group.filename
