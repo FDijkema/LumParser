@@ -241,11 +241,13 @@ class TimeDriveData:
         output = ""
         columns = []
         header = ([self.name, ""], [oftype, ""])
-        data_by_type = {
-            "original": get_xy(self.data),
-            "corrected": get_xy(self.corrected_data)
-        }
-        data = data_by_type[oftype]
+        if oftype == "original":
+            data = get_xy(self.data)
+        elif oftype == "corrected":
+            data = get_xy(self.corrected_data)
+        else:
+            raise ValueError("Unexpected value for keyword argument 'oftype'. "
+                             "Expected 'original' or 'corrected', got {}".format(oftype))
         # put informative headers above the data
         column1 = header[0] + data[0]
         column2 = header[1] + data[1]

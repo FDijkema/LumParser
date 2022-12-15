@@ -1,3 +1,3 @@
-import test_signal
+import test_timedrivedata
 
-test_signal.test_save_a_very_simple_signal()
+test_timedrivedata.test_extracting_time_drive_data_from_a_single_file_and_exporting_to_csv()
