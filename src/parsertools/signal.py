@@ -84,6 +84,9 @@ class Signal:
     def __repr__(self):
         return "Signal({}, {}, {})".format(self.name, self.signal_data, self.filename)
 
+    def __iter__(self):
+        return zip(get_xy(self.signal_data))
+
     def _integrate(self):
         """Integrate the signal and return integrated data as a list of data point dictionaries"""
         # initialize parameters
