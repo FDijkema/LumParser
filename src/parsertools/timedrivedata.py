@@ -13,8 +13,8 @@ import os
 import copy
 import itertools
 from src.parsertools.defaultvalues import default_background_bounds, default_starting_point, default_threshold
-from src.parsertools.signal import Signal
 from src.parsertools.pttools import get_xy
+from src.parsertools.signal import Signal
 
 
 class TimeDriveData:

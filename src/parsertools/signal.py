@@ -73,6 +73,17 @@ class Signal:
         self.total_int = get_highest(self.integrated_data)[1]
         self.fit_data = {}
 
+    def __str__(self):
+        x, y = get_xy(self.signal_data)
+        lines = ["   ".join(rowlist) for rowlist in zip(x, y)]
+        description = "Signal object " + self.name + " from " + self.filename + "\n" \
+                      + "Time[s]    Value[RLU]\n" \
+                      + "\n".join(lines)
+        return description
+
+    def __repr__(self):
+        return "Signal({}, {}, {})".format(self.name, self.signal_data, self.filename)
+
     def _integrate(self):
         """Integrate the signal and return integrated data as a list of data point dictionaries"""
         # initialize parameters

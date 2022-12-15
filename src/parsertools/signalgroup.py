@@ -5,7 +5,7 @@ from src.parsertools.signal import Signal
 from src.parsertools.pttools import signals_to_csv, get_xy
 
 
-class Signalgroup:
+class SignalGroup:
     """
     Hold multiple signals, possibly from different files, and analyse them
 
@@ -25,12 +25,11 @@ class Signalgroup:
 
     def __init__(self, signals, filename, notes=""):
         """Initiate signalgroup from list of signals, storing information."""
-        self.signals = {}   # dict of signals by signal name
-        self.indexed = []   # list of signal names (by index)
-        self.add(signals)   # this way signals are added both by name and index
-        self.notes = notes  # notes are for user
+        self._signals = {}   # dict of signals by signal name
+        self._indexed = []   # list of signal names (by index)
+        self.append(signals)   # this way signals are added both by name and index
+        self.notes = notes    # notes are for user
         self.filename = filename    # filename is used for saving
-        self.fits = {}  # latest created fits of signals by signal name
         self._currentindex = 0
 
     @classmethod
@@ -67,7 +66,7 @@ class Signalgroup:
                 for name in s_info:
                     setattr(signal, name, s_info[name])
                 signals.append(signal)
-        signalgroup = Signalgroup(signals, filename, notes)
+        signalgroup = SignalGroup(signals, filename, notes)
         return signalgroup
 
     def __iter__(self):
@@ -75,30 +74,70 @@ class Signalgroup:
         return self
 
     def __next__(self):
-        if self._currentindex < len(self.indexed):
+        if self._currentindex < len(self._indexed):
             current_signal = self.get_at(self._currentindex)
             self._currentindex += 1
             return current_signal
         raise StopIteration
 
-    def add(self, signals):
-        """Append signals to group, both by name and index"""
+    def __len__(self):
+        return len(self._indexed)
+
+    def __str__(self):
+        signal_str = "\n".join([signal.name for signal in self.get_all()])
+        description = "Signalgroup " + self.filename + "\n\n" + signal_str + "\n"
+        return description
+
+    def __getitem__(self, key):
+        if isinstance(key, slice):
+            indices = range(len(self._signals))[key]
+            return self.get_at(indices, seq=True)
+        elif isinstance(key, int):
+            index = key
+            return self.get_at(index, seq=False)
+        elif isinstance(key, str):
+            return self.get(key, seq=False)
+        else:
+            raise TypeError("Expected slice, int or str as index, got {}".format(type(key)))
+
+    def __contains__(self, key):
+        if isinstance(key, str):
+            if key in self._signals:
+                return True
+            else: return False
+        else:
+            raise TypeError("Expected name of a signal of type str, got {}".format(type(key)))
+
+    def __delitem__(self, key):
+        if isinstance(key, slice):
+            indices = range(len(self._signals))[key]
+            return self.remove_at(key, seq=False)
+        elif isinstance(key, int):
+            index = key
+            return self.remove_at(index, seq=False)
+        elif isinstance(key, str):
+            return self.remove(key, seq=False)
+        else:
+            raise TypeError("Expected slice, int or str as index, got {}".format(type(key)))
+
+    def append(self, signals):
+        """Append signals to collection, both by name and index"""
         for signal in signals:
             new_signal = copy.copy(signal)
-            self.signals[new_signal.name] = new_signal
-            self.indexed.append(new_signal.name)
+            self._signals[new_signal.name] = new_signal
+            self._indexed.append(new_signal.name)
 
     def rename(self, old_name, new_name):
         """Rename the signal."""
         # the indexed list
-        index = self.indexed.index(old_name)
-        del (self.indexed[index])
-        self.indexed.insert(index, new_name)
+        index = self._indexed.index(old_name)
+        del (self._indexed[index])
+        self._indexed.insert(index, new_name)
         # the dict of signal objects
-        self.signals[new_name] = self.signals[old_name]
-        del (self.signals[old_name])
+        self._signals[new_name] = self._signals[old_name]
+        del (self._signals[old_name])
         # the signal attribute
-        self.signals[new_name].name = new_name
+        self._signals[new_name].name = new_name
 
     def remove(self, signal_name, seq=False):
         """
@@ -109,11 +148,11 @@ class Signalgroup:
         """
         if seq:
             for s_name in signal_name:
-                del (self.signals[s_name])
-                self.indexed.remove(s_name)
+                del (self._signals[s_name])
+                self._indexed.remove(s_name)
         else:
-            del (self.signals[signal_name])
-            self.indexed.remove(signal_name)
+            del (self._signals[signal_name])
+            self._indexed.remove(signal_name)
 
     def remove_at(self, index, seq=False):
         """
@@ -124,11 +163,11 @@ class Signalgroup:
         """
         if seq:
             for i in index:
-                del (self.signals[self.indexed[i]])
-                del (self.indexed[i])
+                del (self._signals[self._indexed[i]])
+                del (self._indexed[i])
         else:
-            del (self.signals[self.indexed[index]])
-            del (self.indexed[index])
+            del (self._signals[self._indexed[index]])
+            del (self._indexed[index])
 
     def get(self, signal_name, seq=False):
         """
@@ -139,10 +178,10 @@ class Signalgroup:
         if seq:
             signals_list = []
             for s_name in signal_name:
-                signals_list.append(self.signals[s_name])
+                signals_list.append(self._signals[s_name])
             return signals_list
         else:
-            return self.signals[signal_name]
+            return self._signals[signal_name]
 
     def get_at(self, index, seq=False):
         """
@@ -154,53 +193,49 @@ class Signalgroup:
         if seq:
             signals_list = []
             for i in index:
-                signals_list.append(self.signals[self.indexed[i]])
+                signals_list.append(self._signals[self._indexed[i]])
             return signals_list
         else:
-            return self.signals[self.indexed[index]]
+            return self._signals[self._indexed[index]]
 
-    def get_index(self, signal_name, seq=False):
+    def index(self, signal_name, seq=False):
         """Return index for name or list of indices for list of names."""
         if seq:
             indices = []
             for s_name in signal_name:
-                indices.append(self.indexed.index(s_name))
+                indices.append(self._indexed.index(s_name))
             return indices
         else:
-            return self.indexed.index(signal_name)
+            return self._indexed.index(signal_name)
 
     def get_all(self):
         """Return a list of all signal objects in the group."""
         signals_list = []
-        for s_name in self.indexed:
-            signals_list.append(self.signals[s_name])
+        for s_name in self._indexed:
+            signals_list.append(self._signals[s_name])
         return signals_list
 
     def move_up(self, signal_names):
         """Move the given signals up in the indexed list by 1"""
         for s_name in signal_names:
-            index = self.indexed.index(s_name)
-            self.indexed.insert(index - 1, self.indexed.pop(index))
+            index = self._indexed.index(s_name)
+            self._indexed.insert(index - 1, self._indexed.pop(index))
 
     def move_down(self, signal_names):
         """Move the given signals down in the indexed list by 1"""
         for s_name in signal_names:
-            index = self.indexed.index(s_name)
-            self.indexed.insert(index + 1, self.indexed.pop(index))
+            index = self._indexed.index(s_name)
+            self._indexed.insert(index + 1, self._indexed.pop(index))
 
     def move_up_at(self, indices):
         """Move the signals at the given indices up in the indexed list by 1"""
         for index in indices:
-            self.indexed.insert(index - 1, self.indexed.pop(index))
+            self._indexed.insert(index - 1, self._indexed.pop(index))
 
     def move_down_at(self, indices):
         """Move the signals at the given indices down in the indexed list by 1"""
         for index in indices:
-            self.indexed.insert(index + 1, self.indexed.pop(index))
-
-    def update_notes(self, new_notes=""):
-        """Replace the user notes with the string that is put in for new_notes"""
-        self.notes = new_notes
+            self._indexed.insert(index + 1, self._indexed.pop(index))
 
     def change_filename(self, new_name):
         """Set the filename of the signalgroup to new_name"""
@@ -214,8 +249,8 @@ class Signalgroup:
         """Save the signalgroup to the given directory, by its stored filename"""
         output = str(self.filename) + "\n"
         output += "NOTES\n" + self.notes + "\n"
-        for s_name in self.indexed:
-            signal = self.signals[s_name]
+        for s_name in self._indexed:
+            signal = self._signals[s_name]
             output += "SIGNAL\n"
             for var in vars(signal):
                 vars_to_skip = ["signal_data", "integrated_data", "fit_data"]
@@ -249,7 +284,7 @@ class Signalgroup:
         normal and integrate cannot both be false. Either normal or integrated
             must be saved.
         """
-        signals_to_csv(self.signals.values(), exportname, data_folder, normal=normal, integrated=integrate, fit=fit)
+        signals_to_csv(self._signals.values(), exportname, data_folder, normal=normal, integrated=integrate, fit=fit)
 
     def export_parameters(self, exportname, data_folder):
         """
@@ -273,8 +308,8 @@ class Signalgroup:
         for var in numvars:
             output += str(var) + ","
         output += "\n"
-        for s_name in self.indexed:  # row of values for each signal
-            signal = self.signals[s_name]
+        for s_name in self._indexed:  # row of values for each signal
+            signal = self._signals[s_name]
             line = signal.name + ", " + signal.filename + ","
             for var in numvars:
                 line += str(vars(signal)[var]) + ","
