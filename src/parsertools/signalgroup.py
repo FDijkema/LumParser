@@ -1,3 +1,15 @@
+"""
+NAME
+signalgroup
+
+DESCRIPTION
+Indexed collection of signals.
+
+CLASSES
+SignalGroup
+"""
+
+
 import os
 import copy
 from numbers import Number
@@ -9,18 +21,37 @@ class SignalGroup:
     """
     Hold multiple signals, possibly from different files, and analyse them
 
-    A signalgroup is an object storing information about multiple
-    signals. It can either be initiated from a list of signals (created from a
-    dataset) or from a previously saved file. It can also be made from a selection
-    of signals from different datasets. Signals can be accessed by name or
-    index, renamed, added, moved in the sequence or removed.
-    The entire signalgroup can be saved to work on later or the signals, fits
-    and fit parameters of all signals can be created and exported to csv at once.
+    A signalgroup is an object storing information about multiple signals. It can either be initiated from a list of
+    signals (created from time drive data) or from a previously saved file. It can also be made from a selection
+    of signals from different datasets. Signals can be accessed by name or index, renamed, added, moved in the sequence
+    or removed. The entire signalgroup can be saved to work on later or the signals, fits and fit parameters of all
+    signals can be created and exported to csv at once.
 
-    Two ways to create signalgroup:
+    There are two ways to initiate an instance of SignalGroup:
     __init__(signals, filename, notes="") - initiate signalgroup form a list of
         signals, giving it a filename and possibly some notes for user
-    Signalgroup.loadfrom(directory) - loading a signalgroup from a saved file
+    SignalGroup.loadfrom(directory) - loading a signalgroup from a .parsed saved file
+
+    ATTRIBUTES
+    :ivar notes:
+    :ivar filename:
+
+    METHODS
+    append
+    rename
+    remove
+    remove_at
+    get
+    get_at
+    index
+    get_all
+    move_up
+    move_down
+    move_up_at
+    move_down_at
+    change_filename
+    save
+    export
     """
 
     def __init__(self, signals, filename, notes=""):
