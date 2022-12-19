@@ -34,4 +34,4 @@ def test_create_mixed_dataset_fit_and_save_parameters_should_create_correct_csv_
     signalgroup.export_parameters("parameters_from_fit.csv", csv_out)
     outfile = os.path.join(csv_out, "parameters_from_fit.csv")
     expected_outfile = os.path.join(csv_exp, "parameters_from_fit.csv")
-    assert filecmp.cmp(outfile, expected_outfile)
+    assert filecmp.cmp(outfile, expected_outfile, shallow=False)

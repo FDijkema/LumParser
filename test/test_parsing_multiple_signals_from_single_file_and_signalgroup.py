@@ -22,16 +22,16 @@ td_files = pt.list_td_files(td_in)
 
 def test_creating_signalgroup_from_parsed_data_and_saving_should_create_parsed_file():
     # remove outfile to prevent false positive outcome when not saving
-    os.remove(os.path.join(parsed_out, "signalgroup_from_single_file.parsed"))
+    os.remove(os.path.join(parsed_out, "signalgroup_from_single_csv_file.parsed"))
     # start test
     test_file_01 = td_files[0]["name"]
     td_data_01 = pt.TimeDriveData(test_file_01, os.path.join(td_in, test_file_01))
     signals = td_data_01.extract_signals(starting_point=0, threshold=0.3, bg_bounds=(0.0, 10.0))
-    my_signalgroup = pt.SignalGroup(signals, "signalgroup_from_single_file.parsed", "Hello world!")
+    my_signalgroup = pt.SignalGroup(signals, "signalgroup_from_single_csv_file.parsed", "Hello world!")
     my_signalgroup.save(parsed_out)
-    outfile = os.path.join(parsed_out, "signalgroup_from_single_file.parsed")
-    expected_outfile = os.path.join(parsed_exp, "signalgroup_from_single_file.parsed")
-    assert filecmp.cmp(outfile, expected_outfile)
+    outfile = os.path.join(parsed_out, "signalgroup_from_single_csv_file.parsed")
+    expected_outfile = os.path.join(parsed_exp, "signalgroup_from_single_csv_file.parsed")
+    assert filecmp.cmp(outfile, expected_outfile, shallow=False)
 
 
 def test_loading_signalgroup_from_parsed_file_and_saving_again_should_recreate_input_file():
@@ -42,7 +42,7 @@ def test_loading_signalgroup_from_parsed_file_and_saving_again_should_recreate_i
     my_signalgroup.save(parsed_out)
     outfile = os.path.join(parsed_out, "Example_data.parsed")
     expected_outfile = os.path.join(parsed_exp, "Example_data.parsed")
-    assert filecmp.cmp(outfile, expected_outfile)
+    assert filecmp.cmp(outfile, expected_outfile, shallow=False)
 
 
 def test_loading_parsed_file_and_exporting_signals_should_save_csv_file():
@@ -53,7 +53,7 @@ def test_loading_parsed_file_and_exporting_signals_should_save_csv_file():
     my_signalgroup.export_csv("signals_from_example_data.csv", csv_out, normal=True, integrate=True, fit=False)
     outfile = os.path.join(csv_out, "signals_from_example_data.csv")
     expected_outfile = os.path.join(csv_exp, "signals_from_example_data.csv")
-    assert filecmp.cmp(outfile, expected_outfile)
+    assert filecmp.cmp(outfile, expected_outfile, shallow=False)
 
 
 def test_move_signal_up_or_down_should_adjust_order_of_signals_in_signalgroup():

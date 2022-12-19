@@ -50,4 +50,4 @@ def test_signals_to_csv_should_create_csv_file_with_signal_info():
     pt.signals_to_csv([testsignal], "a_very_simple_signal.csv", csv_out, normal=True, integrated=True)
     outfile = os.path.join(csv_out, "a_very_simple_signal.csv")
     expected_outfile = os.path.join(csv_exp, "a_very_simple_signal.csv")
-    assert filecmp.cmp(outfile, expected_outfile)
+    assert filecmp.cmp(outfile, expected_outfile, shallow=False)

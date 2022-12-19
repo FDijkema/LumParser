@@ -29,7 +29,7 @@ def test_extracting_time_drive_data_from_a_single_file_and_exporting_to_csv_shou
     td_data_01.export_to_csv("a_single_time_drive.csv", csv_out, oftype="original")
     outfile = os.path.join(csv_out, "a_single_time_drive.csv")
     expected_outfile = os.path.join(csv_exp, "a_single_time_drive.csv")
-    assert filecmp.cmp(outfile, expected_outfile)
+    assert filecmp.cmp(outfile, expected_outfile, shallow=False)
 
 
 def test_after_extracting_signals_timedrivedata_object_should_contain_list_of_signals_with_correct_properties():
@@ -51,4 +51,4 @@ def test_extracting_signals_from_td_and_exporting_them_to_csv_should_create_csv_
     pt.signals_to_csv(signals, "signals_from_td01.csv", csv_out, normal=True, integrated=True, fit=False)
     outfile = os.path.join(csv_out, "signals_from_td01.csv")
     expected_outfile = os.path.join(csv_exp, "signals_from_td01.csv")
-    assert filecmp.cmp(outfile, expected_outfile)
+    assert filecmp.cmp(outfile, expected_outfile, shallow=False)

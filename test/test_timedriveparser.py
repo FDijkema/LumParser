@@ -44,7 +44,7 @@ def test_exporting_a_time_drive_to_csv_through_a_parser_should_create_csv_file()
     parser.export_csv("Timedrive01.td", "single_time_drive_through_parser.csv", csv_out, normal=True, integrate=False)
     outfile = os.path.join(csv_out, "single_time_drive_through_parser.csv")
     expected_outfile = os.path.join(csv_exp, "single_time_drive_through_parser.csv")
-    assert filecmp.cmp(outfile, expected_outfile)
+    assert filecmp.cmp(outfile, expected_outfile, shallow=False)
 
 
 def test_change_parse_settings_should_change_the_obtained_signals():
@@ -58,7 +58,7 @@ def test_change_parse_settings_should_change_the_obtained_signals():
     parser.export_csv("Timedrive02.td", "signals_after_changing_settings.csv", csv_out, normal=True, integrate=False)
     outfile = os.path.join(csv_out, "signals_after_changing_settings.csv")
     expected_outfile = os.path.join(csv_exp, "signals_after_changing_settings.csv")
-    assert filecmp.cmp(outfile, expected_outfile)
+    assert filecmp.cmp(outfile, expected_outfile, shallow=False)
 
 
 def test_create_mixed_dataset_should_create_signalgroup_with_signals_from_different_files():
@@ -73,4 +73,4 @@ def test_create_mixed_dataset_should_create_signalgroup_with_signals_from_differ
     signalgroup.save(parsed_out)
     outfile = os.path.join(parsed_out, "a_group_of_mixed_signals.parsed")
     expected_outfile = os.path.join(parsed_exp, "Example_data.parsed")
-    assert filecmp.cmp(outfile, expected_outfile)
+    assert filecmp.cmp(outfile, expected_outfile, shallow=False)
