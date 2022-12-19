@@ -27,11 +27,11 @@ def test_get_highest_should_give_time_and_datapoint_with_highest_value():
 def test_list_td_files_should_return_list_of_dicts_for_all_td_files_in_folder():
     td_in = os.path.join(os.getcwd(), "data", "test_input_data", "td")
     expected_output = [
-        {"name": "Timedrive01", "directory": td_in},
-        {"name": "Timedrive02", "directory": td_in},
-        {"name": "Timedrive03", "directory": td_in},
-        {"name": "Timedrive04", "directory": td_in},
-        {"name": "Timedrive05", "directory": td_in}
+        {"name": "Timedrive01.td", "path": os.path.join(td_in, "Timedrive01.td")},
+        {"name": "Timedrive02.td", "path": os.path.join(td_in, "Timedrive02.td")},
+        {"name": "Timedrive03.td", "path": os.path.join(td_in, "Timedrive03.td")},
+        {"name": "Timedrive04.td", "path": os.path.join(td_in, "Timedrive04.td")},
+        {"name": "Timedrive05.td", "path": os.path.join(td_in, "Timedrive05.td")}
     ]
     output = pt.list_td_files(td_in)
     assert output == expected_output

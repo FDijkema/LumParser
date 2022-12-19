@@ -1,7 +1,6 @@
 signalgroup_from_single_csv_file.parsed
 NOTES
 Hello world!
-
 SIGNAL
 start=15.6
 name=Timedrive01.td 1

@@ -70,7 +70,7 @@ class Parser:
         for thisfile in list_td_files(data_folder):
             # dataset
             filename = thisfile["name"]
-            file_dataset = TimeDriveData(filename, thisfile["directory"])
+            file_dataset = TimeDriveData(filename, thisfile["path"])
             self.datasets[filename] = file_dataset    # save the data so it can be retrieved by filename
             # variables used per file (initialize default)
             self.parse_settings[filename] = self.default_settings.copy()    # very important to copy!!

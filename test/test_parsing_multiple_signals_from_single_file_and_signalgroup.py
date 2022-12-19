@@ -67,10 +67,10 @@ def test_loading_parsed_file_and_exporting_signals_should_save_csv_file():
 
 def test_move_signal_up_or_down_should_adjust_order_of_signals_in_signalgroup():
     my_signalgroup = pt.SignalGroup.loadfrom(os.path.join(parsed_in, "Example_data.parsed"))
-    my_signalgroup.move_up("Timedrive05.td 2")
-    my_signalgroup.move_up_at(-2)
-    my_signalgroup.move_down("Timedrive01.td 2")
-    my_signalgroup.move_down_at(1)
+    my_signalgroup.move_up(["Timedrive05.td 2"])
+    my_signalgroup.move_up_at([3])
+    my_signalgroup.move_down(["Timedrive01.td 2"])
+    my_signalgroup.move_down_at([1])
     output = [signal.name for signal in my_signalgroup]
     expected_output = [
         "Timedrive02.td 2",

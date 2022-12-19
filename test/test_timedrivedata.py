@@ -40,7 +40,7 @@ def test_after_extracting_signals_timedrivedata_object_should_contain_list_of_si
     td_data_01 = pt.TimeDriveData(test_file_01, os.path.join(td_in, test_file_01))
     signals = td_data_01.extract_signals(starting_point=0, threshold=0.3, bg_bounds=(0.0, 10.0))
     output = (signals[1].name, signals[1].peak_height, signals[1].total_int)
-    expected_output = ("Timedrive01.td 2", 3.37204, 874.894)
+    expected_output = ("Timedrive01.td 2", 3.37203667, 874.8943103221968)
     assert output == expected_output
 
 

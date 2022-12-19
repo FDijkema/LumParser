@@ -36,9 +36,9 @@ def test_calling_str_on_signal_should_print_string_representation_of_signal():
 
 def test_integrated_data_should_contain_correctly_integrated_data():
     expected_output = [
-        {"time": 0.0, "value": 1.0},
-        {"time": 0.1, "value": 6.0},
-        {"time": 0.2, "value": 10.0}
+        {"time": 0.0, "value": 0.0},
+        {"time": 0.1, "value": 0.5},
+        {"time": 0.2, "value": 0.9}
     ]
     assert testsignal.integrated_data == expected_output
 

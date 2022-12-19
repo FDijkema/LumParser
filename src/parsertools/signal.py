@@ -75,6 +75,8 @@ class Signal:
 
     def __str__(self):
         x, y = get_xy(self.signal_data)
+        x = map(str, x)
+        y = map(str, y)
         lines = ["       ".join(rowlist) for rowlist in zip(x, y)]
         description = "Signal object " + self.name + " from " + self.filename + "\n" \
                       + "Time[s]    Value[RLU]\n" \

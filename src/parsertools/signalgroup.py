@@ -246,26 +246,30 @@ class SignalGroup:
             signals_list.append(self._signals[s_name])
         return signals_list
 
-    def move_up(self, signal_names):
+    def move_up(self, signal_names: list):
         """Move the given signals up in the indexed list by 1"""
         for s_name in signal_names:
             index = self._indexed.index(s_name)
-            self._indexed.insert(index - 1, self._indexed.pop(index))
+            self._indexed.insert(index -1, self._indexed.pop(index))
 
-    def move_down(self, signal_names):
+    def move_down(self, signal_names: list):
         """Move the given signals down in the indexed list by 1"""
         for s_name in signal_names:
             index = self._indexed.index(s_name)
             self._indexed.insert(index + 1, self._indexed.pop(index))
 
-    def move_up_at(self, indices):
+    def move_up_at(self, indices: list):
         """Move the signals at the given indices up in the indexed list by 1"""
         for index in indices:
-            self._indexed.insert(index - 1, self._indexed.pop(index))
+            if index < 0:
+                raise IndexError("SignalGroup indices for moving signals should be positive integers.")
+            self._indexed.insert(index -1, self._indexed.pop(index))
 
-    def move_down_at(self, indices):
+    def move_down_at(self, indices: list):
         """Move the signals at the given indices down in the indexed list by 1"""
         for index in indices:
+            if index < 0:
+                raise IndexError("SignalGroup indices for moving signals should be positive integers.")
             self._indexed.insert(index + 1, self._indexed.pop(index))
 
     def change_filename(self, new_name):

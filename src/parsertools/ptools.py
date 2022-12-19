@@ -56,8 +56,8 @@ def list_td_files(data_folder: str) -> list:
     files = []
     for f in os.listdir(folder):
         if f.lower().endswith('.td'):
-            directory = os.path.join(folder, f)
-            files.append({"name": f, "directory": directory})
+            path = os.path.join(folder, f)
+            files.append({"name": f, "path": path})
     return files
 
 
