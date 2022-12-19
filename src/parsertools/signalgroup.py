@@ -64,10 +64,10 @@ class SignalGroup:
         self._currentindex = 0
 
     @classmethod
-    def loadfrom(cls, directory):
+    def loadfrom(cls, filepath):
         """Load signalgroup from file. Returns itself. Alternative init method"""
         # read the file
-        input = open(directory)
+        input = open(filepath)
         rawlines = input.read().splitlines()
         input.close()
         # get and store the information

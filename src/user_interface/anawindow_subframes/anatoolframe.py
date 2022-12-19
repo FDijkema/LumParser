@@ -149,7 +149,7 @@ class AnaToolFrame(tk.Frame):
         selection = self.browser_box.curselection()
         self.signalgroup.remove_at(selection, seq=True)
         self.update_browser_box()
-        if len(self.signalgroup.indexed) > selection[0]:
+        if len(self.signalgroup) > selection[0]:
             self.browser_box.activate(selection[0])
         else:
             self.browser_box.activate(END)

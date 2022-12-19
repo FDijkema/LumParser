@@ -21,6 +21,9 @@ td_files = pt.list_td_files(td_in)
 
 
 def test_extracting_time_drive_data_from_a_single_file_and_exporting_to_csv():
+    # remove outfile to prevent false positive outcome when not saving
+    os.remove(os.path.join(csv_out, "a_single_time_drive.csv"))
+    # start test
     test_file_01 = td_files[0]["name"]
     td_data_01 = pt.TimeDriveData(test_file_01, os.path.join(td_in, test_file_01))
     td_data_01.export_to_csv("a_single_time_drive.csv", csv_out, oftype="original")
@@ -28,45 +31,24 @@ def test_extracting_time_drive_data_from_a_single_file_and_exporting_to_csv():
     expected_outfile = os.path.join(csv_exp, "a_single_time_drive.csv")
     assert filecmp.cmp(outfile, expected_outfile)
 
-# ## First example: parsing one file
-# # make a dataset of the first file in the list
-# name01 = all_files[0]["name"]
-# directory01 = all_files[0]["directory"]
-# dataset01 = pt.TimeDriveData(name01, directory01)
-#
-# # get all signals from the dataset
-# allsignals01 = dataset01.extract_signals(starting_point=0, threshold=0.3)
-# # save all the found signals to a csv file
-# pt.signals_to_csv(allsignals01, "Example01.csv", csv_folder)
-#
-# ## Second example: parsing all files at once and picking signals
-# parser = pt.Parser()
-# # Load all the time drive files into the parser
-# parser.import_ascii(import_folder)
-# # Adjust settings if desired
-# for num in ["03","04","08","11","12","15","16"]: # numbers of the files that should be changed
-#     parser.set_vars("Timedrive{}.td".format(num), "threshold", 0.2)
-# # Execute signal detection
-# for setname in parser.datasets:
-#     parser.update_signals(setname)
-# # Export all signals
-# print(parser.signals)
-# for name, dataset in parser.datasets.items():
-#     print(name)
-#     parser.export_csv(name, name.replace(".td", ".csv"), csv_folder, normal=True, integrate=True)
-# # Or pick signals to create a signalgroup and do further analysis
-# allsignals = []
-# for name, signallist in parser.signals.items():
-#     allsignals.append(signallist[0])    # pick first detected signal from each file
-# signalgroup = pt.SignalGroup(allsignals, "Example02.parsed")
-# # fit all signals to the luminescence model
-# for s in signalgroup:
-#     funct, popt, perr, p = s.fit_to("Exponential", init_str="10000, 1, .3")
-# # export the fits and the parameters that were found
-# signalgroup.export_csv("Fits_of_Example02.csv", csv_folder, normal=False, integrate=True, fit=True)
-# signalgroup.export_parameters("Fitparams_of_Example02.csv", csv_folder)
-#
-# # save the files for later use
-# signalgroup.change_filename("test_output.parsed")
-# signalgroup.save(parsed_folder)
-#
+
+def test_extracting_signals_from_time_drive_data():
+    test_file_01 = td_files[0]["name"]
+    td_data_01 = pt.TimeDriveData(test_file_01, os.path.join(td_in, test_file_01))
+    signals = td_data_01.extract_signals(starting_point=0, threshold=0.3, bg_bounds=(0.0, 10.0))
+    output = (signals[1].name, signals[1].peak_height, signals[1].total_int)
+    expected_output = ("Timedrive01.td 2", 3.37204, 874.894)
+    assert output == expected_output
+
+
+def test_extracting_signals_from_td_and_exporting_them_to_csv():
+    # remove outfile to prevent false positive outcome when not saving
+    os.remove(os.path.join(csv_out, "signals_from_td01.csv"))
+    # start test
+    test_file_01 = td_files[0]["name"]
+    td_data_01 = pt.TimeDriveData(test_file_01, os.path.join(td_in, test_file_01))
+    signals = td_data_01.extract_signals(starting_point=0, threshold=0.3, bg_bounds=(0.0, 10.0))
+    pt.signals_to_csv(signals, "signals_from_td01.csv", csv_out, normal=True, integrated=True, fit=False)
+    outfile = os.path.join(csv_out, "signals_from_td01.csv")
+    expected_outfile = os.path.join(csv_exp, "signals_from_td01.csv")
+    assert filecmp.cmp(outfile, expected_outfile)

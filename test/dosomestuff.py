@@ -1,3 +1,4 @@
-import test_timedrivedata
+import test_full_example
 
-test_timedrivedata.test_extracting_time_drive_data_from_a_single_file_and_exporting_to_csv()
+
+test_full_example.test_create_mixed_dataset_and_save_parsed_parameters_after_fitting()

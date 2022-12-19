@@ -97,6 +97,14 @@ class Parser:
         self.signals[td_name] = self.datasets[td_name].extract_signals(starting_point=stp,
                                                                        threshold=th, bg_bounds=bg)
 
+    def update_all_signals(self):
+        """Create or update the list of signals for all datasets using the stored parameters"""
+        for td_name, td_dataset in self.datasets.items():
+            stp = self.parse_settings[td_name]["starting_point"]
+            th = self.parse_settings[td_name]["threshold"]
+            bg = (self.parse_settings[td_name]["bg_bound_L"], self.parse_settings[td_name]["bg_bound_R"])
+            self.signals[td_name] = td_dataset.extract_signals(starting_point=stp, threshold=th, bg_bounds=bg)
+
     def export_csv(self, td_name: str, exportname: str, data_folder: str, normal=True, integrate=False):
         """
         Export all signals in the given dataset to a csv file
