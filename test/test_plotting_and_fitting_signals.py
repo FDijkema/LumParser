@@ -1,7 +1,7 @@
 import src.parsertools as pt
 
 
-def test_fitting_a_single_signal_to_predefined_exponential_function():
+def test_fitting_a_single_signal_to_predefined_exponential_function_should_create_fit_data_list():
     signal_data = [
         {"time": 0.0, "value": 0.4},
         {"time": 1.0, "value": 100.0},
@@ -23,7 +23,7 @@ def test_fitting_a_single_signal_to_predefined_exponential_function():
     assert output == expected_output
 
 
-def test_fitting_a_signal_to_a_custom_function():
+def test_fitting_a_signal_to_a_custom_function_should_create_fit_data_list():
     signal_data = [
         {"time": 0.0, "value": 0.4},
         {"time": 1.0, "value": 100.0},

@@ -20,7 +20,7 @@ csv_exp = os.path.join(os.getcwd(), "data", "expected_output_data", "csv")
 td_files = pt.list_td_files(td_in)
 
 
-def test_extracting_time_drive_data_from_a_single_file_and_exporting_to_csv():
+def test_extracting_time_drive_data_from_a_single_file_and_exporting_to_csv_should_create_correct_csv_file():
     # remove outfile to prevent false positive outcome when not saving
     os.remove(os.path.join(csv_out, "a_single_time_drive.csv"))
     # start test
@@ -32,7 +32,7 @@ def test_extracting_time_drive_data_from_a_single_file_and_exporting_to_csv():
     assert filecmp.cmp(outfile, expected_outfile)
 
 
-def test_extracting_signals_from_time_drive_data():
+def test_after_extracting_signals_timedrivedata_object_should_contain_list_of_signals_with_correct_properties():
     test_file_01 = td_files[0]["name"]
     td_data_01 = pt.TimeDriveData(test_file_01, os.path.join(td_in, test_file_01))
     signals = td_data_01.extract_signals(starting_point=0, threshold=0.3, bg_bounds=(0.0, 10.0))
@@ -41,7 +41,7 @@ def test_extracting_signals_from_time_drive_data():
     assert output == expected_output
 
 
-def test_extracting_signals_from_td_and_exporting_them_to_csv():
+def test_extracting_signals_from_td_and_exporting_them_to_csv_should_create_csv_file():
     # remove outfile to prevent false positive outcome when not saving
     os.remove(os.path.join(csv_out, "signals_from_td01.csv"))
     # start test

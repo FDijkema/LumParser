@@ -1,4 +1,0 @@
-import test_full_example
-
-
-test_full_example.test_create_mixed_dataset_and_save_parsed_parameters_after_fitting()

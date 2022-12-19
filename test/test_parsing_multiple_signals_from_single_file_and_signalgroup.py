@@ -20,7 +20,7 @@ csv_exp = os.path.join(os.getcwd(), "data", "expected_output_data", "csv")
 td_files = pt.list_td_files(td_in)
 
 
-def test_creating_signalgroup_from_parsed_data_and_saving():
+def test_creating_signalgroup_from_parsed_data_and_saving_should_create_parsed_file():
     # remove outfile to prevent false positive outcome when not saving
     os.remove(os.path.join(parsed_out, "signalgroup_from_single_file.parsed"))
     # start test
@@ -34,7 +34,7 @@ def test_creating_signalgroup_from_parsed_data_and_saving():
     assert filecmp.cmp(outfile, expected_outfile)
 
 
-def test_loading_signalgroup_from_parsed_file_and_saving_again():
+def test_loading_signalgroup_from_parsed_file_and_saving_again_should_recreate_input_file():
     # remove outfile to prevent false positive outcome when not saving
     os.remove(os.path.join(parsed_out, "Example_data.parsed"))
     # start test
@@ -45,7 +45,7 @@ def test_loading_signalgroup_from_parsed_file_and_saving_again():
     assert filecmp.cmp(outfile, expected_outfile)
 
 
-def test_loading_parsed_file_and_exporting_signals():
+def test_loading_parsed_file_and_exporting_signals_should_save_csv_file():
     # remove outfile to prevent false positive outcome when not saving
     os.remove(os.path.join(csv_out, "signals_from_example_data.csv"))
     # start test
@@ -56,7 +56,7 @@ def test_loading_parsed_file_and_exporting_signals():
     assert filecmp.cmp(outfile, expected_outfile)
 
 
-def test_moving_signals_within_a_signalgroup():
+def test_move_signal_up_or_down_should_adjust_order_of_signals_in_signalgroup():
     my_signalgroup = pt.SignalGroup.loadfrom(os.path.join(parsed_in, "Example_data.parsed"))
     my_signalgroup.move_up("Timedrive05.td 2")
     my_signalgroup.move_up_at(-2)
@@ -72,7 +72,8 @@ def test_moving_signals_within_a_signalgroup():
     ]
     assert output == expected_output
 
-def test_slicing_signalgroup():
+
+def test_slicing_signalgroup_should_output_list_of_signals_in_slice():
     my_signalgroup = pt.SignalGroup.loadfrom(os.path.join(parsed_in, "Example_data.parsed"))
     output = [signal.name for signal in my_signalgroup[1:4]]
     expected_output = [

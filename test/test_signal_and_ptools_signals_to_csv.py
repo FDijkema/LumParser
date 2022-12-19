@@ -25,7 +25,7 @@ signal_data = [
 testsignal = pt.Signal("signal01", signal_data, "fake_file.td")
 
 
-def test_turn_signal_object_to_string():
+def test_calling_str_on_signal_should_print_string_representation_of_signal():
     expected_output = "Signal object signal01 from fake_file.td\n" \
                       "Time[s]    Value[RLU]\n" \
                       "0.0       1.0\n" \
@@ -34,7 +34,7 @@ def test_turn_signal_object_to_string():
     assert str(testsignal) == expected_output
 
 
-def test_if_signal_integrates_correctly():
+def test_integrated_data_should_contain_correctly_integrated_data():
     expected_output = [
         {"time": 0.0, "value": 1.0},
         {"time": 0.1, "value": 6.0},
@@ -43,7 +43,10 @@ def test_if_signal_integrates_correctly():
     assert testsignal.integrated_data == expected_output
 
 
-def test_save_a_very_simple_signal():
+def test_signals_to_csv_should_create_csv_file_with_signal_info():
+    # remove outfile to prevent false positive outcome when not saving
+    os.remove(os.path.join(csv_out, "a_very_simple_signal.csv"))
+    # start test
     pt.signals_to_csv([testsignal], "a_very_simple_signal.csv", csv_out, normal=True, integrated=True)
     outfile = os.path.join(csv_out, "a_very_simple_signal.csv")
     expected_outfile = os.path.join(csv_exp, "a_very_simple_signal.csv")

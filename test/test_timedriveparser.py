@@ -20,7 +20,7 @@ csv_exp = os.path.join(os.getcwd(), "data", "expected_output_data", "csv")
 td_files = pt.list_td_files(td_in)
 
 
-def test_importing_multiple_td_files():
+def test_importing_multiple_td_files_should_create_datasets_in_parser():
     parser = pt.Parser()
     parser.import_ascii(td_in)
     output = parser.datasets.keys()
@@ -34,7 +34,7 @@ def test_importing_multiple_td_files():
     assert output == expected_output
 
 
-def test_exporting_a_time_drive_to_csv_through_a_parser():
+def test_exporting_a_time_drive_to_csv_through_a_parser_should_create_csv_file():
     # remove outfile to prevent false positive outcome when not saving
     os.remove(os.path.join(csv_out, "single_time_drive_through_parser.csv"))
     # start test
@@ -47,7 +47,7 @@ def test_exporting_a_time_drive_to_csv_through_a_parser():
     assert filecmp.cmp(outfile, expected_outfile)
 
 
-def test_change_parse_settings():
+def test_change_parse_settings_should_change_the_obtained_signals():
     # remove outfile to prevent false positive outcome when not saving
     os.remove(os.path.join(csv_out, "signals_after_changing_settings.csv"))
     # start test
@@ -61,7 +61,7 @@ def test_change_parse_settings():
     assert filecmp.cmp(outfile, expected_outfile)
 
 
-def test_create_mixed_dataset():
+def test_create_mixed_dataset_should_create_signalgroup_with_signals_from_different_files():
     # remove outfile to prevent false positive outcome when not saving
     os.remove(os.path.join(parsed_out, "a_group_of_mixed_signals.parsed"))
     # start test

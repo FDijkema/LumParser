@@ -2,7 +2,7 @@ import os
 import src.parsertools as pt
 
 
-def test_get_xy():
+def test_get_xy_should_convert_data_to_x_list_and_y_list():
     test_input = [
         {"time": 0.0, "value": 1.0},
         {"time": 0.1, "value": 5.0},
@@ -13,7 +13,7 @@ def test_get_xy():
     assert output == expected_output
 
 
-def test_get_highest():
+def test_get_highest_should_give_time_and_datapoint_with_highest_value():
     test_input = [
         {"time": 0.0, "value": 1.0},
         {"time": 0.1, "value": 5.0},
@@ -24,7 +24,7 @@ def test_get_highest():
     assert output == expected_output
 
 
-def test_list_td_files():
+def test_list_td_files_should_return_list_of_dicts_for_all_td_files_in_folder():
     td_in = os.path.join(os.getcwd(), "data", "test_input_data", "td")
     expected_output = [
         {"name": "Timedrive01", "directory": td_in},
