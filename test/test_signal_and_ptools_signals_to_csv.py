@@ -45,7 +45,10 @@ def test_integrated_data_should_contain_correctly_integrated_data():
 
 def test_signals_to_csv_should_create_csv_file_with_signal_info():
     # remove outfile to prevent false positive outcome when not saving
-    os.remove(os.path.join(csv_out, "a_very_simple_signal.csv"))
+    try:
+        os.remove(os.path.join(csv_out, "a_very_simple_signal.csv"))
+    except OSError:
+        pass
     # start test
     pt.signals_to_csv([testsignal], "a_very_simple_signal.csv", csv_out, normal=True, integrated=True)
     outfile = os.path.join(csv_out, "a_very_simple_signal.csv")

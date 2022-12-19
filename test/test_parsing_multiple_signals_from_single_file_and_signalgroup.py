@@ -22,7 +22,10 @@ td_files = pt.list_td_files(td_in)
 
 def test_creating_signalgroup_from_parsed_data_and_saving_should_create_parsed_file():
     # remove outfile to prevent false positive outcome when not saving
-    os.remove(os.path.join(parsed_out, "signalgroup_from_single_csv_file.parsed"))
+    try:
+        os.remove(os.path.join(parsed_out, "signalgroup_from_single_csv_file.parsed"))
+    except OSError:
+        pass
     # start test
     test_file_01 = td_files[0]["name"]
     td_data_01 = pt.TimeDriveData(test_file_01, os.path.join(td_in, test_file_01))
@@ -36,7 +39,10 @@ def test_creating_signalgroup_from_parsed_data_and_saving_should_create_parsed_f
 
 def test_loading_signalgroup_from_parsed_file_and_saving_again_should_recreate_input_file():
     # remove outfile to prevent false positive outcome when not saving
-    os.remove(os.path.join(parsed_out, "Example_data.parsed"))
+    try:
+        os.remove(os.path.join(parsed_out, "Example_data.parsed"))
+    except OSError:
+        pass
     # start test
     my_signalgroup = pt.SignalGroup.loadfrom(os.path.join(parsed_in, "Example_data.parsed"))
     my_signalgroup.save(parsed_out)
@@ -47,7 +53,10 @@ def test_loading_signalgroup_from_parsed_file_and_saving_again_should_recreate_i
 
 def test_loading_parsed_file_and_exporting_signals_should_save_csv_file():
     # remove outfile to prevent false positive outcome when not saving
-    os.remove(os.path.join(csv_out, "signals_from_example_data.csv"))
+    try:
+        os.remove(os.path.join(csv_out, "signals_from_example_data.csv"))
+    except OSError:
+        pass
     # start test
     my_signalgroup = pt.SignalGroup.loadfrom(os.path.join(parsed_in, "Example_data.parsed"))
     my_signalgroup.export_csv("signals_from_example_data.csv", csv_out, normal=True, integrate=True, fit=False)

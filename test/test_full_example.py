@@ -22,7 +22,10 @@ td_files = pt.list_td_files(td_in)
 
 def test_create_mixed_dataset_fit_and_save_parameters_should_create_correct_csv_file():
     # remove outfile to prevent false positive outcome when not saving
-    os.remove(os.path.join(csv_out, "parameters_from_fit.csv"))
+    try:
+        os.remove(os.path.join(csv_out, "parameters_from_fit.csv"))
+    except OSError:
+        pass
     # start test
     parser = pt.Parser()
     parser.import_ascii(td_in)

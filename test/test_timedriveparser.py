@@ -36,7 +36,10 @@ def test_importing_multiple_td_files_should_create_datasets_in_parser():
 
 def test_exporting_a_time_drive_to_csv_through_a_parser_should_create_csv_file():
     # remove outfile to prevent false positive outcome when not saving
-    os.remove(os.path.join(csv_out, "single_time_drive_through_parser.csv"))
+    try:
+        os.remove(os.path.join(csv_out, "single_time_drive_through_parser.csv"))
+    except OSError:
+        pass
     # start test
     parser = pt.Parser()
     parser.import_ascii(td_in)
@@ -49,7 +52,10 @@ def test_exporting_a_time_drive_to_csv_through_a_parser_should_create_csv_file()
 
 def test_change_parse_settings_should_change_the_obtained_signals():
     # remove outfile to prevent false positive outcome when not saving
-    os.remove(os.path.join(csv_out, "signals_after_changing_settings.csv"))
+    try:
+        os.remove(os.path.join(csv_out, "signals_after_changing_settings.csv"))
+    except OSError:
+        pass
     # start test
     parser = pt.Parser()
     parser.import_ascii(td_in)
@@ -63,11 +69,14 @@ def test_change_parse_settings_should_change_the_obtained_signals():
 
 def test_create_mixed_dataset_should_create_signalgroup_with_signals_from_different_files():
     # remove outfile to prevent false positive outcome when not saving
-    os.remove(os.path.join(parsed_out, "a_group_of_mixed_signals.parsed"))
+    try:
+        os.remove(os.path.join(parsed_out, "a_group_of_mixed_signals.parsed"))
+    except OSError:
+        pass
     # start test
     parser = pt.Parser()
     parser.import_ascii(td_in)
-    parser.update_signals()
+    parser.update_all_signals()
     selected_signals = [signals[1] for signals in parser.signals.values()]    # take second signal in each time drive
     signalgroup = pt.SignalGroup(selected_signals, "a_group_of_mixed_signals.parsed", notes="Hello world!")
     signalgroup.save(parsed_out)
