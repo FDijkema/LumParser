@@ -52,12 +52,15 @@ datapoints in a file.
 - When a signal is recorded and parsed, the background light value is subtracted from all datapoints and the starting
 time is set to 0s.
 
+# Installing
+To be written...
+
 # Using the interface
 
 Run the interface from command line using:
 
 ```
-python -m LumParser
+python LumParser
 ```
 
-The interface will open and 
+The interface will open and ...
