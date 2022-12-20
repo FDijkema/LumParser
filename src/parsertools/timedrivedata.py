@@ -121,15 +121,15 @@ class TimeDriveData:
             # calc average of 10 most recent points
             local.append(value)
             local = local[-10:]
-            local_average = sum(local) / len(local)
+            baseline = sum(local) / len(local)
 
             # start looking for signals after the expected time point
-            if i > stp and value > (local_average + th):    # sudden increase, possible signal start
+            if i > stp and value > (baseline + th):    # sudden increase, possible signal start
                 for index in range(i, i + 100):    # check the first 100 datapoints after the putative signal start
                     value = data[index]["value"]
-                    # if the light goes down within 100 datapoints from the putative signal start, the peak is assumed
-                    # to be noise and no signal is recorded
-                    if value < local_average:
+                    # if the light goes down below the baseline within 100 datapoints from the putative signal start,
+                    # the peak is assumed to be noise and no signal is recorded
+                    if value < baseline:
                         i += 1
                         break
                 else:    # there is a signal
