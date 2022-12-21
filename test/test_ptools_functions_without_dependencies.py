@@ -1,5 +1,5 @@
 import os
-import src.parsertools as pt
+import src.lumparser.parsertools as pt
 
 
 def test_get_xy_should_convert_data_to_x_list_and_y_list():

@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lumparser"
+version = "0.0.1"
+authors=[
+    {email="fmdijkema@gmail.com"},
+    {name='Fenne Marjolein Dijkema'}
+]
+readme = "README.md"
+description='Python library for parsing and analysing Luminescence time drive data.'
+keywords=["Luminescence Time drive Luciferase Gaussia Relative light units Luminometer Spectroscopy"]
+license={file = "LICENSE.txt"}
+requires-python=">=3.7"
+dependencies=['numpy', 'scipy', 'matplotlib']
+
+[project.urls]
+repository="https://github.com/FDijkema/LumParser"
+
+[project.gui-scripts]
+lumparser = "lumparser:user_interface.run.run_app"
+
+[tool.pytest.ini_options]
+addopts = [
+    "--imports-mode=importlib"
+]

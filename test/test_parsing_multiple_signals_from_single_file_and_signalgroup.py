@@ -1,6 +1,6 @@
 import os
 import filecmp
-import src.parsertools as pt
+import src.lumparser.parsertools as pt
 
 # Data paths
 # input

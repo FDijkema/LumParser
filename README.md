@@ -20,7 +20,7 @@ the program.
 # Requirements
 
   * Python 3.7
-  * Python third-party packages:
+  * Python third-party libraries:
     * matplotlib
     * numpy
     * scipy

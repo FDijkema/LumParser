@@ -1,4 +1,4 @@
-import src.parsertools as pt
+import src.lumparser.parsertools as pt
 
 
 def test_fitting_a_single_signal_to_predefined_exponential_function_should_create_fit_data_list():
