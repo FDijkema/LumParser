@@ -27,14 +27,14 @@ AnaFrame (Subclass of tk.Frame)
 """
 
 import sys
-import src.lumparser.parsertools as pt
+import lumparser.parsertools as pt
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 import tkinter as tk
 from tkinter import N, S, W, E, TOP, LEFT, X, BOTH, END
-from src.lumparser.user_interface.anawindow_subframes.anatoolframe import AnaToolFrame
-from src.lumparser.user_interface.anawindow_subframes.fitoptionsframe import FitOptionsFrame
-from src.lumparser.user_interface.stdredirector import StdRedirector
+from lumparser.user_interface.anawindow_subframes.anatoolframe import AnaToolFrame
+from lumparser.user_interface.anawindow_subframes.fitoptionsframe import FitOptionsFrame
+from lumparser.user_interface.stdredirector import StdRedirector
 
 
 class AnaFrame(tk.Frame):

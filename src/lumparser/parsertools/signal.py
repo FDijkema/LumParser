@@ -11,8 +11,8 @@ CLASSES
 Signal
 """
 
-from lumparser.parsertools import get_xy, get_highest
-from lumparser.parsertools import prepare_inits, fit_data
+from .ptools import get_xy, get_highest
+from .fitting.fittools import prepare_inits, fit_data
 
 
 class Signal:

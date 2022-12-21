@@ -10,9 +10,9 @@ CLASSES
 Parser
 """
 
-from lumparser.parsertools import default_threshold, default_starting_point, default_background_bounds
-from lumparser.parsertools import list_td_files, signals_to_csv
-from lumparser.parsertools import TimeDriveData
+from .defaultvalues import default_threshold, default_starting_point, default_background_bounds
+from .ptools import list_td_files, signals_to_csv
+from .timedrivedata import TimeDriveData
 
 
 class Parser:

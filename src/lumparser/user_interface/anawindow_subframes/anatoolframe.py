@@ -37,7 +37,7 @@ AnaToolFrame (subclass of tk.Frame)
 import os
 import tkinter as tk
 from tkinter import N, S, W, E, EXTENDED, LEFT, END, ANCHOR
-import src.lumparser.parsertools as pt
+import lumparser.parsertools as pt
 
 
 class AnaToolFrame(tk.Frame):

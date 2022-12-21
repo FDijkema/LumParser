@@ -13,8 +13,8 @@ SignalGroup
 import os
 import copy
 from numbers import Number
-from lumparser.parsertools import Signal
-from lumparser.parsertools import signals_to_csv, get_xy
+from .signal import Signal
+from .ptools import signals_to_csv, get_xy
 
 
 class SignalGroup:

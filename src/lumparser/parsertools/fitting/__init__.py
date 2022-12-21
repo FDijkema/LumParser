@@ -20,4 +20,5 @@ FUNCTIONS (dict, function names as keys, functions as values)
 DEFAULT_INITS (dict, function names as keys, lists of default initial parameters per function type as values)
 """
 
-
+from .fittools import fit_data, curve_fit, make_func
+from .functions import FUNCTIONS, DEFAULT_INITS

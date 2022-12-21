@@ -21,13 +21,13 @@ App (Subclass of tk.Tk)
 
 import sys
 import os
-import src.lumparser.parsertools as pt
-from src.lumparser.user_interface.anawindow import AnaFrame
-from src.lumparser.user_interface.parsewindow import ParseFrame
+import lumparser.parsertools as pt
+from lumparser.user_interface.anawindow import AnaFrame
+from lumparser.user_interface.parsewindow import ParseFrame
 import matplotlib.pyplot as plt
 import tkinter as tk
 from tkinter import N, S, W, E, TOP, BOTH, END
-from src.lumparser.user_interface.stdredirector import StdRedirector
+from lumparser.user_interface.stdredirector import StdRedirector
 
 
 class App(tk.Tk):

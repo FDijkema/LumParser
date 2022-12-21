@@ -26,7 +26,7 @@ FitOptionsFrame (subclass of tk.Frame)
 
 import tkinter as tk
 from tkinter import N, S, W, E, LEFT, END
-from src.lumparser.parsertools import FUNCTIONS, DEFAULT_INITS
+from lumparser.parsertools.fitting import FUNCTIONS, DEFAULT_INITS
 
 
 class FitOptionsFrame(tk.Frame):

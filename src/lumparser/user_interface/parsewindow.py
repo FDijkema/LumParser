@@ -28,15 +28,15 @@ ParseFrame (Subclass of tk.Frame)
 """
 
 import sys
-import src.lumparser.parsertools as pt
-from src.lumparser.user_interface.anawindow import AnaFrame
+import lumparser.parsertools as pt
+from lumparser.user_interface.anawindow import AnaFrame
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 import tkinter as tk
 from tkinter import N, S, W, E, DISABLED, TOP, LEFT, X, BOTH
-from src.lumparser.user_interface.parsewindow_subframes.parsertoolframe import ParserToolFrame
-from src.lumparser.user_interface.parsewindow_subframes.parsermixframe import ParserMixFrame
-from src.lumparser.user_interface.stdredirector import StdRedirector
+from lumparser.user_interface.parsewindow_subframes.parsertoolframe import ParserToolFrame
+from lumparser.user_interface.parsewindow_subframes.parsermixframe import ParserMixFrame
+from lumparser.user_interface.stdredirector import StdRedirector
 
 
 class ParseFrame(tk.Frame):

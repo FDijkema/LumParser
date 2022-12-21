@@ -83,8 +83,8 @@ fitting contains functions for fitting data to a curve in fitting.fittools and f
 fitting.functions. Additional functions can be defined in the same format as the existing ones.
 """
 
-import src.lumparser.parsertools.fitting as fitting
-import src.lumparser.parsertools.defaultvalues
+from . import fitting
+from . import defaultvalues
 from .timedrivedata import TimeDriveData
 from .timedriveparser import Parser
 from .signal import Signal

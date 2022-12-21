@@ -34,10 +34,10 @@ CLASSES
 ParserToolFrame (subclass of tk.Frame)
 """
 
-import src.lumparser.parsertools as pt
+import lumparser.parsertools as pt
 import tkinter as tk
 from tkinter import N, S, W, E, DISABLED, RIGHT, END, ANCHOR
-from src.lumparser.parsertools import default_import_folder
+from lumparser.parsertools.defaultvalues import default_import_folder
 
 
 class ParserToolFrame(tk.Frame):
