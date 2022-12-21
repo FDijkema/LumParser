@@ -35,6 +35,7 @@ class App(tk.Tk):
     def __init__(self, *args, **kwargs):
         # initialise the main window
         tk.Tk.__init__(self, *args, **kwargs)
+        self.protocol("WM_DELETE_WINDOW", self._quit)
         self.state("zoomed")
 
         # set attributes for window display
@@ -178,3 +179,7 @@ class App(tk.Tk):
             self.viewmenu.add_command(label=w_name, command=lambda w_name=w_name: self.show_frame(w_name))
         # update the Output menu
         self.menubar.entryconfig(3, menu=self.outputmenu)
+
+    def _quit(self):
+        self.quit()
+        self.destroy()

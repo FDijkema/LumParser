@@ -1,3 +1,1 @@
-graft src
-graft data
-graft test
+recursive-include lumparsing/data
