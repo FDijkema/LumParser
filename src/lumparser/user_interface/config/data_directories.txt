@@ -1,0 +1,3 @@
+import_folder=""
+parsed_folder=""
+csv_folder=""

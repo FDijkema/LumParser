@@ -32,9 +32,9 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 import tkinter as tk
 from tkinter import N, S, W, E, TOP, LEFT, X, BOTH, END
-from lumparser.user_interface.anawindow_subframes.anatoolframe import AnaToolFrame
-from lumparser.user_interface.anawindow_subframes.fitoptionsframe import FitOptionsFrame
-from lumparser.user_interface.stdredirector import StdRedirector
+from .anawindow_subframes.anatoolframe import AnaToolFrame
+from .anawindow_subframes.fitoptionsframe import FitOptionsFrame
+from .stdredirector import StdRedirector
 
 
 class AnaFrame(tk.Frame):

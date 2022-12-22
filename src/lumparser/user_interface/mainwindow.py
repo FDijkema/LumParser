@@ -21,13 +21,29 @@ App (Subclass of tk.Tk)
 
 import sys
 import os
-import lumparser.parsertools as pt
-from lumparser.user_interface.anawindow import AnaFrame
-from lumparser.user_interface.parsewindow import ParseFrame
-import matplotlib.pyplot as plt
 import tkinter as tk
 from tkinter import N, S, W, E, TOP, BOTH, END
-from lumparser.user_interface.stdredirector import StdRedirector
+from .stdredirector import StdRedirector
+import matplotlib.pyplot as plt
+try:
+    import importlib.resources as resources
+except ImportError:
+    # Try backported to PY<37 `importlib_resources`.
+    import importlib_resources as resources
+import lumparser.parsertools as pt
+from .anawindow import AnaFrame
+from .parsewindow import ParseFrame
+from .first_run import CreateFolderWindow
+from . import config
+
+
+
+
+# read and store in variable
+first_run = resources.open_text(config, 'first_run.txt')
+prompt_change_directory = resources.open_text(config, 'prompt_change_directory.txt')
+# read for a file-like stream:
+data_directories = resources.open_text(config, 'data_directories.txt')
 
 
 class App(tk.Tk):
@@ -82,6 +98,19 @@ class App(tk.Tk):
         # updated when changed from one window to another
         self.outputmenu = tk.Menu(self.menubar)
         self.menubar.add_cascade(label="Output", menu=self.outputmenu)
+
+        # First time running the program, do some special operations
+        if first_run.read() == "True":
+            create_folder_window = CreateFolderWindow(self)
+            # remember not to do this again next time
+            with open(os.path.join(pt.defaultvalues.project_root, "user_interface", "config", "first_run.txt"), "w") as f:
+                f.write("False")
+        elif prompt_change_directory.read() == "True":
+            self.launch_change_directory()
+
+    def launch_change_directory(self):
+        """To be implemented"""
+        raise NotImplementedError
 
     def start_import(self):
         """Go to the parsing window. If it does not exist yet, open one."""
@@ -183,3 +212,4 @@ class App(tk.Tk):
     def _quit(self):
         self.quit()
         self.destroy()
+        quit()

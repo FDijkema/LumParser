@@ -17,11 +17,14 @@ default_background_bounds
 """
 
 import os
+from pathlib import Path
 
 # saving location
-default_import_folder = os.path.join(os.getcwd(), "data", "td")    # where to find .td files
-default_parsed_folder = os.path.join(os.getcwd(), "data", "parsed")    # where to find and save .parsed files
-default_csv_folder = os.path.join(os.getcwd(), "data", "csv")    # where to save .csv files
+default_data_folder = os.path.join(os.getcwd(), "data")
+default_import_folder = os.path.join(default_data_folder, "td")    # where to find .td files
+default_parsed_folder = os.path.join(default_data_folder, "parsed")    # where to find and save .parsed files
+default_csv_folder = os.path.join(default_data_folder, "csv")    # where to save .csv files
+project_root = Path(__file__).parent.parent
 
 # default parsing parameters for finding signal start
 default_starting_point = 0    # earliest time point where a signal is expected
