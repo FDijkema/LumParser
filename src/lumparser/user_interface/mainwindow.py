@@ -33,7 +33,7 @@ except ImportError:
 import lumparser.parsertools as pt
 from .anawindow import AnaFrame
 from .parsewindow import ParseFrame
-from .first_run import CreateFolderWindow
+from .folderwindow import CreateFolderWindow
 from . import config
 
 
@@ -97,11 +97,13 @@ class App(tk.Tk):
         # Output menu to save data or parse from parsing window to start analysis
         # updated when changed from one window to another
         self.outputmenu = tk.Menu(self.menubar)
+        self.outputmenu.add_command(label="change saving location", command=lambda: self.launch_change_directory())
         self.menubar.add_cascade(label="Output", menu=self.outputmenu)
 
         # First time running the program, do some special operations
         if first_run.read() == "True":
             create_folder_window = CreateFolderWindow(self)
+            create_folder_window.attributes("-topmost", True)
             # remember not to do this again next time
             with open(os.path.join(pt.defaultvalues.project_root, "user_interface", "config", "first_run.txt"), "w") as f:
                 f.write("False")
@@ -110,7 +112,8 @@ class App(tk.Tk):
 
     def launch_change_directory(self):
         """To be implemented"""
-        raise NotImplementedError
+        create_folder_window = CreateFolderWindow(self)
+        create_folder_window.attributes("-topmost", True)
 
     def start_import(self):
         """Go to the parsing window. If it does not exist yet, open one."""

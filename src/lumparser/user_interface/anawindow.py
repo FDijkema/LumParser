@@ -117,6 +117,8 @@ class AnaFrame(tk.Frame):
         self.outputmenu.add_command(label="Export dataset", command=self.launch_export)
         self.outputmenu.add_command(label="Save dataset", command=self.save_set)
         self.outputmenu.add_command(label="Save dataset as", command=self.launch_save_as)
+        self.outputmenu.add_separator()
+        self.outputmenu.add_command(label="change saving location", command=lambda: self.controller.launch_change_directory())
 
     def show_custom(self):
         """Show plot of selected X and Y parameters."""

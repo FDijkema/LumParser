@@ -55,6 +55,8 @@ class ParseFrame(tk.Frame):
         self.outputmenu.add_command(label="Export selected file", command=self.launch_export)
         self.outputmenu.add_command(label="Parse selected file", command=self.parse_file)
         self.outputmenu.add_command(label="Parse mixed dataset", command=self.parse_mixed)
+        self.outputmenu.add_separator()
+        self.outputmenu.add_command(label="change saving location", command=lambda: self.controller.launch_change_directory())
 
         # make sure the analysis window fills the entire main window
         main_window = tk.PanedWindow(self)  # the parseframe itself is the master
