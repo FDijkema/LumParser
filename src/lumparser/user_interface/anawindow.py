@@ -274,7 +274,7 @@ class AnaFrame(tk.Frame):
     def export_files(self, exportname):
         """Export files based on user input, close export window."""
         data_directories = resources.open_text(config, 'data_directories.txt')
-        for line in data_directories.readlines():
+        for line in data_directories.read().splitlines():
             if line.startswith("csv_folder"):
                 label, csv_folder = line.split("=")
         if self.export_type.get() == "signals":
@@ -293,7 +293,7 @@ class AnaFrame(tk.Frame):
     def save_set(self):
         """Simple save of file under current name. Run save_as if necessary"""
         data_directories = resources.open_text(config, 'data_directories.txt')
-        for line in data_directories.readlines():
+        for line in data_directories.read().splitlines():
             if line.startswith("parsed_folder"):
                 label, parsed_folder = line.split("=")
         if self.signalgroup.filename.startswith(self.controller.default_name):
@@ -326,7 +326,7 @@ class AnaFrame(tk.Frame):
     def save_as(self, new_name):
         """Save file under name input by user, then close save window."""
         data_directories = resources.open_text(config, 'data_directories.txt')
-        for line in data_directories.readlines():
+        for line in data_directories.read().splitlines():
             if line.startswith("parsed_folder"):
                 label, parsed_folder = line.split("=")
         old_name = self.signalgroup.filename

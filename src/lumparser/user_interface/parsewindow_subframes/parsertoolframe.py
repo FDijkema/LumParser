@@ -52,7 +52,7 @@ class ParserToolFrame(tk.Frame):
         self.controller = controller
 
         data_directories = resources.open_text(config, 'data_directories.txt')
-        for line in data_directories.readlines():
+        for line in data_directories.read().splitlines():
             if line.startswith("import_folder"):
                 label, default_import_folder = line.split("=")
         self.import_folder = default_import_folder

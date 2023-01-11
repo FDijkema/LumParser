@@ -72,7 +72,7 @@ class CreateFolderWindow(tk.Toplevel):
     def create_datafolder(self, path):
         """Create a datafolder in the user directory."""
         # give feedback to user
-        print("Files will be saved at {0}.".format(path))
+        print("Files will be saved at '{0}'.".format(path))
         # save the setting to show the change directory window next time or not
         with open(os.path.join(pt.defaultvalues.project_root, "user_interface", "config", "prompt_change_directory.txt"), "w") as f:
             f.write(str(self.show_window.get()))
@@ -96,9 +96,9 @@ class CreateFolderWindow(tk.Toplevel):
         # save subfolder locations
         with open(os.path.join(pt.defaultvalues.project_root, "user_interface", "config",
                                "data_directories.txt"), "w") as f:
-            f.write('import_folder="{}"\n'.format(str(import_folder)) +
-                    'parsed_folder="{}"\n'.format(str(parsed_folder)) +
-                    'csv_folder="{}"'.format(str(csv_folder))
+            f.write('import_folder={}\n'.format(str(import_folder)) +
+                    'parsed_folder={}\n'.format(str(parsed_folder)) +
+                    'csv_folder={}'.format(str(csv_folder))
                     )
         # if the make_examples setting is ticked, fill the created folders with example data
         if self.make_examples.get() is True:

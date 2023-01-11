@@ -267,7 +267,7 @@ class ParseFrame(tk.Frame):
     def export_files(self, exportname):
         """Export the data based on the user input, then close export window."""
         data_directories = resources.open_text(config, 'data_directories.txt')
-        for line in data_directories.readlines():
+        for line in data_directories.read().splitlines():
             if line.startswith("csv_folder"):
                 label, csv_folder = line.split("=")
         filename = self.export_file.get()
