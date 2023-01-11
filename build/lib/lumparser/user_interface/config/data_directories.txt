@@ -1,0 +1,3 @@
+import_folder=C:\Users\tlm711\Luminescence_data\td
+parsed_folder=C:\Users\tlm711\Luminescence_data\parsed
+csv_folder=C:\Users\tlm711\Luminescence_data\csv

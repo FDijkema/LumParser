@@ -1,8 +1,7 @@
-"""GUI entrypoint to run program"""
+"""Execute this file to run the LumParsing user interface"""
 
 from lumparser.user_interface.mainwindow import App
 
-
-def run_app():
+if __name__ == "__main__":
     app = App()
     app.mainloop()  # initialize event loop (start interaction with user)

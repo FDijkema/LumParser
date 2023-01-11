@@ -1,2 +1,2 @@
 [gui_scripts]
-lumparser = lumparser:user_interface.run.run_app
+lumparser = lumparser.user_interface:run_app

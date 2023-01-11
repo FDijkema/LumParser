@@ -65,3 +65,7 @@ Once the package is installed, run the interface from command line using:
 ```
 python -m lumparser
 ```
+or
+```
+lumparser
+```
