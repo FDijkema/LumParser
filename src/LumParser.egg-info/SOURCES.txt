@@ -46,6 +46,7 @@ src/lumparser/parsertools/fitting/__pycache__/fittools.cpython-37.pyc
 src/lumparser/parsertools/fitting/__pycache__/functions.cpython-37.pyc
 src/lumparser/user_interface/__init__.py
 src/lumparser/user_interface/anawindow.py
+src/lumparser/user_interface/folderwindow.py
 src/lumparser/user_interface/mainwindow.py
 src/lumparser/user_interface/parsewindow.py
 src/lumparser/user_interface/stdredirector.py
@@ -58,6 +59,7 @@ src/lumparser/user_interface/anawindow_subframes/fitoptionsframe.py
 src/lumparser/user_interface/anawindow_subframes/__pycache__/__init__.cpython-37.pyc
 src/lumparser/user_interface/anawindow_subframes/__pycache__/anatoolframe.cpython-37.pyc
 src/lumparser/user_interface/anawindow_subframes/__pycache__/fitoptionsframe.cpython-37.pyc
+src/lumparser/user_interface/config/__init__.py
 src/lumparser/user_interface/config/data_directories.txt
 src/lumparser/user_interface/config/first_run.txt
 src/lumparser/user_interface/config/prompt_change_directory.txt
