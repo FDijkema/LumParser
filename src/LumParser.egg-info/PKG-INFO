@@ -90,14 +90,15 @@ datapoints in a file.
 time is set to 0s.
 
 # Installing
-To be written...
+Install using pip (For installing pip see https://pip.pypa.io/en/stable/installation/):
+
+```
+pip install LumParser
+```
 
 # Using the interface
-
-Run the interface from command line using:
+Once the package is installed, run the interface from command line using:
 
 ```
 python LumParser
 ```
-
-The interface will open and ...

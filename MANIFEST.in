@@ -1,1 +1,2 @@
-recursive-include lumparser/data *
+recursive-include lumparser/data *.td
+recursive-include lumparser/user_interface/config *.txt

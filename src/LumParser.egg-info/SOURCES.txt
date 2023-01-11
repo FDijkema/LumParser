@@ -48,7 +48,6 @@ src/lumparser/user_interface/__init__.py
 src/lumparser/user_interface/anawindow.py
 src/lumparser/user_interface/mainwindow.py
 src/lumparser/user_interface/parsewindow.py
-src/lumparser/user_interface/run.py
 src/lumparser/user_interface/stdredirector.py
 src/lumparser/user_interface/__pycache__/__init__.cpython-37.pyc
 src/lumparser/user_interface/__pycache__/anawindow.cpython-37.pyc
