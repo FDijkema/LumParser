@@ -285,6 +285,9 @@ class ParseFrame(tk.Frame):
     def parse_file(self):
         """Parse the data in the selected time drive and open in analysis window."""
         thisfile = self.tools.loader_box.get("active")
+        if thisfile ==():
+            print("File could not be parsed: no file selected.")
+            return
         signals = self.tools.parser.signals[thisfile]
         group = pt.SignalGroup(signals, thisfile)
         name = group.filename
@@ -297,6 +300,8 @@ class ParseFrame(tk.Frame):
 
     def parse_mixed(self):
         """Parse the data of the mixed group of signals and open in analysis window."""
+        if len(self.parse_options.mixsignals) == 0:
+            print("There are no signals selected to parse.")
         group = pt.SignalGroup(self.parse_options.mixsignals, "")
         group.change_filename(self.controller.default_name + "_" + str(self.controller.name_count))
         self.controller.name_count += 1
