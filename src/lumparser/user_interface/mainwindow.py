@@ -36,9 +36,6 @@ from .parsewindow import ParseFrame
 from .folderwindow import CreateFolderWindow
 from . import config
 
-
-
-
 # read and store in variable
 first_run = resources.open_text(config, 'first_run.txt')
 prompt_change_directory = resources.open_text(config, 'prompt_change_directory.txt')
