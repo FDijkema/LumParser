@@ -34,6 +34,12 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 import tkinter as tk
 from tkinter import N, S, W, E, DISABLED, TOP, LEFT, X, BOTH
+try:
+    import importlib.resources as resources
+except ImportError:
+    # Try backported to PY<37 `importlib_resources`.
+    import importlib_resources as resources
+from . import config
 from .parsewindow_subframes.parsertoolframe import ParserToolFrame
 from .parsewindow_subframes.parsermixframe import ParserMixFrame
 from .stdredirector import StdRedirector
@@ -56,7 +62,7 @@ class ParseFrame(tk.Frame):
         self.outputmenu.add_command(label="Parse selected file", command=self.parse_file)
         self.outputmenu.add_command(label="Parse mixed dataset", command=self.parse_mixed)
         self.outputmenu.add_separator()
-        self.outputmenu.add_command(label="change saving location", command=lambda: self.controller.launch_change_directory())
+        self.outputmenu.add_command(label="Change saving location", command=lambda: self.controller.launch_change_directory())
 
         # make sure the analysis window fills the entire main window
         main_window = tk.PanedWindow(self)  # the parseframe itself is the master
@@ -260,15 +266,19 @@ class ParseFrame(tk.Frame):
 
     def export_files(self, exportname):
         """Export the data based on the user input, then close export window."""
+        data_directories = resources.open_text(config, 'data_directories.txt')
+        for line in data_directories.readlines():
+            if line.startswith("csv_folder"):
+                label, csv_folder = line.split("=")
         filename = self.export_file.get()
         if self.export_type.get() == "original":
-            self.tools.parser.datasets[filename].export_to_csv(exportname, pt.defaultvalues.default_csv_folder, oftype="original")
+            self.tools.parser.datasets[filename].export_to_csv(exportname, csv_folder, oftype="original")
         elif self.export_type.get() == "corrected":
-            self.tools.parser.datasets[filename].export_to_csv(exportname, pt.defaultvalues.default_csv_folder, oftype="corrected")
+            self.tools.parser.datasets[filename].export_to_csv(exportname, csv_folder, oftype="corrected")
         elif self.export_type.get() == "signals":
             normal = self.export_normal.get()
             inte = self.export_int.get()
-            self.tools.parser.export_csv(filename, exportname, pt.defaultvalues.default_csv_folder, normal=normal, integrate=inte)
+            self.tools.parser.export_csv(filename, exportname, csv_folder, normal=normal, integrate=inte)
         print("Exported file as {}".format(exportname))
         self.export_window.destroy()
 

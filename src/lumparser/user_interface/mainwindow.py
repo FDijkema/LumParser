@@ -97,11 +97,17 @@ class App(tk.Tk):
         # Output menu to save data or parse from parsing window to start analysis
         # updated when changed from one window to another
         self.outputmenu = tk.Menu(self.menubar)
-        self.outputmenu.add_command(label="change saving location", command=lambda: self.launch_change_directory())
+        self.outputmenu.add_command(label="Change saving location", command=lambda: self.launch_change_directory())
         self.menubar.add_cascade(label="Output", menu=self.outputmenu)
 
         # First time running the program, do some special operations
         if first_run.read() == "True":
+            with open(os.path.join(pt.defaultvalues.project_root, "user_interface", "config",
+                                   "data_directories.txt"), "w") as f:
+                f.write('import_folder={}\n'.format(str(pt.defaultvalues.default_import_folder)) +
+                        'parsed_folder={}\n'.format(str(pt.defaultvalues.default_parsed_folder)) +
+                        'csv_folder={}'.format(str(pt.defaultvalues.default_csv_folder))
+                        )
             create_folder_window = CreateFolderWindow(self)
             create_folder_window.attributes("-topmost", True)
             # remember not to do this again next time

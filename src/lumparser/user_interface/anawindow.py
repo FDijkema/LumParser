@@ -32,6 +32,12 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 import tkinter as tk
 from tkinter import N, S, W, E, TOP, LEFT, X, BOTH, END
+try:
+    import importlib.resources as resources
+except ImportError:
+    # Try backported to PY<37 `importlib_resources`.
+    import importlib_resources as resources
+from . import config
 from .anawindow_subframes.anatoolframe import AnaToolFrame
 from .anawindow_subframes.fitoptionsframe import FitOptionsFrame
 from .stdredirector import StdRedirector
@@ -118,7 +124,7 @@ class AnaFrame(tk.Frame):
         self.outputmenu.add_command(label="Save dataset", command=self.save_set)
         self.outputmenu.add_command(label="Save dataset as", command=self.launch_save_as)
         self.outputmenu.add_separator()
-        self.outputmenu.add_command(label="change saving location", command=lambda: self.controller.launch_change_directory())
+        self.outputmenu.add_command(label="Change saving location", command=lambda: self.controller.launch_change_directory())
 
     def show_custom(self):
         """Show plot of selected X and Y parameters."""
@@ -267,27 +273,35 @@ class AnaFrame(tk.Frame):
 
     def export_files(self, exportname):
         """Export files based on user input, close export window."""
+        data_directories = resources.open_text(config, 'data_directories.txt')
+        for line in data_directories.readlines():
+            if line.startswith("csv_folder"):
+                label, csv_folder = line.split("=")
         if self.export_type.get() == "signals":
             normal = self.export_normal.get()
             inte = self.export_int.get()
-            self.signalgroup.export_csv(exportname, pt.defaultvalues.default_csv_folder,
+            self.signalgroup.export_csv(exportname, csv_folder,
                                         normal=normal, integrate=inte)
         elif self.export_type.get() == "fit":
             fit_type = self.extra_options.curve_name.get()
-            self.signalgroup.export_csv(exportname, pt.defaultvalues.default_csv_folder, normal=0, integrate=1, fit=1)
+            self.signalgroup.export_csv(exportname, csv_folder, normal=0, integrate=1, fit=1)
         elif self.export_type.get() == "parameters":
-            self.signalgroup.export_parameters(exportname, pt.defaultvalues.default_csv_folder)
+            self.signalgroup.export_parameters(exportname, csv_folder)
         print("Exported as %s" % exportname)
         self.export_window.destroy()
 
     def save_set(self):
         """Simple save of file under current name. Run save_as if necessary"""
+        data_directories = resources.open_text(config, 'data_directories.txt')
+        for line in data_directories.readlines():
+            if line.startswith("parsed_folder"):
+                label, parsed_folder = line.split("=")
         if self.signalgroup.filename.startswith(self.controller.default_name):
             self.launch_save_as()
         else:
             print("Saving...")
             self.signalgroup.notes = self.tools.browser_notes.get(1.0, END)
-            self.signalgroup.save(pt.defaultvalues.default_parsed_folder)
+            self.signalgroup.save(parsed_folder)
             print("Saved dataset as %s" % self.signalgroup.filename)
 
     def launch_save_as(self):
@@ -311,6 +325,10 @@ class AnaFrame(tk.Frame):
 
     def save_as(self, new_name):
         """Save file under name input by user, then close save window."""
+        data_directories = resources.open_text(config, 'data_directories.txt')
+        for line in data_directories.readlines():
+            if line.startswith("parsed_folder"):
+                label, parsed_folder = line.split("=")
         old_name = self.signalgroup.filename
         index = self.controller.windownames.index(old_name)
         # save
@@ -318,7 +336,7 @@ class AnaFrame(tk.Frame):
         self.signalgroup.change_filename(new_name)
         new_name = self.signalgroup.filename    # make sure the two names are the same to prevent errors
         print("Changed filename to {}".format(self.signalgroup.filename))
-        self.signalgroup.save(pt.defaultvalues.default_parsed_folder)
+        self.signalgroup.save(parsed_folder)
         # rename the window #
         if new_name != old_name:
             self.controller.windownames[index] = new_name

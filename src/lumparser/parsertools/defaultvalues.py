@@ -20,7 +20,7 @@ import os
 from pathlib import Path
 
 # saving location
-default_data_folder = os.path.join(os.getcwd(), "data")
+default_data_folder = os.path.join(os.path.expanduser("~"), "Luminescence_data")
 default_import_folder = os.path.join(default_data_folder, "td")    # where to find .td files
 default_parsed_folder = os.path.join(default_data_folder, "parsed")    # where to find and save .parsed files
 default_csv_folder = os.path.join(default_data_folder, "csv")    # where to save .csv files

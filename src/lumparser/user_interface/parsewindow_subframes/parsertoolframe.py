@@ -37,7 +37,12 @@ ParserToolFrame (subclass of tk.Frame)
 import lumparser.parsertools as pt
 import tkinter as tk
 from tkinter import N, S, W, E, DISABLED, RIGHT, END, ANCHOR
-from lumparser.parsertools.defaultvalues import default_import_folder
+try:
+    import importlib.resources as resources
+except ImportError:
+    # Try backported to PY<37 `importlib_resources`.
+    import importlib_resources as resources
+from .. import config
 
 
 class ParserToolFrame(tk.Frame):
@@ -45,7 +50,13 @@ class ParserToolFrame(tk.Frame):
     def __init__(self, parent, controller, borderwidth=5):
         self.parent = parent
         self.controller = controller
+
+        data_directories = resources.open_text(config, 'data_directories.txt')
+        for line in data_directories.readlines():
+            if line.startswith("import_folder"):
+                label, default_import_folder = line.split("=")
         self.import_folder = default_import_folder
+
         self.parser = pt.Parser()
         tk.Frame.__init__(self, self.parent, borderwidth=borderwidth)
 
