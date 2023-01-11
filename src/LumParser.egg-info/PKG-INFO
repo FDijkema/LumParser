@@ -93,12 +93,12 @@ time is set to 0s.
 Install using pip (For installing pip see https://pip.pypa.io/en/stable/installation/):
 
 ```
-pip install LumParser
+pip install lumparser
 ```
 
 # Using the interface
 Once the package is installed, run the interface from command line using:
 
 ```
-python LumParser
+python -m lumparser
 ```

@@ -20,7 +20,7 @@ dependencies=['numpy', 'scipy', 'matplotlib']
 repository="https://github.com/FDijkema/LumParser"
 
 [project.gui-scripts]
-lumparser = "lumparser:user_interface.run.run_app"
+lumparser = "lumparser.run:run_app"
 
 [tool.pytest.ini_options]
 addopts = [
