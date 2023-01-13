@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "lumparser"
-version = "0.0.4"
+version = "1.0.0"
 authors=[
     {email="fmdijkema@gmail.com"},
     {name='Fenne Marjolein Dijkema'}
