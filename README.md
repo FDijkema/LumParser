@@ -60,7 +60,7 @@ pip install lumparser
 ```
 
 # Using the interface
-Once the package is installed, run the interface from command line using:
+Once the library is installed, run the interface from command line using:
 
 ```
 python -m lumparser
@@ -69,3 +69,15 @@ or
 ```
 lumparser
 ```
+
+# Importing the library
+Make sure all dependencies are installed. To import the lumparser library, include the line
+
+```
+import lumparser
+```
+
+at the beginning of a script or module.
+
+# Maintenance and updates
+The library is provided as-is and will not be maintained or updated after June 2023.
