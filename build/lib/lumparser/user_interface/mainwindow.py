@@ -39,8 +39,6 @@ from . import config
 # read and store in variable
 first_run = resources.open_text(config, 'first_run.txt')
 prompt_change_directory = resources.open_text(config, 'prompt_change_directory.txt')
-# read for a file-like stream:
-data_directories = resources.open_text(config, 'data_directories.txt')
 
 
 class App(tk.Tk):
@@ -148,14 +146,19 @@ class App(tk.Tk):
                                    yscrollcommand=loader_scrollbar.set, width=40)
         self.open_box.grid(row=1, column=0, columnspan=2, sticky=W + E + N + S)
         loader_scrollbar.config(command=self.open_box.yview)
-
-        folder = pt.defaultvalues.default_parsed_folder  # directory of script
+        # find the right directory
+        data_directories = resources.open_text(config, 'data_directories.txt')
+        for line in data_directories.read().splitlines():
+            if line.startswith("parsed_folder"):
+                label, parsed_folder = line.split("=")
+        folder = parsed_folder  # directory of script to search
         files = []
         for f in os.listdir(folder):
             if f.endswith('.parsed'):
                 directory = os.path.join(folder, f)
                 files.append({"name": f, "directory": directory})
                 self.open_box.insert(END, f)
+        #
         loader_button = tk.Button(loader, text="Open",
                                   command=lambda *args: self.open_set(files))
         loader_button.grid(row=2, column=1, columnspan=2, sticky=N + S + E + W)

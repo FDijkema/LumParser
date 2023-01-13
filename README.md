@@ -71,7 +71,7 @@ lumparser
 ```
 
 # Importing the library
-Make sure all dependencies are installed. To import the lumparser library, include the line
+To import the lumparser library, include the line
 
 ```
 import lumparser

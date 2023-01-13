@@ -97,22 +97,25 @@ class App(tk.Tk):
 
         # First time running the program, do some special operations
         if first_run.read() == "True":
-            with open(os.path.join(pt.defaultvalues.project_root, "user_interface", "config",
-                                   "data_directories.txt"), "w") as f:
-                f.write('import_folder={}\n'.format(str(pt.defaultvalues.default_import_folder)) +
-                        'parsed_folder={}\n'.format(str(pt.defaultvalues.default_parsed_folder)) +
-                        'csv_folder={}'.format(str(pt.defaultvalues.default_csv_folder))
-                        )
-            create_folder_window = CreateFolderWindow(self)
-            create_folder_window.attributes("-topmost", True)
-            # remember not to do this again next time
-            with open(os.path.join(pt.defaultvalues.project_root, "user_interface", "config", "first_run.txt"), "w") as f:
-                f.write("False")
+            self.on_first_run()
         elif prompt_change_directory.read() == "True":
             self.launch_change_directory()
 
+    def on_first_run(self):
+        """Create a data folder to store program data files and prompt user to change it"""
+        with open(os.path.join(pt.defaultvalues.project_root, "user_interface", "config",
+                               "data_directories.txt"), "w") as f:
+            f.write('import_folder={}\n'.format(str(pt.defaultvalues.default_import_folder)) +
+                    'parsed_folder={}\n'.format(str(pt.defaultvalues.default_parsed_folder)) +
+                    'csv_folder={}'.format(str(pt.defaultvalues.default_csv_folder))
+                    )
+        self.launch_change_directory()
+        # remember not to do this again next time
+        with open(os.path.join(pt.defaultvalues.project_root, "user_interface", "config", "first_run.txt"), "w") as f:
+            f.write("False")
+
     def launch_change_directory(self):
-        """To be implemented"""
+        """Create a window in which the saving directory can be changed"""
         create_folder_window = CreateFolderWindow(self)
         create_folder_window.attributes("-topmost", True)
 
