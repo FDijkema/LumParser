@@ -39,6 +39,7 @@ from . import config
 # read and store in variable
 first_run = resources.open_text(config, 'first_run.txt')
 prompt_change_directory = resources.open_text(config, 'prompt_change_directory.txt')
+basedir = os.path.dirname(__file__)
 
 
 class App(tk.Tk):
@@ -48,6 +49,8 @@ class App(tk.Tk):
         tk.Tk.__init__(self, *args, **kwargs)
         self.protocol("WM_DELETE_WINDOW", self._quit)
         self.state("zoomed")
+        self.iconbitmap(os.path.abspath(os.path.join(basedir, os.pardir, "LumParser.ico")))
+        self.title("LumParser")
 
         # set attributes for window display
         self.windownames = []

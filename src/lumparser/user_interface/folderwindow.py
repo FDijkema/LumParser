@@ -26,6 +26,7 @@ import lumparser.parsertools as pt
 
 
 prompt_change_directory = resources.open_text(config, 'prompt_change_directory.txt')
+basedir = os.path.dirname(__file__)
 
 
 class CreateFolderWindow(tk.Toplevel):
@@ -38,6 +39,7 @@ class CreateFolderWindow(tk.Toplevel):
     def __init__(self, parent):
         tk.Toplevel.__init__(self, parent)
         self.title("Saving directory")
+        self.iconbitmap(os.path.abspath(os.path.join(basedir, os.pardir, "LumParser.ico")))
 
         data_directories = resources.open_text(config, 'data_directories.txt')
         for line in data_directories.readlines():

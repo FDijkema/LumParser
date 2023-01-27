@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: lumparser
-Version: 0.0.4
+Version: 1.0.0
 Summary: Python library for parsing and analysing Luminescence time drive data.
 Author: Fenne Marjolein Dijkema
 Author-email: fmdijkema@gmail.com

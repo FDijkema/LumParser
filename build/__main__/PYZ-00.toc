@@ -1,0 +1,2 @@
+('C:\\Users\\tlm711\\PycharmProjects\\lumparser\\build\\__main__\\PYZ-00.pyz',
+ [])
